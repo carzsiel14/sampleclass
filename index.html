@@ -202,12 +202,6 @@
             margin-top: 1rem;
             border: 1px solid #bde0fe;
         }
-        .iframe-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
         .iframe-wrapper {
             border: 8px solid #333;
             border-radius: 10px;
@@ -232,11 +226,36 @@
             width: 100%;
             height: 100%;
             border: none;
-            transform: scale(0.8);
-            transform-origin: top left;
-            width: 125%;
-            height: 125%;
         }
+        .tech-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #0d6efd;
+        }
+        .framework-logo {
+            height: 32px;
+            margin-bottom: 0.5rem;
+        }
+         .visualization-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 900px;
+            position: relative;
+        }
+        .viz-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 180px;
+        }
+        .viz-box i { font-size: 3rem; }
     </style>
 </head>
 <body>
@@ -259,9 +278,18 @@
     <div id="slide-3" class="slide bg-white">
         <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Web in Your Daily Life</h2>
-        <div class="iframe-container mb-4 animated delay-2">
+        <div class="mb-4 animated delay-2">
             <div class="iframe-wrapper">
-                 <iframe class="iframe-screenshot" src="https://www.facebook.com" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe>
+                 <iframe class="iframe-screenshot" srcdoc="
+                    <html style='height:100%;'>
+                    <head><style>body{font-family: Arial, sans-serif; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; margin: 0; background: #fff;} .logo {font-size: 72px; font-weight: bold; letter-spacing: -3px;} .logo span:nth-child(1){color:#4285F4;} .logo span:nth-child(2){color:#EA4335;} .logo span:nth-child(3){color:#FBBC05;} .logo span:nth-child(4){color:#4285F4;} .logo span:nth-child(5){color:#34A853;} .logo span:nth-child(6){color:#EA4335;} .search-bar{width: 80%; max-width: 400px; padding: 10px; border: 1px solid #dfe1e5; border-radius: 24px; margin-top: 20px;} .buttons{margin-top: 20px;} .buttons button{background-color: #f8f9fa; border: 1px solid #f8f9fa; border-radius: 4px; padding: 8px 16px; margin: 5px; cursor: pointer;}</style></head>
+                    <body>
+                        <div class='logo'><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+                        <input type='text' class='search-bar'>
+                        <div class='buttons'><button>Google Search</button><button>I'm Feeling Lucky</button></div>
+                    </body>
+                    </html>
+                 "></iframe>
             </div>
         </div>
         <p class="fs-5 animated delay-3 col-md-8">Have you used a website like this before? Have you ever stopped to think about how it works behind the scenes?</p>
@@ -316,49 +344,78 @@
          <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
          <h2 class="slide-title animated delay-1">Website vs. Web Application</h2>
          <div class="split-container">
-             <div class="card p-4 flex-fill animated delay-2">
-                <h3 class="fw-bold text-center">Website (Static)</h3>
-                <p class="fs-5">Primarily informational. Content is pre-built and delivered to the user exactly as it's stored.</p>
-                <p class="text-center fs-1">📰</p>
+             <div class="animated delay-2">
+                <h3 class="fw-bold text-center">Static Website</h3>
+                <div class="iframe-wrapper">
+                    <iframe class="iframe-screenshot" srcdoc="
+                        <html>
+                        <head><style>body{font-family: sans-serif; padding: 20px; text-align: center;} h1{color: #333;} p{color: #666;}</style></head>
+                        <body>
+                            <h1>Jane Doe's Portfolio</h1>
+                            <img src='https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961' style='width: 100px; height: 100px; border-radius: 50%; object-fit: cover;'>
+                            <p>Welcome to my personal website. Here you will find my projects and resume.</p>
+                        </body>
+                        </html>
+                    "></iframe>
+                </div>
              </div>
-             <div class="card p-4 flex-fill animated delay-3">
-                <h3 class="fw-bold text-center">Web Application (Dynamic)</h3>
-                <p class="fs-5">Interactive and responsive. Content is generated or changed based on user actions and data.</p>
-                 <p class="text-center fs-1">🛒</p>
+             <div class="animated delay-3">
+                <h3 class="fw-bold text-center">Dynamic Web Application</h3>
+                 <div class="iframe-wrapper">
+                    <iframe class="iframe-screenshot" srcdoc="
+                        <html>
+                        <head>
+                            <style>
+                                body {font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh;}
+                                .container { text-align: center; }
+                                .logo { color: #0866ff; font-size: 48px; font-weight: bold; margin-bottom: -10px;}
+                                .form-container { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.1); padding: 20px; width: 350px;}
+                                .form-container input { width: 90%; padding: 14px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #dddfe2; font-size: 16px; }
+                                .form-container button { width: 100%; padding: 14px; border-radius: 6px; border: none; background-color: #1877f2; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;}
+                                .forgot { color: #1877f2; text-decoration: none; margin-top: 15px; display: inline-block;}
+                            </style>
+                        </head>
+                        <body>
+                            <div class='container'>
+                                <div class='logo'>facebook</div>
+                                <div class='form-container'>
+                                    <input type='text' placeholder='Email address or phone number'>
+                                    <input type='password' placeholder='Password'>
+                                    <button>Log In</button>
+                                    <a href='#' class='forgot'>Forgotten password?</a>
+                                </div>
+                            </div>
+                        </body>
+                        </html>
+                    "></iframe>
+                </div>
              </div>
          </div>
     </div>
     
-    <!-- Slide 8: Static Websites Deeper Dive -->
+    <!-- Slide 8: Web System vs. Website -->
     <div id="slide-8" class="slide bg-light-gray">
-        <i class="bi bi-file-earmark-text-fill icon-header mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Static Websites: A Deeper Dive</h2>
-        <div class="col-md-8 text-start animated delay-2">
-            <p class="fs-5">The content of a static website is fixed. Each page is a separate HTML file, and the content only changes when a developer manually edits the files.</p>
-            <ul class="fs-5">
-                <li><strong>How it works:</strong> When you request a page, the server simply finds the corresponding HTML file and sends it to your browser.</li>
-                <li><strong>Characteristics:</strong> Very fast, secure, and cheap to host.</li>
-                <li><strong>Best for:</strong> Portfolios, simple blogs, company brochures, and informational sites that don't need frequent updates.</li>
-            </ul>
+        <i class="bi bi-question-diamond-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Web System vs. Website</h2>
+        <p class="slide-subtitle text-muted mb-5 animated delay-2">Are they the same thing?</p>
+        <div class="split-container col-md-10">
+            <div class="card p-4 flex-fill animated delay-3">
+                <h3 class="fw-bold text-center">Website (The Car)</h3>
+                <p class="fs-5">A website is the final product that the user sees and interacts with in their browser. It's the collection of pages, images, and content.</p>
+            </div>
+            <div class="card p-4 flex-fill animated delay-4">
+                <h3 class="fw-bold text-center">Web System (The Factory)</h3>
+                <p class="fs-5">The web system is the entire infrastructure behind the scenes: the servers, databases, backend code, and everything else that builds, serves, and manages the website.</p>
+            </div>
+        </div>
+        <div class="content-card mt-4 col-10 animated delay-4">
+            <h4 class="fw-bold text-center">Are they interchangeable?</h4>
+            <p class="text-center mb-0">In casual conversation, people often use "website" to mean the whole thing. In a technical context, "web system" is more accurate because it includes all the backend components, not just the frontend pages.</p>
         </div>
     </div>
     
-    <!-- Slide 9: Dynamic Websites Deeper Dive -->
-    <div id="slide-9" class="slide bg-white">
-        <i class="bi bi-gear-fill icon-header mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Dynamic Websites: A Deeper Dive</h2>
-        <div class="col-md-8 text-start animated delay-2">
-            <p class="fs-5">The content is generated in real-time by the server. Instead of sending a fixed file, the server runs code, gets data from a database, and assembles a custom HTML page just for you.</p>
-            <ul class="fs-5">
-                <li><strong>How it works:</strong> The server uses a backend language (like Python) and a database to build a page based on your request (e.g., showing your specific news feed).</li>
-                <li><strong>Characteristics:</strong> Interactive, personalized, and can handle complex features.</li>
-                <li><strong>Best for:</strong> Social media, e-commerce, online banking, and any application that requires user logins and personalized content.</li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Slide 10: Question for Web App -->
-    <div id="slide-10" class="slide bg-light-gray question-slide">
+    <!-- Slide 9: Question for Web App -->
+    <div id="slide-9" class="slide bg-white question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">Is an e-commerce site like Shopee, where you add items to a cart, a static or a dynamic web application? Why?</p>
@@ -370,16 +427,24 @@
     </div>
 
 
-    <!-- Slide 11: Client vs Server -->
-    <div id="slide-11" class="slide bg-white">
+    <!-- Slide 10: Client vs Server -->
+    <div id="slide-10" class="slide bg-light-gray">
         <i class="bi bi-cpu-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Client-Side vs. Server-Side</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">Every web system has two fundamental sides that communicate constantly to deliver the experience you see on your screen.</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/1280px-Client-server-model.svg.png" alt="Client-Server Model Diagram" class="img-fluid bg-white p-3 rounded animated delay-3" style="max-width: 700px;">
+        <div class="split-container col-md-10 text-start animated delay-2">
+            <div class="col-md-6">
+                <h3 class="fw-bold">Client-Side (Frontend)</h3>
+                <p class="fs-5">This refers to everything the user sees and interacts with in their browser. It's the "front" of the house, responsible for the user interface and visual presentation.</p>
+            </div>
+             <div class="col-md-6">
+                <h3 class="fw-bold">Server-Side (Backend)</h3>
+                <p class="fs-5">This is the "behind-the-scenes" part of the system that runs on a remote computer. It handles data, security, and the core logic of the application.</p>
+            </div>
+        </div>
     </div>
     
-    <!-- Slide 12: Question for Client/Server -->
-     <div id="slide-12" class="slide bg-light-gray question-slide">
+    <!-- Slide 11: Question for Client/Server -->
+     <div id="slide-11" class="slide bg-white question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">When you see a loading spinner on a website after clicking a button, which side (client or server) is likely doing the most work at that moment?</p>
@@ -390,51 +455,69 @@
          </div>
     </div>
     
-    <!-- Slide 13: The Request-Response Cycle -->
-    <div id="slide-13" class="slide bg-white">
+    <!-- Slide 12: The Request-Response Cycle -->
+    <div id="slide-12" class="slide bg-light-gray">
         <i class="bi bi-arrow-repeat icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Request-Response Cycle</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the fundamental conversation that happens every time you interact with a website.</p>
-        <div class="container text-start">
+        <div class="container text-start col-md-10 animated delay-2">
             <ol class="fs-5">
-                <li class="animated delay-2"><strong>The Request:</strong> Your browser (the Client) sends a request over the internet to the server's address (e.g., www.google.com). This request asks for a specific resource, like a webpage, image, or data.</li>
-                <li class="animated delay-3"><strong>The Processing:</strong> The Server receives the request. It finds the required resource, processes any necessary logic (like checking if you're logged in), and gathers data from a database if needed.</li>
-                <li class="animated delay-4"><strong>The Response:</strong> The Server sends the resource back to your browser as a response, typically in the form of HTML, CSS, and JavaScript files.</li>
-                <li class="animated delay-4"><strong>The Rendering:</strong> Your browser receives these files and renders them into the visual webpage you see and interact with.</li>
+                <li><strong>The Request:</strong> Your browser (the Client) sends a request over the internet to the server's address.</li>
+                <li><strong>The Processing:</strong> The Server receives the request, processes any logic, and gathers data from a database if needed.</li>
+                <li><strong>The Response:</strong> The Server sends the resource back to your browser, typically as HTML, CSS, and JavaScript files.</li>
+                <li><strong>The Rendering:</strong> Your browser receives these files and renders them into the visual webpage you see.</li>
             </ol>
+        </div>
+    </div>
+    
+    <!-- Slide 13: Request-Response Visualization -->
+    <div id="slide-13" class="slide bg-white">
+        <i class="bi bi-diagram-2-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Visualizing the Cycle</h2>
+        <div class="visualization-container animated delay-2">
+            <!-- Client -->
+            <div class="viz-box">
+                <i class="bi bi-pc-display-horizontal text-primary"></i>
+                <h5 class="mt-2 fw-bold">Client</h5>
+                <p class="mb-0">(Your Browser)</p>
+            </div>
+            
+            <!-- Request -->
+            <div style="position: absolute; left: 220px; top: 30%;">
+                <div class="fw-bold">1. Request</div>
+                <i class="bi bi-arrow-right-circle-fill fs-1 text-success"></i>
+            </div>
+            
+            <!-- Server -->
+            <div class="viz-box">
+                <i class="bi bi-server text-info"></i>
+                <h5 class="mt-2 fw-bold">Server</h5>
+                <p class="mb-0">(Processes Request)</p>
+            </div>
+            
+             <!-- Response -->
+             <div style="position: absolute; right: 220px; top: 60%;">
+                <div class="fw-bold">2. Response</div>
+                <i class="bi bi-arrow-left-circle-fill fs-1 text-danger"></i>
+            </div>
         </div>
     </div>
 
     <!-- Slide 14: Client-Side Technologies -->
     <div id="slide-14" class="slide bg-light-gray">
         <i class="bi bi-display-fill icon-header text-success mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Client-Side (Frontend)</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">This is everything the user sees and interacts with directly in the browser. Its primary job is to present data and capture user input.</p>
+        <h2 class="slide-title animated delay-1">Client-Side Technologies</h2>
+        <p class="slide-subtitle text-muted mb-5 animated delay-2">These are the three fundamental technologies that run in every modern web browser.</p>
         <div class="container animated delay-3">
             <div class="row g-4">
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">HTML (HyperText Markup Language)</h4><p>The core structure and skeleton of a webpage. It defines the elements like headings, paragraphs, images, and links.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">CSS (Cascading Style Sheets)</h4><p>Controls the visual presentation. It handles the layout, colors, fonts, and overall aesthetic of the website to make it visually appealing.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">JavaScript</h4><p>Brings the page to life. It adds interactivity, such as animations, form validations, pop-up messages, and dynamic content updates without needing to reload the page.</p></div></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 15: Frontend Frameworks -->
-    <div id="slide-15" class="slide bg-white">
-        <i class="bi bi-layers-fill icon-header text-success mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">A Quick Look at Frontend Frameworks</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">For complex web applications, developers often use frameworks—pre-written code libraries—to build user interfaces more efficiently.</p>
-        <div class="container animated delay-3">
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-3"><div class="card p-3 h-100"><h4 class="fw-bold">React</h4><p>A popular library for building user interfaces with reusable components. Developed by Facebook.</p></div></div>
-                <div class="col-md-3"><div class="card p-3 h-100"><h4 class="fw-bold">Angular</h4><p>A comprehensive framework for building large-scale applications. Developed by Google.</p></div></div>
-                <div class="col-md-3"><div class="card p-3 h-100"><h4 class="fw-bold">Vue.js</h4><p>A progressive framework that is known for being easy to learn and flexible.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-html tech-icon" style="color: #E44D26;"></i><h4 class="fw-bold">HTML</h4><p>The core structure and skeleton of a webpage.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-css tech-icon" style="color: #264DE4;"></i><h4 class="fw-bold">CSS</h4><p>Controls the visual presentation, layout, and colors.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-js tech-icon" style="color: #F0DB4F;"></i><h4 class="fw-bold">JavaScript</h4><p>Brings the page to life with interactivity.</p></div></div>
             </div>
         </div>
     </div>
     
-    <!-- Slide 16: Question on Frontend -->
-    <div id="slide-16" class="slide bg-light-gray question-slide">
+    <!-- Slide 15: Question on Frontend -->
+    <div id="slide-15" class="slide bg-white question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">If you wanted to change the color of a button on a webpage, which of the three core client-side technologies would you use?</p>
@@ -445,22 +528,22 @@
          </div>
     </div>
 
-    <!-- Slide 17: Server-Side Technologies -->
-    <div id="slide-17" class="slide bg-white">
+    <!-- Slide 16: Server-Side Technologies -->
+    <div id="slide-16" class="slide bg-light-gray">
         <i class="bi bi-server icon-header text-info mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Server-Side (Backend)</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the engine room of the web system. It runs on a remote computer (the server) and handles all the complex logic, data management, and security.</p>
+        <h2 class="slide-title animated delay-1">Server-Side Technologies</h2>
+        <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the engine room of the web system. It handles all the complex logic, data management, and security.</p>
         <div class="container animated delay-3">
             <div class="row g-4">
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Programming Languages</h4><p>These languages (like Python, PHP, Node.js) process user requests, perform calculations, and execute the core business logic of the application.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Databases</h4><p>Databases (like MySQL, MongoDB) are responsible for storing, organizing, and retrieving all the application's data, such as user profiles, products, or posts.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Web Servers</h4><p>This is the software (like Apache or Nginx) that listens for incoming requests from clients (browsers) and serves them the appropriate files and data.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-code-slash tech-icon"></i><h4 class="fw-bold">Programming Languages</h4><p>(e.g., Python, PHP, Node.js) Process user requests, and execute core business logic.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-database-fill tech-icon"></i><h4 class="fw-bold">Databases</h4><p>(e.g., MySQL, MongoDB) Store, organize, and retrieve all application data.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-hdd-network-fill tech-icon"></i><h4 class="fw-bold">Web Servers</h4><p>(e.g., Apache or Nginx) Listens for and responds to requests from clients.</p></div></div>
             </div>
         </div>
     </div>
     
-    <!-- Slide 18: Question on Backend -->
-    <div id="slide-18" class="slide bg-light-gray question-slide">
+    <!-- Slide 17: Question on Backend -->
+    <div id="slide-17" class="slide bg-white question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">When you create a new account on a website, which backend component is responsible for saving your username and password?</p>
@@ -471,36 +554,8 @@
          </div>
     </div>
     
-    <!-- Slide 19: The Role of APIs -->
-    <div id="slide-19" class="slide bg-white">
-        <i class="bi bi-plug-fill icon-header text-info mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">The Role of APIs</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">APIs (Application Programming Interfaces) are the messengers that allow different software components to talk to each other.</p>
-        <div class="container text-start col-md-8 animated delay-3">
-             <p class="fs-5">In a web system, the frontend (client) doesn't talk directly to the database. Instead, it sends a request to a backend API. The API then gets the data from the database and sends it back to the frontend in a structured format (like JSON).</p>
-             <p class="fs-5 text-muted">This is crucial for security and organization. It also allows mobile apps and other services to use the same backend data as the website.</p>
-        </div>
-    </div>
-
-    <!-- Slide 20: Putting It All Together -->
-    <div id="slide-20" class="slide bg-light-gray">
-        <i class="bi bi-puzzle-fill icon-header mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Putting It All Together</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">Let's trace a simple action: Liking a post on social media.</p>
-        <div class="container text-start">
-             <ol class="fs-5">
-                <li class="animated delay-2"><strong>Client:</strong> You click the "Like" button (HTML element).</li>
-                <li class="animated delay-2"><strong>Client:</strong> JavaScript code runs, instantly changing the button's color to give you feedback. It then sends an API request to the server, saying "User 123 likes Post 456".</li>
-                <li class="animated delay-3"><strong>Server:</strong> The web server (Nginx) receives the request and passes it to the backend application (e.g., Python code).</li>
-                <li class="animated delay-3"><strong>Server:</strong> The backend code validates the request (Are you logged in? Does the post exist?) and then tells the database to update the "likes" count for Post 456.</li>
-                <li class="animated delay-4"><strong>Server:</strong> The database confirms the update was successful. The server sends back a success message to your browser.</li>
-                <li class="animated delay-4"><strong>Client:</strong> Your browser receives the success message. The "like" is now permanently saved.</li>
-            </ol>
-        </div>
-    </div>
-
-    <!-- Slide 21: Summary of Key Concepts -->
-    <div id="slide-21" class="slide bg-white">
+    <!-- Slide 18: Summary of Key Concepts -->
+    <div id="slide-18" class="slide bg-light-gray">
         <i class="bi bi-card-checklist icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Summary of Key Concepts</h2>
         <div class="col-md-8 text-start animated delay-2">
@@ -509,15 +564,13 @@
                 <li><strong>Web Applications</strong> are interactive, while <strong>Websites</strong> are mostly informational.</li>
                 <li>The <strong>Client-Side</strong> is what you see in your browser (Frontend); the <strong>Server-Side</strong> is the "brain" that runs remotely (Backend).</li>
                 <li>The core technologies are <strong>HTML</strong> (structure), <strong>CSS</strong> (style), and <strong>JavaScript</strong> (interactivity).</li>
-                <li>The server uses programming languages, databases, and web server software to function.</li>
-                <li><strong>APIs</strong> act as messengers between the client and the server.</li>
             </ul>
         </div>
     </div>
 
 
-    <!-- Slide 22: Activity -->
-    <div id="slide-22" class="slide bg-light-gray">
+    <!-- Slide 19: Activity -->
+    <div id="slide-19" class="slide bg-white">
         <i class="bi bi-people-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Group Activity: Website Dissection</h2>
         <div class="content-card col-md-8 animated delay-2">
@@ -532,8 +585,8 @@
         </div>
     </div>
     
-    <!-- Slide 23: Career Paths -->
-    <div id="slide-23" class="slide bg-white">
+    <!-- Slide 20: Career Paths -->
+    <div id="slide-20" class="slide bg-light-gray">
         <i class="bi bi-briefcase-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Career Paths in Web Development</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">Understanding these concepts opens doors to many exciting careers.</p>
@@ -546,8 +599,8 @@
         </div>
     </div>
 
-    <!-- Slide 24: Integration -->
-    <div id="slide-24" class="slide bg-light-gray">
+    <!-- Slide 21: Integration -->
+    <div id="slide-21" class="slide bg-white">
          <i class="bi bi-mortarboard-fill icon-header mb-4 animated"></i>
          <h2 class="slide-title animated delay-1">Integration & Reflection</h2>
          <div class="split-container text-start animated delay-2">
@@ -562,8 +615,8 @@
          </div>
     </div>
     
-    <!-- Slide 25: Closing -->
-    <div id="slide-25" class="slide bg-white">
+    <!-- Slide 22: Closing -->
+    <div id="slide-22" class="slide bg-light-gray">
         <div class="container animated">
             <blockquote class="blockquote animated delay-1">
                 <p class="fs-3">"The beginning of wisdom is this: Get wisdom. Though it cost all you have, get understanding."</p>
