@@ -3,776 +3,376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Systems and Technologies Presentation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>Web Systems and Technologies</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow: hidden; /* Prevent scrollbars on body */
-        }
-        .presentation-container {
-            width: 100%;
-            max-width: 1200px;
-            height: 90vh;
-            max-height: 800px;
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-        .slide {
-            width: 100%;
+        /* Custom Styles for PPT Look */
+        html, body {
             height: 100%;
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            justify-content: flex-start; /* Changed to flex-start for consistent top alignment */
-            align-items: flex-start;
-            padding: 40px 60px;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+            font-family: 'Inter', sans-serif;
+        }
+
+        .slide {
+            display: none; /* Hide all slides by default */
+            width: 100%;
+            height: 100vh;
+            padding: 50px;
             box-sizing: border-box;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
             position: absolute;
             top: 0;
             left: 0;
-            text-align: left;
-            overflow: hidden; /* Hide overflow from content animations */
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
         }
+
         .slide.active {
-            display: flex;
+            display: flex; /* Show active slide */
             opacity: 1;
-            position: relative;
         }
-        .slide h1 {
+
+        /* Slide Specific Backgrounds */
+        #slide-1 {
+            background-color: #f8f9fa;
+            background-image: linear-gradient(135deg, #ffffff 50%, #e6f0ff 50%);
+            color: #333;
+        }
+        #slide-2, #slide-4, #slide-6, #slide-8, #slide-10 {
+            background-color: #f0f2f5;
+        }
+        #slide-3, #slide-5, #slide-7, #slide-9, #slide-11 {
+            background-color: #ffffff;
+        }
+        
+        /* Navigation Controls */
+        .slide-nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        .slide-nav button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 5px;
+            font-size: 24px;
+            transition: background-color 0.2s;
+        }
+        .slide-nav button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 1000;
+            color: #6c757d;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        /* Custom Content Styling */
+        .slide-title {
             font-size: 3.5rem;
             font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 20px;
-            line-height: 1.2;
+            margin-bottom: 1rem;
         }
-        .slide h2 {
-            font-size: 2.25rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 15px;
-        }
-        .slide h3 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 10px;
-        }
-        .slide ul {
-            list-style: disc;
-            margin-left: 30px;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            color: #4a5568;
-        }
-        .slide ul li {
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-        .slide strong {
-            color: #2c5282;
-        }
-        .slide p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #4a5568;
-            margin-bottom: 15px;
-        }
-        .navigation-buttons {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 10;
-        }
-        .nav-button {
-            background-color: #4299e1;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(66, 153, 225, 0.3);
-        }
-        .nav-button:hover {
-            background-color: #3182ce;
-            transform: translateY(-2px);
-        }
-        .nav-button:disabled {
-            background-color: #a0aec0;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        /* Specific styling for the title slide */
-        #slide-0 {
-            text-align: center;
-            justify-content: center; /* Keep centered for title slide */
-            align-items: center;
-            background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        #slide-0 h1 {
-            font-size: 4.5rem;
-            margin-bottom: 30px;
-            color: white;
-        }
-        #slide-0 .subtitle {
-            font-size: 2.5rem;
-            color: white;
-            margin-bottom: 20px;
-        }
-        #slide-0 p {
+         .slide-subtitle {
             font-size: 1.5rem;
-            color: white;
-            font-weight: 500;
+            font-weight: 400;
+            max-width: 800px;
         }
-        .slide-content-area {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            padding-right: 20px;
-            box-sizing: border-box;
+        .content-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+            text-align: left;
+        }
+         .icon-header {
+            font-size: 4rem;
+            color: #0d6efd;
+        }
+        .split-container {
             display: flex;
-            flex-direction: column;
-            justify-content: flex-start; /* Changed to flex-start for content slides */
-            align-items: flex-start;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 2rem;
         }
-        /* Adjust padding for slides with lists or extensive text */
-        .slide:not(#slide-0) .slide-content-area {
-            padding-top: 20px;
-            padding-bottom: 20px;
+        .blockquote {
+            border-left: 5px solid #0d6efd;
+            padding-left: 1.5rem;
+            max-width: 700px;
+            margin: 2rem auto;
         }
-        .discussion-prompt {
-            background-color: #e2e8f0;
-            padding: 20px;
-            border-left: 5px solid #4299e1;
-            border-radius: 8px;
-            margin-top: 20px;
+        .instructor-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #0d6efd;
         }
-        .discussion-prompt p {
-            font-style: italic;
-            color: #2d3748;
-            font-size: 1.1rem;
-        }
-        .activity-instructions {
-            background-color: #e6fffa;
-            border-left: 5px solid #38b2ac;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .activity-instructions ol {
-            list-style: decimal;
-            margin-left: 30px;
-            font-size: 1.1rem;
-            color: #2d3748;
-        }
-        .activity-instructions ol li {
-            margin-bottom: 10px;
-        }
-        .activity-instructions strong {
-            color: #2c5282;
-        }
-        .biblical-verse {
-            background-color: #fffaf0;
-            border-left: 5px solid #dd6b20;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .biblical-verse p {
-            font-style: italic;
-            color: #9c4221;
-            font-weight: 600;
-            font-size: 1.15rem;
-        }
-        .biblical-verse strong {
-             color: #c05621;
-        }
-        .footer-info {
-            font-size: 0.9rem;
-            color: #a0aec0;
-            margin-top: auto; /* Pushes to the bottom */
-            text-align: center;
-            padding-top: 20px;
-        }
-        .slide-image {
-            max-width: 70%; /* Adjusted for better fit with text */
-            height: auto;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-            display: block;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .presentation-container {
-                height: auto;
-                min-height: 95vh;
-                padding: 15px;
-            }
-            .slide {
-                padding: 20px 30px;
-            }
-            .slide h1 {
-                font-size: 2.5rem;
-            }
-            .slide h2 {
-                font-size: 1.75rem;
-            }
-            .slide h3 {
-                font-size: 1.35rem;
-            }
-            .slide ul, .slide p {
-                font-size: 1rem;
-            }
-            #slide-0 h1 {
-                font-size: 3.5rem;
-            }
-            #slide-0 .subtitle {
-                font-size: 1.8rem;
-            }
-            #slide-0 p {
-                font-size: 1.2rem;
-            }
-            .nav-button {
-                padding: 10px 20px;
-                font-size: 1rem;
-            }
-            .slide-image {
-                max-width: 90%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .slide {
-                padding: 15px 20px;
-            }
-            .slide h1 {
-                font-size: 2rem;
-            }
-            .slide h2 {
-                font-size: 1.5rem;
-            }
-            .slide h3 {
-                font-size: 1.2rem;
-            }
-            .slide ul, .slide p {
-                font-size: 0.9rem;
-            }
-            #slide-0 h1 {
-                font-size: 2.8rem;
-            }
-            #slide-0 .subtitle {
-                font-size: 1.5rem;
-            }
-            #slide-0 p {
-                font-size: 1rem;
-            }
-            .navigation-buttons {
-                bottom: 10px;
-                gap: 10px;
-            }
-            .nav-button {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
-            .discussion-prompt, .activity-instructions, .biblical-verse {
-                padding: 15px;
-                margin-top: 15px;
-            }
-            .slide-image {
-                max-width: 100%;
-            }
+        .probing-question {
+            background-color: #e7f3ff;
+            border-left: 5px solid #0d6efd;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="presentation-container">
-        <!-- Slide 1: Title Slide -->
-        <div id="slide-0" class="slide active">
-            <h1 class="animate__animated animate__fadeInDown">Web Systems and Technologies</h1>
-            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Understanding the Digital Backbone</p>
-            <p class="animate__animated animate__fadeInUp animate__delay-2s"><strong>Course:</strong> Web Systems and Technologies</p>
-            <p class="animate__animated animate__fadeInUp animate__delay-2-5s"><strong>Teacher:</strong> LELIS, JOHN CARL RAY R.</p>
-            <p class="animate__animated animate__fadeInUp animate__delay-3s"><strong>School:</strong> ST. MARY’S COLLEGE OF BANSALAN, INC.</p>
-            <p class="animate__animated animate__fadeInUp animate__delay-3-5s"><strong>Academic Year:</strong> SY 2024-2025</p>
-        </div>
 
-        <!-- Slide 2: Learning Goals -->
-        <div id="slide-1" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Learning Goals</h2>
-                <h3 class="animate__animated animate__fadeInLeft">Transfer Goal:</h3>
-                <ul class="animate__animated animate__fadeInUp animate__delay-0-5s">
-                    <li>You will be able to understand what a web system is.</li>
-                    <li>You will be able to explain its general components.</li>
-                    <li>You will be able to identify core web technologies used in modern web development.</li>
-                </ul>
-                <h3 class="animate__animated animate__fadeInLeft animate__delay-1s">Essential Understanding:</h3>
-                <ul class="animate__animated animate__fadeInUp animate__delay-1-5s">
-                    <li>Web systems are platforms that support websites and online applications.</li>
-                    <li>Knowing how they work and the technologies involved provides a foundation for future web development learning.</li>
-                </ul>
-                <img src="https://images.unsplash.com/photo-1549241517-fa16d7b5b5c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image representing learning and growth with books and globe" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-2s">
+    <!-- Slide 1: Title -->
+    <div id="slide-1" class="slide active">
+        <h1 class="slide-title" style="color: #0d6efd;">Web Systems and Technologies</h1>
+        <p class="slide-subtitle">An introduction to the platforms that power the digital world.</p>
+    </div>
+
+    <!-- Slide 2: Instructor Introduction -->
+    <div id="slide-2" class="slide">
+        <img src="https://scontent.fdvo1-1.fna.fbcdn.net/v/t39.30808-6/499421816_3975176996066522_5730849379930356855_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHmBS_16YMVqQ0Ku210ri7gK7bu7ycxl4krtu7vJzGXicRdZEHZenV0M96fwjr5QWwk3Q24zbRjV3yH67tJHiPb&_nc_ohc=1jdA8j9NO8QQ7kNvwEII30Z&_nc_oc=AdkoZUdtpvOleR1o9eaHHw41BiFlzmeMY7vavugGG6y5eOnyOEoUrAYPfLXa7V8xg8A&_nc_zt=23&_nc_ht=scontent.fdvo1-1.fna&_nc_gid=S8ujUBKu0uwm6o64A-lKlQ&oh=00_AfNiRQTGWwMnmno9BAl1-ymAv1SYG-8XZzfIUJyRzz6Mhg&oe=685F9572" alt="Instructor John Carl Ray R. Lelis" class="instructor-img mb-4">
+        <h2 class="slide-title">Your Instructor</h2>
+        <p class="slide-subtitle">John Carl Ray R. Lelis</p>
+        <p class="text-muted">Welcome to our journey into Web Systems and Technologies!</p>
+    </div>
+
+    <!-- Slide 3: What is a Web System? -->
+    <div id="slide-3" class="slide">
+        <i class="bi bi-diagram-3-fill icon-header mb-4"></i>
+        <h2 class="slide-title">What is a Web System?</h2>
+        <div class="split-container container-fluid">
+            <div class="col-md-5">
+                <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2070&auto=format&fit=crop" class="img-fluid rounded shadow" alt="Working on a laptop">
             </div>
-        </div>
-
-        <!-- Slide 3: Essential and Probing Questions -->
-        <div id="slide-2" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Essential & Probing Questions</h2>
-                <h3 class="animate__animated animate__fadeInLeft">Essential Questions:</h3>
-                <ul class="animate__animated animate__fadeInUp">
-                    <li>What defines a web system, and what is its indispensable role in the contemporary digital world?</li>
-                    <li>What are the prevailing technologies employed within web systems, and how do these technologies interrelate to form a cohesive functional unit?</li>
-                    <li>Why is the study of web systems critically important for an Information Technology student's academic and professional development?</li>
-                </ul>
-                <h3 class="animate__animated animate__fadeInLeft animate__delay-1s">Let's Reflect:</h3>
-                <div class="discussion-prompt animate__animated animate__zoomIn animate__delay-1-5s">
-                    <p>What comes to mind when you hear the terms "websites" or "online applications"?</p>
-                    <p>Can anyone share an experience of encountering an "error" or a malfunction while using a website?</p>
-                    <p>When you interact with a webpage—perhaps clicking a button, logging in, or submitting a form—what do you hypothesize occurs in the background to process your action?</p>
+            <div class="col-md-5 text-start">
+                <p class="fs-5">A <strong>web system</strong> is a comprehensive framework of software, hardware, and network protocols that work in unison to deliver content and services over the internet. It encompasses everything from the physical servers storing the data to the code running in your browser.</p>
+                <p class="fs-5 text-muted">Think of it as the complete ecosystem that allows a website or application to function, communicate, and serve its purpose to users worldwide.</p>
+                <div class="probing-question">
+                    <p class="mb-0"><strong>Check for Understanding:</strong> Besides a website you visit, can you name one other component that might be part of a web system? (e.g., what stores your login information?)</p>
                 </div>
-                <img src="https://images.unsplash.com/photo-1516050519395-bf043ff74136?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Question marks and brainstorming" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-2s">
             </div>
-        </div>
-
-        <!-- Slide 4: Motivation - Engaging with the Web -->
-        <div id="slide-3" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Motivation - Engaging with the Web</h2>
-                <p class="animate__animated animate__fadeIn animate__delay-0-5s"><strong>Visual Aid:</strong> (Screenshots of diverse and popular web applications will be displayed here, e.g., Online Banking portals, E-commerce platforms, Social Media networks, Video Streaming services, Mobile Payment Applications)</p>
-                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Collage of various web application screenshots on multiple devices" class="slide-image w-full mt-6 animate__animated animate__zoomIn animate__delay-0-5s">
-                <h3 class="animate__animated animate__fadeInUp animate__delay-1s">Discussion Questions:</h3>
-                <ul class="animate__animated animate__fadeInUp animate__delay-1-5s">
-                    <li>How many of you regularly use these specific websites or applications?</li>
-                    <li>Have you ever paused to consider the intricate mechanisms that allow these platforms to function seamlessly behind the scenes?</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Slide 5: Lesson Development - Defining a Web System -->
-        <div id="slide-4" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Lesson Development - Defining a Web System</h2>
-                <h3 class="animate__animated animate__fadeInLeft">Definition:</h3>
-                <p class="animate__animated animate__fadeInUp animate__delay-0-5s">A <strong>web system</strong> is a comprehensive software architecture that enables the delivery of information and functionality over the Internet, typically accessed via a web browser. It is a collection of interconnected components working synergistically.</p>
-                <h3 class="animate__animated animate__fadeInLeft animate__delay-1s">Core Purpose:</h3>
-                <ul class="animate__animated animate__fadeInUp animate__delay-1-5s">
-                    <li>To serve dynamic content (text, images, video).</li>
-                    <li>To facilitate user interaction (data input, transactions).</li>
-                    <li>To manage and process data (user profiles, product catalogs, financial records).</li>
-                </ul>
-                <h3 class="animate__animated animate__fadeInLeft animate__delay-2s">Real-world Importance:</h3>
-                <ul class="animate__animated animate__fadeInUp animate__delay-2-5s">
-                    <li><strong>Communication:</strong> Social media, email, messaging.</li>
-                    <li><strong>Commerce:</strong> Online shopping, banking, financial services.</li>
-                    <li><strong>Education:</strong> E-learning platforms, online research.</li>
-                    <li><strong>Information Access:</strong> News portals, encyclopedias, search engines.</li>
-                    <li><strong>Entertainment:</strong> Streaming, online gaming.</li>
-                </ul>
-                <p class="animate__animated animate__fadeInUp animate__delay-3s">Web systems are fundamental to the modern digital economy and societal infrastructure.</p>
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image of code on a screen representing web systems" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-3s">
-            </div>
-        </div>
-
-        <!-- Slide 6: Websites vs. Web Applications: A Clear Distinction -->
-        <div id="slide-5" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Websites vs. Web Applications: A Clear Distinction</h2>
-                <div class="flex flex-col md:flex-row gap-8 w-full mt-6">
-                    <div class="md:w-1/2 animate__animated animate__fadeInLeft">
-                        <h3>Website:</h3>
-                        <ul>
-                            <li><strong>Definition:</strong> Primarily a collection of static or mostly static web pages (documents) accessible via a uniform resource locator (URL). Its main purpose is to present information.</li>
-                            <li><strong>Characteristics:</strong> Less interactive, content-focused, often uses HTML and CSS for display.</li>
-                            <li><strong>Examples:</strong> Personal blogs, news sites, company information pages.</li>
-                        </ul>
-                        <img src="https://images.unsplash.com/photo-1553531885-3b7c84c6c06a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Simple webpage design representing a static website" class="slide-image w-full mt-4">
-                    </div>
-                    <div class="md:w-1/2 animate__animated animate__fadeInRight animate__delay-0-5s">
-                        <h3>Web Application:</h3>
-                        <ul>
-                            <li><strong>Definition:</strong> A dynamic, interactive application that is delivered over the internet via a web browser. It offers user interaction, data processing, and often integrates with databases.</li>
-                            <li><strong>Characteristics:</strong> Highly interactive, functionality-driven, processes user input, stores and retrieves data.</li>
-                            <li><strong>Examples:</strong> Online banking systems, e-commerce platforms (e.g., Amazon, Lazada), social media platforms (e.g., Facebook, Twitter), online productivity suites (e.g., Google Docs).</li>
-                        </ul>
-                        <img src="https://images.unsplash.com/photo-1581403341630-e67f0b2f3479?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Interactive UI elements representing a dynamic web application" class="slide-image w-full mt-4">
-                    </div>
-                </div>
-                <p class="mt-8 animate__animated animate__fadeInUp animate__delay-1s"><strong>Key Difference:</strong> The degree of interactivity and dynamic functionality. Websites *inform*; web applications *perform* actions.</p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Client-Side vs. Server-Side Processing: The Two Halves -->
-        <div id="slide-6" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Client-Side vs. Server-Side Processing: The Two Halves</h2>
-                <div class="flex flex-col md:flex-row gap-8 w-full mt-6">
-                    <div class="md:w-1/2 animate__animated animate__fadeInLeft">
-                        <h3>Client-Side Processing:</h3>
-                        <ul>
-                            <li><strong>Location:</strong> Occurs directly within the user's web browser or device.</li>
-                            <li><strong>Function:</strong> Handles the presentation layer, user interface, and immediate user interactions.</li>
-                            <li><strong>Tasks:</strong> Rendering HTML, applying CSS styles, executing JavaScript for animations, form validation, managing user interface elements.</li>
-                            <li><strong>Benefit:</strong> Reduces server load, provides immediate feedback to the user.</li>
-                        </ul>
-                        <img src="https://images.unsplash.com/photo-1526498460491-a6b18979637c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Browser window with code representing client-side" class="slide-image w-full mt-4">
-                    </div>
-                    <div class="md:w-1/2 animate__animated animate__fadeInRight animate__delay-0-5s">
-                        <h3>Server-Side Processing:</h3>
-                        <ul>
-                            <li><strong>Location:</strong> Occurs on a remote server that hosts the web system.</li>
-                            <li><strong>Function:</strong> Manages business logic, data storage and retrieval, security, and authentication. It responds to client requests by generating dynamic content or performing operations.</li>
-                            <li><strong>Tasks:</strong> Processing form submissions, accessing databases, user authentication, generating dynamic HTML pages, handling complex calculations, API integrations.</li>
-                            <li><strong>Benefit:</strong> Centralized data management, enhanced security, scalability.</li>
-                        </ul>
-                        <img src="https://images.unsplash.com/photo-1550500171-628d09581561?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Server room or cloud icon representing server-side" class="slide-image w-full mt-4">
-                    </div>
-                </div>
-                <p class="mt-8 animate__animated animate__fadeInUp animate__delay-1s"><strong>Interaction:</strong> The client sends requests to the server, and the server processes them, sends back responses, which the client then renders.</p>
-            </div>
-        </div>
-
-        <!-- Slide 8: Overview of Key Technologies in Web Systems -->
-        <div id="slide-7" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Overview of Key Technologies in Web Systems</h2>
-                <div class="flex flex-wrap justify-between gap-4 mt-6">
-                    <div class="w-full md:w-[48%] animate__animated animate__fadeInLeft">
-                        <ul>
-                            <li><strong>1. HyperText Markup Language (HTML):</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> The standard markup language for creating web pages. It provides the <strong>structure</strong> and content of a webpage.</li>
-                                    <li><strong>Analogy:</strong> The skeleton of a house.</li>
-                                </ul>
-                            </li>
-                            <li><strong>2. Cascading Style Sheets (CSS):</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> A style sheet language used for describing the presentation of a document written in HTML. It controls the <strong>visual appearance</strong>.</li>
-                                    <li><strong>Analogy:</strong> The paint, wallpaper, and interior design of a house.</li>
-                                </ul>
-                            </li>
-                            <li><strong>3. JavaScript (JS):</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> Enables <strong>interactivity</strong> on web pages. Allows for dynamic content, animations, form validation, and complex user interfaces.</li>
-                                    <li><strong>Analogy:</strong> The electrical wiring and smart home features.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="w-full md:w-[48%] animate__animated animate__fadeInRight animate__delay-0-5s">
-                        <ul>
-                            <li><strong>4. Web Servers:</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> Store web content and deliver it to web browsers upon request.</li>
-                                    <li><strong>Examples:</strong> Apache HTTP Server, Nginx.</li>
-                                </ul>
-                            </li>
-                            <li><strong>5. Databases:</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> Organized collections of data. Crucial for storing dynamic content, user information, etc.</li>
-                                    <li><strong>Examples:</strong> MySQL, PostgreSQL, MongoDB.</li>
-                                </ul>
-                            </li>
-                            <li><strong>6. Server-Side Programming Languages:</strong>
-                                <ul>
-                                    <li><strong>Role:</strong> Executed on the web server to process requests, interact with databases, handle business logic.</li>
-                                    <li><strong>Examples:</strong> Python, PHP, Node.js, Ruby, Java.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <img src="https://images.unsplash.com/photo-1522252234503-e356532ce266?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image representing various web technologies with multiple screens and code" class="slide-image w-full mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 9: Collaborative Activity: Website Dissection and Presentation -->
-        <div id="slide-8" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Collaborative Activity: Website Dissection and Presentation</h2>
-                <div class="activity-instructions animate__animated animate__fadeInUp animate__delay-0-5s">
-                    <h3>Instructions:</h3>
-                    <ol>
-                        <li><strong>Group Formation:</strong> You will be divided into small groups (3–5 members each).</li>
-                        <li><strong>Website Selection:</strong> Each group will collaboratively choose a popular website or web application that you frequently use and are familiar with. (e.g., Facebook, Lazada, YouTube, Shopee, GCash).</li>
-                        <li><strong>Guided Analysis:</strong> As a group, thoroughly discuss and formulate answers to the following guide questions. Be prepared to present your findings to the class.</li>
-                    </ol>
-                </div>
-                <img src="https://images.unsplash.com/photo-1521737711867-ee1ce5a90ca4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image representing collaborative group work" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 10: Group Activity Guide Questions -->
-        <div id="slide-9" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Group Activity Guide Questions</h2>
-                <ul class="animate__animated animate__fadeInUp">
-                    <li>What is the primary purpose and core functionality of this chosen website/application?</li>
-                    <li>Identify specific features or functions that render this site interactive or particularly useful to its users.</li>
-                    <li>Based on our discussion today, hypothesize what processes occur "behind the scenes" when you perform actions like clicking buttons, logging into an account, or submitting a form.</li>
-                    <li>Which of the key technologies discussed in today's lesson do you believe are primarily at work in the background of this website/application? Be ready to justify your assumptions.</li>
-                </ul>
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4cd085?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of a person analyzing data on a laptop" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 11: Group Sharing and Discussion -->
-        <div id="slide-10" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Group Sharing and Discussion</h2>
-                <p class="animate__animated animate__fadeInUp">Each group will briefly present their insights and findings to the class.</p>
-                <img src="https://images.unsplash.com/photo-1531488107567-54b73b5df510?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of a person giving a presentation" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-0-5s">
-            </div>
-        </div>
-
-        <!-- Slide 12: Broadening of Concept - Deeper Understanding -->
-        <div id="slide-11" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Broadening of Concept - Deeper Understanding</h2>
-                <ul class="animate__animated animate__fadeInUp">
-                    <li>Why is it essential for websites to integrate a variety of distinct technologies to function effectively?</li>
-                    <li>Articulate the fundamental differences in responsibilities between client-side and server-side operations within a web system.</li>
-                    <li>From a technical and user experience perspective, what are the defining characteristics that contribute to a "good" and "functional" website or web application?</li>
-                </ul>
-                <img src="https://images.unsplash.com/photo-1451187580459-491902588fec?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image representing deep thinking or insight" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 13: Integration - Ignacian Core Value -->
-        <div id="slide-12" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Integration - Ignacian Core Value</h2>
-                <ul class="animate__animated animate__fadeInLeft">
-                    <li><strong>Core Value:</strong> Excellence</li>
-                    <li><strong>Related Value:</strong> Education</li>
-                </ul>
-                <p class="animate__animated animate__fadeInUp animate__delay-0-5s"><strong>Reflection:</strong> How can acquiring a deep understanding of the structure and underlying mechanisms of web systems empower you to innovate, develop creative solutions, and effectively address real-world problems in the future?</p>
-                <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of people collaborating, representing values and innovation" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 14: Integration - Social Orientation -->
-        <div id="slide-13" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Integration - Social Orientation</h2>
-                <ul class="animate__animated animate__fadeInLeft">
-                    <li><strong>Concept:</strong> Digital Citizenship & Web Awareness</li>
-                </ul>
-                <p class="animate__animated animate__fadeInUp animate__delay-0-5s"><strong>Reflection:</strong> In today's hyper-connected society, where digital interactions are ubiquitous, why is it critically important for every individual to understand how web systems function and how they impact our daily lives?</p>
-                <img src="https://images.unsplash.com/photo-1520697923769-1c9f2b8f7c9e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image representing social connection and digital citizenship" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 15: Integration - Across Disciplines -->
-        <div id="slide-14" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Integration - Across Disciplines</h2>
-                <ul class="animate__animated animate__fadeInLeft">
-                    <li><strong>Concept:</strong> Technology in Everyday Life</li>
-                </ul>
-                <p class="animate__animated animate__fadeInUp animate__delay-0-5s"><strong>Reflection:</strong> Beyond the realm of pure IT, how are the principles and applications of web systems demonstrably applied and integrated into diverse fields such as business, education, and healthcare?</p>
-                <img src="https://images.unsplash.com/photo-1533750050854-ce88c83507c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image showing technology applied in various fields with diverse professionals" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 16: Integration - Faith/Biblical Reflection -->
-        <div id="slide-15" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Integration - Faith/Biblical Reflection</h2>
-                <div class="biblical-verse animate__animated animate__zoomIn animate__delay-0-5s">
-                    <p><strong>Biblical Verse:</strong> Proverbs 4:7 – "The beginning of wisdom is this: Get wisdom. Though it cost all you have, get understanding."</p>
-                </div>
-                <p class="animate__animated animate__fadeInUp animate__delay-1s"><strong>Reflection:</strong> How does this ancient proverb resonate with our modern pursuit of knowledge and understanding in the complex domain of web systems and technologies?</p>
-                <img src="https://images.unsplash.com/photo-1518641979313-a496b0101d29?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of an old book representing wisdom and knowledge" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 17: Evaluation / Assessment -->
-        <div id="slide-16" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Evaluation / Assessment</h2>
-                <h3 class="animate__animated animate__fadeInLeft">Activity: Written Output</h3>
-                <div class="activity-instructions animate__animated animate__fadeInUp animate__delay-0-5s">
-                    <h3>Instructions:</h3>
-                    <p>In 1–2 well-structured paragraphs, explain in your own words:</p>
-                    <ol>
-                        <li>What precisely constitutes a web system?</li>
-                        <li>Elaborate on why it is of paramount importance for you, as an IT student, to thoroughly understand the various technologies employed in web systems.</li>
-                    </ol>
-                </div>
-                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of a person writing or typing, representing assessment" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 18: Summary / Action - Reflective Conclusion -->
-        <div id="slide-17" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Summary / Action - Reflective Conclusion</h2>
-                <ul class="animate__animated animate__fadeInUp">
-                    <li>What was the most surprising or particularly interesting concept or piece of information you learned during today's lesson?</li>
-                    <li>How do you personally feel about delving deeper into the technologies that underpin the websites and applications you use every day?</li>
-                </ul>
-                <img src="https://images.unsplash.com/photo-1506729731111-e6e2f12f91a5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Abstract image representing reflection or summary" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 19: Purposive Assignment -->
-        <div id="slide-18" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Purposive Assignment</h2>
-                <div class="activity-instructions animate__animated animate__fadeInUp animate__delay-0-5s">
-                    <h3>Instructions:</h3>
-                    <p>In preparation for our next lesson, undertake a research task:</p>
-                    <ol>
-                        <li>Identify and list five (5) websites or web applications that you utilize frequently in your daily routine.</li>
-                        <li>For each identified website/application, describe the specific features or functions you interact with most often.</li>
-                        <li>Based on your current understanding from today's lesson, formulate and write down your assumptions about the underlying technologies that might be powering those features.</li>
-                    </ol>
-                </div>
-                <img src="https://images.unsplash.com/photo-1456324504447-ce476a6a9b5f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image representing research or a task with a person reading" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <!-- Slide 20: References / Instructional Materials -->
-        <div id="slide-19" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">References / Instructional Materials</h2>
-                <ul class="animate__animated animate__fadeInUp">
-                    <li>Projector for displaying website screenshots and presentation slides</li>
-                    <li>Online educational resources: W3Schools, Mozilla Developer Network (MDN)</li>
-                    <li>Bible</li>
-                </ul>
-                <img src="https://images.unsplash.com/photo-1497633261621-e376662706e2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image representing books and online learning resources" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-0-5s">
-            </div>
-        </div>
-
-        <!-- Slide 21: Concluding Remarks -->
-        <div id="slide-20" class="slide">
-            <div class="slide-content-area">
-                <h2 class="animate__animated animate__fadeInDown">Concluding Remarks</h2>
-                <h3 class="animate__animated animate__fadeIn animate__delay-0-5s">Thank You!</h3>
-                <p class="animate__animated animate__fadeInUp animate__delay-1s">"The journey into web systems is a journey into the future of digital interaction. Keep exploring, keep questioning, and keep building."</p>
-                <p class="animate__animated animate__fadeInUp animate__delay-1-5s">Are there any questions or points you would like to clarify?</p>
-                <img src="https://images.unsplash.com/photo-1549495475-1e370a2f7c00?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image of hands clapping, representing appreciation" class="slide-image w-2/3 mt-6 animate__animated animate__zoomIn animate__delay-1s">
-            </div>
-        </div>
-
-        <div class="navigation-buttons">
-            <button id="prevBtn" class="nav-button">Previous</button>
-            <button id="nextBtn" class="nav-button">Next</button>
         </div>
     </div>
 
+    <!-- Slide 4: Website vs Web App -->
+    <div id="slide-4" class="slide">
+         <i class="bi bi-lightbulb-fill icon-header mb-4"></i>
+         <h2 class="slide-title">Website vs. Web Application</h2>
+         <div class="split-container">
+             <div class="card p-4 flex-fill">
+                <h3 class="fw-bold text-center">Website (Static)</h3>
+                <p class="fs-5">A website is primarily informational. Its main goal is to present content that doesn't change based on user interaction. It's like a digital brochure or a book—you can read it, but you can't change its content.</p>
+                <p class="text-center fs-1">📰</p>
+                <p class="text-muted text-center">Examples: A company's informational page, a blog, a portfolio site.</p>
+             </div>
+             <div class="card p-4 flex-fill">
+                <h3 class="fw-bold text-center">Web Application (Dynamic)</h3>
+                <p class="fs-5">A web application is interactive. It's designed for user engagement, allowing you to perform tasks, create content, and manipulate data. It's more like a software program that you access through your browser.</p>
+                 <p class="text-center fs-1">🛒</p>
+                 <p class="text-muted text-center">Examples: Online banking, social media (Facebook), e-commerce (Shopee).</p>
+             </div>
+         </div>
+         <div class="probing-question mt-4 col-10">
+            <p class="mb-0"><strong>Check for Understanding:</strong> Is your school's online grading portal a website or a web application? Why?</p>
+        </div>
+    </div>
+
+    <!-- Slide 5: Client vs Server -->
+    <div id="slide-5" class="slide">
+        <i class="bi bi-cpu-fill icon-header mb-4"></i>
+        <h2 class="slide-title">Client-Side vs. Server-Side</h2>
+        <p class="slide-subtitle text-muted mb-5">Every web system has two fundamental sides that communicate constantly to deliver the experience you see on your screen.</p>
+        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxzdmcgd2lkdGg9Ijg3MHB4IiBoZWlnaHQ9IjQ1NHB4IiB2aWV3Qm94PSIwIDAgODcwIDQ1NCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj4NCiAgICA8dGl0bGU+Q2xpZW50IFNlcnZlciBJZGlhZ3JhbTwvdGl0bGU+DQogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+DQogICAgICAgIDxnIGlkPSJDbGllbnQtU2VydmVyLUlkaWFncmFtIj4NCiAgICAgICAgICAgIDxnIGlkPSJHcm91cCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsIDAuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0YwRjJGNSIgeD0iMCIgeT0iMCIgd2lkdGg9Ijg3MCIgaGVpZ2h0PSI0NTQiPjwvcmVjdD4NCiAgICAgICAgICAgICAgICA8ZyBpZD0iR3JvdXAtMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTk0LjAwMDAwMCwgNDguMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgICAgIDxwb2x5Z29uIGlkPSJQb2x5Z29uIiBmaWxsPSIjRkZGRkZGIiBwb2ludHM9IjIzMy4xMjE0MjkgMTQxLjEzOTI4NiAzNDQuOTI1IDAgNDk2IDExMi4yMDcwMjQgNDk2IDM1NyAyMzMuMDExMDcxIDM1NyAwIDM1NyAwIDEwMy4yMTQyODYiPjwvcG9seWdvbj4NCiAgICAgICAgICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0UxRTZGRiIgeD0iMCIgeT0iMTEyLjIwNzAyNCIgd2lkdGg9IjQ5NiIgaGVpZ2h0PSIyNDQuNzkyOTc2Ij48L3JlY3Q+DQogICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgIDx0ZXh0IGlkPSJDTElFTlQtU0lERSIgZm9udC1mYW1pbHk9IkhlbHZldGljYU5ldWUtQm9sZCwgSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMkQzMTMyIj4NCiAgICAgICAge3N0eWxlPi5jbGllbnQtc2lkZS10ZXh0e2ZvbnQ6IDI0cHggSGVsdmV0aWNhLCBzYW5zLXNlcmlmO2ZvbnQtd2VpZ2h0OiBib2xkO2ZpbGw6ICMyRDMxMzI7fTwvc3R5bGU+Pjx0ZXh0IHg9IjM1MSIgeT0iMTI4IiBjbGFzcz0iY2xpZW50LXNpZGUtdGV4dCI+Q0xJRU5ULVNJREU8L3RleHQ+DQogICAgICAgICAgICAgICAgPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDx0ZXh0IGlkPSJTRVJWRVItU0lERSIgZm9udC1mYW1pbHk9IkhlbHZldGljYU5ldWUtQm9sZCwgSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMkQzMTMyIj4NCiAgICAgICAge3N0eWxlPi5zZXJ2ZXItc2lkZS10ZXh0e2ZvbnQ6IDI0cHggSGVsdmV0aWNhLCBzYW5zLXNlcmlmO2ZvbnQtd2VpZ2h0OiBib2xkO2ZpbGw6ICMyRDMxMzI7fTwvc3R5bGU+Pjx0ZXh0IHg9IjM1MSIgeT0iMjgyIiBjbGFzcz0ic2VydmVyLXNpZGUtdGV4dCI+U0VSVkVSLVNJREU8L3RleHQ+DQogICAgICAgICAgICAgICAgPC90ZXh0Pg0KICAgICAgICAgICAgICAgIDxnIGlkPSJjbGllbnQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMS4wMDAwMDAsIDE2MS4wMDAwMDApIj4NCiAgICAgICAgICAgICAgICAgICAgPGcgaWQ9IkhUTUwiPg0KICAgICAgICAgICAgICAgICAgICAgICAgPHJlY3QgaWQ9IlJlY3RhbmdsZSIgZmlsbD0iI0ZGRkZGRiIgeD0iMCIgeT0iMCIgd2lkdGg9Ijc5IiBoZWlnaHQ9IjM2IiByeD0iNCI+PC9yZWN0Pg0KICAgICAgICAgICAgICAgICAgICAgICAgPHRleHQgaWQ9IkhUTUwiIGZpbGw9IiM1NTU1NTUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2FOZXVlLUJvbGQsIEhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRzcGFuIHg9IjE4LjYiIHk9IjIzIj5IVE1MPC90c3Bhbj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvdGV4dD4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iQ1NTIiB0cmFuc2Zvcm09dHJhbnNsYXRlKDEwNC4wMDAwMDAsIDAuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgICAgICAgICA8cmVjdCBpZD0iUmVjdGFuZ2xlIiBmaWxsPSIjRkZGRkZGIiB4PSIwIiB5PSIwIiB3aWR0aD0iNzQiIGhlaWdodD0iMzYiIHJ4PSI0Ij48L3JlY3Q+DQogICAgICAgICAgICAgICAgICAgICAgICA8dGV4dCBpZD0iQ1NTIiBmaWxsPSIjNTU1NTU1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhTmV1ZS1Cb2xkLCBIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0c3BhbiB4PSIxOC4zIiB5PSIyMyI+Q1NTPC90c3Bhbj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvdGV4dD4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iSlMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwMy4wMDAwMDAsIDAuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgICAgICAgICA8cmVjdCBpZD0iUmVjdGFuZ2xlIiBmaWxsPSIjRkZGRkZGIiB4PSIwIiB5PSIwIiB3aWR0aD0iNjgiIGhlaWdodD0iMzYiIHJ4PSI0Ij48L3JlY3Q+DQogICAgICAgICAgICAgICAgICAgICAgICA8dGV4dCBpZD0iSlMiIGZpbGw9IiM1NTU1NTUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2FOZXVlLUJvbGQsIEhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRzcGFuIHg9IjI0LjUiIHk9IjIzIj5KUzwvdHNwYW4+DQogICAgICAgICAgICAgICAgICAgICAgICA8L3RleHQ+DQogICAgICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgICAgICA8L2c+DQogICAgICAgICAgICAgICAgPGcgaWQ9InNlcnZlciIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ3LjAwMDAwMCwgMzEwLjAwMDAwMCkiPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iUHl0aG9uIj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUiIGZpbGw9IiNGRkZGRkYiIHg9IjAiIHk9IjAiIHdpZHRoPSIxMDIiIGhlaWdodD0iMzYiIHJ4PSI0Ij48L3JlY3Q+DQogICAgICAgICAgICAgICAgICAgICAgICA8dGV4dCBpZD0iUHl0aG9uIiBmaWxsPSIjNTU1NTU1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhTmV1ZS1Cb2xkLCBIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0c3BhbiB4PSIxOC44IiB5PSIyMyI+UHl0aG9uPC90c3Bhbj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvdGV4dD4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iUG9zdGdyZVNRTCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDEzLjAwMDAwMCwgMC4wMDAwMDApIj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUiIGZpbGw9IiNGRkZGRkYiIHg9IjAiIHk9IjAiIHdpZHRoPSIxNzUiIGhlaWdodD0iMzYiIHJ4PSI0Ij48L3JlY3Q+DQogICAgICAgICAgICAgICAgICAgICAgICA8dGV4dCBpZD0iUG9zdGdyZVNRTCIgZmlsbD0iIzU1NTU1NSIgZm9udC1mYW1pbHk9IkhlbHZldGljYU5ldWUtQm9sZCwgSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIj4NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dHNwYW4geD0iMTkuNCIgeT0iMjMiPlBvc3RncmVTUUw8L3RzcGFuPg0KICAgICAgICAgICAgICAgICAgICAgICAgPC90ZXh0Pg0KICAgICAgICAgICAgICAgICAgICA8L2c+DQogICAgICAgICAgICAgICAgICAgIDxnIGlkPSJOZ2lueCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI3LjAwMDAwMCwgMC4wMDAwMDApIj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUiIGZpbGw9IiNGRkZGRkYiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MiIgaGVpZ2h0PSIzNiIgcng9IjQiPjwvcmVjdD4NCiAgICAgICAgICAgICAgICAgICAgICAgIDx0ZXh0IGlkPSJOZ2lueCIgZmlsbD0iIzU1NTU1NSIgZm9udC1mYW1pbHk9IkhlbHZldGljYU5ldWUtQm9sZCwgSGVsdmV0aWNhIE5ldWUiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIj4NCiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dHNwYW4geD0iMTguMSIgeT0iMjMiPk5naW54PC90c3Bhbj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvdGV4dD4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgICAgICA8ZyBpZD0iTm9kZS5qcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjMzLjAwMDAwMCwgMC4wMDAwMDApIj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IGlkPSJSZWN0YW5nbGUiIGZpbGw9IiNGRkZGRkYiIHg9IjAiIHk9IjAiIHdpZHRoPSI5MCIgaGVpZ2h0PSIzNiIgcng9IjQiPjwvcmVjdD4NCiAgICAgICAgICAgICAgICAgICAgICAgIDx0ZXh0IGlkPSJOb2RlLmpzIiBmaWxsPSIjNTU1NTU1IiBmb250LWZhbWlseT0iSGVsdmV0aWNhTmV1ZS1Cb2xkLCBIZWx2ZXRpY2EgTmV1ZSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0c3BhbiB4PSIxOC42IiB5PSIyMyI+Tm9kZS5qczwvdHNwYW4+DQogICAgICAgICAgICAgICAgICAgICAgICA8L3RleHQ+DQogICAgICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgICAgICAgICAgPGcgaWQ9Ik1vbmdvREIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM0OC4wMDAwMDAsIDAuMDAwMDAwKSI+DQogICAgICAgICAgICAgICAgICAgICAgICA8cmVjdCBpZD0iUmVjdGFuZ2xlIiBmaWxsPSIjRkZGRkZGIiB4PSIwIiB5PSIwIiB3aWR0aD0iMTEzIiBoZWlnaHQ9IjM2IiByeD0iNCI+PC9yZWN0Pg0KICAgICAgICAgICAgICAgICAgICAgICAgPHRleHQgaWQ9Ik1vbmdvREIiIGZpbGw9IiM1NTU1NTUiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2FOZXVlLUJvbGQsIEhlbHZldGljYSBOZXVlIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iYm9sZCI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRzcGFuIHg9IjE3LjkiIHk9IjIzIj5Nb25nb0RCPC90c3Bhbj4NCiAgICAgICAgICAgICAgICAgICAgICAgIDwvdGV4dD4NCiAgICAgICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgIDwvZz4NCiAgICAgICAgICAgIDwvZz4NCiAgICAgICAgPC9nPg0KICAgIDwvZz4NCjwvc3ZnPg==" alt="Client-Server Iceberg Analogy" class="img-fluid" style="max-width: 600px;">
+        <div class="probing-question mt-4 col-10">
+            <p class="mb-0"><strong>Check for Understanding:</strong> When you see a loading spinner on a website after clicking a button, which side (client or server) is likely doing the most work at that moment? Why?</p>
+        </div>
+    </div>
+    
+    <!-- Slide 6: Client-Side Technologies -->
+    <div id="slide-6" class="slide">
+        <i class="bi bi-display-fill icon-header text-success mb-4"></i>
+        <h2 class="slide-title">Client-Side (Frontend)</h2>
+        <p class="slide-subtitle text-muted mb-5">Also known as the "frontend," this is everything the user sees and interacts with directly in the browser. Its primary job is to present data and capture user input.</p>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">HTML (HyperText Markup Language)</h4><p>The core structure and skeleton of a webpage. It defines the elements like headings, paragraphs, images, and links.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">CSS (Cascading Style Sheets)</h4><p>Controls the visual presentation. It handles the layout, colors, fonts, and overall aesthetic of the website to make it visually appealing.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">JavaScript</h4><p>Brings the page to life. It adds interactivity, such as animations, form validations, pop-up messages, and dynamic content updates without needing to reload the page.</p></div></div>
+            </div>
+        </div>
+        <div class="probing-question mt-4 col-10">
+            <p class="mb-0"><strong>Check for Understanding:</strong> If you wanted to change the color of a button on a webpage, which of these three technologies would you use?</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: Server-Side Technologies -->
+    <div id="slide-7" class="slide">
+        <i class="bi bi-server icon-header text-info mb-4"></i>
+        <h2 class="slide-title">Server-Side (Backend)</h2>
+        <p class="slide-subtitle text-muted mb-5">Also known as the "backend," this is the engine room of the web system. It runs on a remote computer (the server) and handles all the complex logic, data management, and security.</p>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Programming Languages</h4><p>These languages (like Python, PHP, Node.js) process user requests, perform calculations, and execute the core business logic of the application.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Databases</h4><p>Databases (like MySQL, MongoDB) are responsible for storing, organizing, and retrieving all the application's data, such as user profiles, products, or posts.</p></div></div>
+                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Web Servers</h4><p>This is the software (like Apache or Nginx) that listens for incoming requests from clients (browsers) and serves them the appropriate files and data.</p></div></div>
+            </div>
+        </div>
+         <div class="probing-question mt-4 col-10">
+            <p class="mb-0"><strong>Check for Understanding:</strong> When you create a new account on a website, which backend component is responsible for saving your username and password?</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Activity -->
+    <div id="slide-8" class="slide">
+        <i class="bi bi-people-fill icon-header mb-4"></i>
+        <h2 class="slide-title">Group Activity: Website Dissection</h2>
+        <div class="content-card col-md-8">
+            <h4 class="fw-bold">Instructions:</h4>
+            <p>Form small groups and choose a popular website (e.g., Facebook, YouTube, Shopee). As a group, discuss and answer:</p>
+            <ol>
+                <li>What is the website's main purpose? Is it more of a static site or a web application?</li>
+                <li>What are three key interactive features?</li>
+                <li>For one of those features, what do you think happens on the <strong>server</strong> when you use it?</li>
+                <li>What visual clues tell you that HTML, CSS, and JavaScript are being used on the <strong>client</strong>?</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 9: Deeper Understanding -->
+    <div id="slide-9" class="slide">
+        <i class="bi bi-question-circle-fill icon-header mb-4"></i>
+        <h2 class="slide-title">Deeper Understanding</h2>
+        <div class="content-card col-md-9 text-start">
+            <p class="fs-5 mb-2"><strong>Q: Why do websites need different technologies?</strong></p>
+            <p class="text-muted">A: Because each technology is specialized for a specific task. This is called "separation of concerns." HTML is for meaning, CSS is for presentation, and JavaScript is for behavior. On the backend, server languages handle logic while databases handle data. This specialization makes web systems more efficient, scalable, and easier to maintain.</p>
+            <hr>
+            <p class="fs-5 mb-2"><strong>Q: What makes a good, functional website?</strong></p>
+            <p class="text-muted">A: A great website is a harmonious blend of both client-side and server-side excellence. It needs to be fast (efficient server processing and optimized client-side code), intuitive (a clear and responsive user interface), secure (robust backend authentication and data protection), and reliable (minimal downtime and errors).</p>
+        </div>
+    </div>
+
+    <!-- Slide 10: Integration -->
+    <div id="slide-10" class="slide">
+         <i class="bi bi-mortarboard-fill icon-header mb-4"></i>
+         <h2 class="slide-title">Integration & Reflection</h2>
+         <div class="split-container text-start">
+             <div class="col-md-5">
+                 <h4 class="fw-bold">Digital Citizenship & Web Awareness</h4>
+                 <p>In our digital society, understanding how web systems work is a key part of being a responsible digital citizen. It empowers you to better identify security risks (like phishing), understand data privacy, and appreciate the complex infrastructure that supports fields like business, education, and healthcare.</p>
+             </div>
+             <div class="col-md-5">
+                 <h4 class="fw-bold">Ignacian Value: Excellence</h4>
+                 <p>As St. Ignatius valued excellence, so too should we in our digital creations. Learning the fundamental structure of web systems is the first step toward this excellence. It provides the foundation upon which you can innovate, solve real-world problems, and build digital tools that are not just functional, but truly exceptional.</p>
+             </div>
+         </div>
+    </div>
+    
+    <!-- Slide 11: Closing -->
+    <div id="slide-11" class="slide">
+        <div class="container">
+            <blockquote class="blockquote">
+                <p class="fs-3">"The beginning of wisdom is this: Get wisdom. Though it cost all you have, get understanding."</p>
+                <footer class="blockquote-footer fs-5">Proverbs 4:7</footer>
+            </blockquote>
+            <div class="mt-5 text-muted">
+                <p class="mb-0">Created for the subject Web Systems and Technologies</p>
+                <p class="mb-0">Based on the Learning Plan by John Carl Ray R. Lelis</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="slide-nav">
+        <button id="prevBtn" title="Previous Slide"><i class="bi bi-arrow-left"></i></button>
+        <button id="nextBtn" title="Next Slide"><i class="bi bi-arrow-right"></i></button>
+    </div>
+    
+    <div id="slideCounter" class="slide-counter"></div>
+
     <script>
-        const slides = document.querySelectorAll('.slide');
+        // JavaScript for Slide Navigation
         let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCounter = document.getElementById('slideCounter');
 
         function showSlide(index) {
-            slides.forEach((slide, i) => {
-                const contentElements = slide.querySelectorAll('h1, h2, h3, p, ul, ol, img, .discussion-prompt, .activity-instructions, .biblical-verse');
-                if (i === index) {
-                    slide.classList.add('active');
-                    // Add animation classes to the content of the active slide
-                    contentElements.forEach(el => {
-                        if (el.dataset.animatedClass) {
-                            el.classList.add('animate__animated', el.dataset.animatedClass);
-                        } else {
-                            // Default animation for elements without specific data-animated-class
-                            el.classList.add('animate__animated', 'animate__fadeInUp');
-                        }
-                    });
-                } else {
-                    slide.classList.remove('active');
-                    // Remove animation classes from non-active slides to reset them
-                    contentElements.forEach(el => {
-                        el.classList.remove('animate__animated', 'animate__fadeInDown', 'animate__fadeInLeft', 'animate__fadeInRight', 'animate__fadeInUp', 'animate__fadeIn', 'animate__zoomIn');
-                        if (el.dataset.animatedClass) {
-                            el.classList.remove(el.dataset.animatedClass);
-                        }
-                    });
-                }
-            });
-            updateButtons();
-        }
-
-        function nextSlide() {
-            if (currentSlide < slides.length - 1) {
-                currentSlide++;
-                showSlide(currentSlide);
+            // Ensure index is within bounds
+            if (index >= totalSlides) {
+                index = totalSlides - 1;
             }
+            if (index < 0) {
+                index = 0;
+            }
+
+            // Hide the current slide
+            slides[currentSlide].classList.remove('active');
+
+            // Show the new slide
+            slides[index].classList.add('active');
+            currentSlide = index;
+            
+            updateNav();
+        }
+        
+        function updateNav() {
+            // Update counter
+            slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+            
+            // Update button states
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === totalSlides - 1;
         }
 
-        function prevSlide() {
+        // Event Listeners for buttons
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
             if (currentSlide > 0) {
-                currentSlide--;
-                showSlide(currentSlide);
+                showSlide(currentSlide - 1);
             }
-        }
-
-        function updateButtons() {
-            document.getElementById('prevBtn').disabled = currentSlide === 0;
-            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
-        }
-
-        document.getElementById('nextBtn').addEventListener('click', nextSlide);
-        document.getElementById('prevBtn').addEventListener('click', prevSlide);
-
+        });
+        
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                prevSlide();
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                showSlide(currentSlide - 1);
             }
         });
 
-        // Add data-animated-class to elements for easier management
-        // This is a manual mapping, more complex logic could parse from existing classes
-        // For simplicity, applying some common ones
-        document.querySelectorAll('.slide').forEach((slide, slideIndex) => {
-            slide.querySelectorAll('h1').forEach(el => el.dataset.animatedClass = 'animate__fadeInDown');
-            slide.querySelectorAll('h2').forEach(el => el.dataset.animatedClass = 'animate__fadeInDown');
-            slide.querySelectorAll('h3').forEach(el => el.dataset.animatedClass = 'animate__fadeInLeft');
-            slide.querySelectorAll('p:not(.subtitle)').forEach(el => el.dataset.animatedClass = 'animate__fadeInUp');
-            slide.querySelectorAll('ul').forEach(el => el.dataset.animatedClass = 'animate__fadeInUp');
-            slide.querySelectorAll('ol').forEach(el => el.dataset.animatedClass = 'animate__fadeInUp');
-            slide.querySelectorAll('.discussion-prompt, .activity-instructions, .biblical-verse, .slide-image').forEach(el => el.dataset.animatedClass = 'animate__zoomIn');
-            // Specific delays for title slide content
-            if (slideIndex === 0) {
-                slide.querySelector('.subtitle').dataset.animatedClass = 'animate__fadeIn';
-            }
-        });
-
-
-        // Initial display
-        showSlide(currentSlide);
+        // Initialize the first slide
+        showSlide(0);
     </script>
 </body>
 </html>
