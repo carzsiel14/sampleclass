@@ -288,6 +288,39 @@
         .inner-card h4, .inner-card p {
             color: var(--facebook-text) !important;
         }
+        
+        /* New Visualization Styles */
+        .visualization-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 900px;
+        }
+        .viz-box {
+            background: var(--facebook-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            width: 200px;
+        }
+        .viz-box i { font-size: 3.5rem; }
+        
+        .arrows-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100px;
+        }
+        .arrow-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .arrow-group i {
+            font-size: 2.5rem;
+        }
+
     </style>
 </head>
 <body>
@@ -365,7 +398,7 @@
                     <h3 class="fw-bold">The Complete Team Behind a Website</h3>
                     <p class="fs-5">A <strong>web system</strong> is the complete team of parts working together to bring a website to your screen. This includes computers (servers), code, networks, and databases.</p>
                     <h4 class="fw-bold mt-3">What is its Role?</h4>
-                    <p class="text-white-50">Its role is to power our digital world. Web systems run everything from e-commerce (Shopee) and social media (Facebook) to education and online banking.</p>
+                    <p>Its role is to power our digital world. Web systems run everything from e-commerce (Shopee) and social media (Facebook) to education and online banking.</p>
                 </div>
             </div>
         </div>
@@ -516,23 +549,23 @@
                 <p class="mb-0">(Your Browser)</p>
             </div>
             
-            <!-- Request -->
-            <div style="position: absolute; left: 220px; top: 30%;">
-                <div class="fw-bold">1. Request</div>
-                <i class="bi bi-arrow-right-circle-fill fs-1 text-success"></i>
+            <!-- Arrows Column -->
+            <div class="arrows-column">
+                <div class="arrow-group">
+                    <div class="fw-bold">1. Request</div>
+                    <i class="bi bi-arrow-right-circle-fill fs-1 text-success"></i>
+                </div>
+                 <div class="arrow-group">
+                    <div class="fw-bold">2. Response</div>
+                    <i class="bi bi-arrow-left-circle-fill fs-1 text-danger"></i>
+                </div>
             </div>
-            
+
             <!-- Server -->
             <div class="viz-box">
                 <i class="bi bi-server text-info"></i>
                 <h5 class="mt-2 fw-bold">Server</h5>
                 <p class="mb-0">(Processes Request)</p>
-            </div>
-            
-             <!-- Response -->
-             <div style="position: absolute; right: 220px; top: 60%;">
-                <div class="fw-bold">2. Response</div>
-                <i class="bi bi-arrow-left-circle-fill fs-1 text-danger"></i>
             </div>
         </div>
     </div>
