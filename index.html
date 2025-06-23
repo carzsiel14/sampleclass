@@ -21,6 +21,13 @@
             padding: 0;
             overflow: hidden; /* Prevent scrolling */
             font-family: 'Inter', sans-serif;
+            --facebook-blue: #0866FF;
+            --facebook-blue-gradient: linear-gradient(135deg, #0866FF 0%, #3a86ff 100%);
+            --facebook-bg: #F0F2F5;
+            --facebook-card-bg: #FFFFFF;
+            --facebook-text: #050505;
+            --facebook-text-secondary: #65676B;
+            --facebook-card-text: #FFFFFF;
         }
 
         .slide {
@@ -38,6 +45,7 @@
             left: 0;
             transition: opacity 0.6s ease-in-out;
             opacity: 0;
+            background-color: var(--facebook-bg);
         }
 
         .slide.active {
@@ -108,14 +116,11 @@
 
 
         /* Slide Specific Backgrounds */
-        #slide-1 {
-            background-color: #f8f9fa;
+        .bg-cover {
+            background-color: var(--facebook-card-bg);
             background-image: linear-gradient(135deg, #ffffff 50%, #e6f0ff 50%);
             color: #333;
         }
-        .bg-light-gray { background-color: #f0f2f5; }
-        .bg-white { background-color: #ffffff; }
-
         
         /* Navigation Controls */
         .slide-nav {
@@ -145,7 +150,7 @@
             bottom: 20px;
             left: 30px;
             z-index: 1000;
-            color: #6c757d;
+            color: var(--facebook-text-secondary);
             background-color: rgba(255, 255, 255, 0.7);
             padding: 5px 15px;
             border-radius: 20px;
@@ -156,22 +161,33 @@
             font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 1rem;
+            color: var(--facebook-text);
         }
          .slide-subtitle {
             font-size: 1.25rem;
             font-weight: 400;
             max-width: 800px;
+            color: var(--facebook-text-secondary);
         }
         .content-card {
-            background-color: #ffffff;
+            background: var(--facebook-blue-gradient);
+            color: var(--facebook-card-text);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             text-align: left;
+            width: 100%;
+            max-width: 900px;
+        }
+        .content-card h1, .content-card h2, .content-card h3, .content-card h4, .content-card h5, .content-card p, .content-card li {
+            color: var(--facebook-card-text);
+        }
+        .content-card .text-muted {
+            color: rgba(255,255,255,0.8) !important;
         }
          .icon-header {
             font-size: 4rem;
-            color: #0d6efd;
+            color: var(--facebook-blue);
         }
         .split-container {
             display: flex;
@@ -180,34 +196,46 @@
             width: 100%;
             gap: 2rem;
         }
-        .blockquote {
-            border-left: 5px solid #0d6efd;
-            padding-left: 1.5rem;
-            max-width: 700px;
-            margin: 2rem auto;
-        }
         .instructor-img {
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #0d6efd;
+            border: 8px solid #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
         }
-        .question-slide { text-align: left; }
+        .question-container {
+            background: var(--facebook-blue-gradient);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+         .question-container .btn-primary {
+            background-color: #fff;
+            color: var(--facebook-blue);
+            font-weight: bold;
+            border: none;
+        }
         .answer {
             display: none;
-            background-color: #eaf6ff;
+            background-color: rgba(255,255,255,0.2);
             border-radius: 8px;
             padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid #bde0fe;
+            margin-top: 1.5rem;
+            text-align: center;
         }
         .iframe-wrapper {
-            border: 8px solid #333;
+            border: 8px solid #ccc;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             width: 380px;
-            height: 500px;
+            height: 350px;
             overflow: hidden;
             position: relative;
             background: #fff;
@@ -218,7 +246,7 @@
             top: -1px;
             left: 10px;
             font-size: 18px;
-            color: #888;
+            color: #aaa;
             letter-spacing: 5px;
             z-index: 10;
         }
@@ -230,52 +258,64 @@
         .tech-icon {
             font-size: 2rem;
             margin-bottom: 0.5rem;
-            color: #0d6efd;
         }
         .framework-logo {
             height: 32px;
             margin-bottom: 0.5rem;
         }
-         .visualization-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 80%;
-            max-width: 900px;
+        .profile-card {
+            width: 100%;
+            max-width: 700px;
+            background: var(--facebook-card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             position: relative;
+            padding-top: 100px;
+            margin-top: -50px; /* pull up */
         }
-        .viz-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            width: 180px;
+        .profile-header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            height: 200px;
+            border-radius: 15px 15px 0 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
         }
-        .viz-box i { font-size: 3rem; }
+        .card.inner-card {
+            background-color: var(--facebook-card-bg);
+        }
+        .inner-card h4, .inner-card p {
+            color: var(--facebook-text) !important;
+        }
     </style>
 </head>
 <body>
 
     <!-- Slide 1: Title -->
-    <div id="slide-1" class="slide active">
-        <h1 class="slide-title animated" style="color: #0d6efd;">Web Systems and Technologies</h1>
+    <div id="slide-1" class="slide active bg-cover">
+        <h1 class="slide-title animated" style="color: var(--facebook-blue);">Web Systems and Technologies</h1>
         <p class="slide-subtitle animated delay-1">An introduction to the platforms that power the digital world.</p>
+        <p class="slide-subtitle animated delay-2 mt-3"><strong>Prepared by: John Carl Ray R. Lelis</strong></p>
     </div>
 
     <!-- Slide 2: Instructor Introduction -->
-    <div id="slide-2" class="slide bg-light-gray">
-        <img src="https://scontent.fdvo1-1.fna.fbcdn.net/v/t39.30808-6/499421816_3975176996066522_5730849379930356855_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHmBS_16YMVqQ0Ku210ri7gK7bu7ycxl4krtu7vJzGXicRdZEHZenV0M96fwjr5QWwk3Q24zbRjV3yH67tJHiPb&_nc_ohc=1jdA8j9NO8QQ7kNvwEII30Z&_nc_oc=AdkoZUdtpvOleR1o9eaHHw41BiFlzmeMY7vavugGG6y5eOnyOEoUrAYPfLXa7V8xg8A&_nc_zt=23&_nc_ht=scontent.fdvo1-1.fna&_nc_gid=S8ujUBKu0uwm6o64A-lKlQ&oh=00_AfNiRQTGWwMnmno9BAl1-ymAv1SYG-8XZzfIUJyRzz6Mhg&oe=685F9572" alt="Instructor John Carl Ray R. Lelis" class="instructor-img mb-4 animated">
-        <h2 class="slide-title animated delay-1">Your Instructor</h2>
-        <p class="slide-subtitle animated delay-2">John Carl Ray R. Lelis</p>
-        <p class="text-muted animated delay-3">Welcome to our journey into Web Systems and Technologies!</p>
+    <div id="slide-2" class="slide">
+        <div class="profile-header animated"></div>
+        <div class="profile-card animated delay-1">
+            <img src="https://scontent.fdvo1-1.fna.fbcdn.net/v/t39.30808-6/499421816_3975176996066522_5730849379930356855_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHmBS_16YMVqQ0Ku210ri7gK7bu7ycxl4krtu7vJzGXicRdZEHZenV0M96fwjr5QWwk3Q24zbRjV3yH67tJHiPb&_nc_ohc=1jdA8j9NO8QQ7kNvwEII30Z&_nc_oc=AdkoZUdtpvOleR1o9eaHHw41BiFlzmeMY7vavugGG6y5eOnyOEoUrAYPfLXa7V8xg8A&_nc_zt=23&_nc_ht=scontent.fdvo1-1.fna&_nc_gid=S8ujUBKu0uwm6o64A-lKlQ&oh=00_AfNiRQTGWwMnmno9BAl1-ymAv1SYG-8XZzfIUJyRzz6Mhg&oe=685F9572" alt="Instructor John Carl Ray R. Lelis" class="instructor-img">
+            <h2 class="slide-title mt-3 mb-1">John Carl Ray R. Lelis</h2>
+            <p class="slide-subtitle text-muted">Web Systems and Technologies Instructor</p>
+            <div class="p-4 text-start">
+                <p class="fs-5 mb-2"><i class="bi bi-mortarboard-fill me-2 text-primary"></i>Graduated at St. Mary's College of Bansalan Inc.</p>
+                <p class="fs-5 mb-2"><i class="bi bi-code-slash me-2 text-primary"></i>Freelance Web Developer</p>
+                <p class="fs-5 mb-0"><i class="bi bi-easel-fill me-2 text-primary"></i>Part-time IT Instructor</p>
+            </div>
+        </div>
     </div>
     
     <!-- Slide 3: Motivation -->
-    <div id="slide-3" class="slide bg-white">
+    <div id="slide-3" class="slide">
         <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Web in Your Daily Life</h2>
         <div class="mb-4 animated delay-2">
@@ -297,40 +337,47 @@
     </div>
     
     <!-- Slide 4: Origin of a Web System -->
-    <div id="slide-4" class="slide bg-light-gray">
+    <div id="slide-4" class="slide">
         <i class="bi bi-globe-americas icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Origin of Web Systems</h2>
-        <div class="col-md-8 text-start animated delay-2">
-            <p class="fs-5">The story begins in <strong>1989</strong> with Tim Berners-Lee, a British scientist at CERN. He invented the World Wide Web (which is not the same as the internet!).</p>
-            <p class="fs-5">He proposed a system to share information across a computer network. This first web system had three main technologies:</p>
+        <div class="col-md-8 text-start animated delay-2 content-card">
+            <p class="fs-5">The story begins in <strong>1989</strong> with Tim Berners-Lee, a British scientist. He invented the World Wide Web to help scientists share information easily.</p>
+            <p class="fs-5">His first web system had three main technologies:</p>
             <ul class="fs-5">
-                <li><strong>HTML:</strong> A language to create web pages.</li>
-                <li><strong>HTTP:</strong> A protocol to send and receive web pages.</li>
-                <li><strong>URL:</strong> An address to find each web page.</li>
+                <li><strong>HTML:</strong> A simple language to create linked documents.</li>
+                <li><strong>HTTP:</strong> A set of rules for computers to request and send these documents.</li>
+                <li><strong>URL:</strong> A unique address for every document.</li>
             </ul>
-             <p class="fs-5 text-muted">From this simple start, web systems have evolved into the complex, interactive platforms we use every day.</p>
+             <p class="text-muted">From this simple start, web systems have evolved into the complex, interactive platforms we use every day.</p>
         </div>
     </div>
 
     <!-- Slide 5: What is a Web System? -->
-    <div id="slide-5" class="slide bg-white">
+    <div id="slide-5" class="slide">
         <i class="bi bi-diagram-3-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">What is a Web System?</h2>
-        <div class="split-container container-fluid animated delay-2">
-            <div class="col-md-5">
-                <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2070&auto=format&fit=crop" class="img-fluid rounded shadow" alt="Working on a laptop">
-            </div>
-            <div class="col-md-5 text-start">
-                <p class="fs-5">A <strong>web system</strong> is a comprehensive framework of software, hardware, and network protocols that work in unison to deliver content and services over the internet. It encompasses everything from the physical servers storing the data to the code running in your browser.</p>
-                <p class="fs-5 text-muted">Think of it as the complete ecosystem that allows a website or application to function, communicate, and serve its purpose to users worldwide.</p>
+        <div class="animated delay-2 content-card">
+            <div class="split-container container-fluid">
+                <div class="col-md-5">
+                    <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2070&auto=format&fit=crop" class="img-fluid rounded shadow" alt="Working on a laptop">
+                </div>
+                <div class="col-md-7 text-start ps-4">
+                    <h3 class="fw-bold">The Complete Team Behind a Website</h3>
+                    <p class="fs-5">A <strong>web system</strong> is the complete team of parts working together to bring a website to your screen. This includes computers (servers), code, networks, and databases.</p>
+                    <h4 class="fw-bold mt-3">What is its Role?</h4>
+                    <p class="text-white-50">Its role is to power our digital world. Web systems run everything from e-commerce (Shopee) and social media (Facebook) to education and online banking.</p>
+                </div>
             </div>
         </div>
     </div>
     
     <!-- Slide 6: Question for Web System -->
-    <div id="slide-6" class="slide bg-light-gray question-slide">
-         <div class="col-md-8 animated">
-             <h3 class="fw-bold">Check for Understanding</h3>
+    <div id="slide-6" class="slide">
+        <div class="question-container animated">
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="bi bi-patch-question-fill fs-1 text-white me-3"></i>
+                <h3 class="fw-bold mb-0">Check for Understanding</h3>
+            </div>
              <p class="fs-4 mt-3">Besides the website you see, can you name one other component that must be part of a web system to store your login information?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
@@ -340,7 +387,7 @@
     </div>
 
     <!-- Slide 7: Website vs Web App -->
-    <div id="slide-7" class="slide bg-white">
+    <div id="slide-7" class="slide">
          <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
          <h2 class="slide-title animated delay-1">Website vs. Web Application</h2>
          <div class="split-container">
@@ -394,30 +441,22 @@
     </div>
     
     <!-- Slide 8: Web System vs. Website -->
-    <div id="slide-8" class="slide bg-light-gray">
+    <div id="slide-8" class="slide">
         <i class="bi bi-question-diamond-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Web System vs. Website</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">Are they the same thing?</p>
-        <div class="split-container col-md-10">
-            <div class="card p-4 flex-fill animated delay-3">
-                <h3 class="fw-bold text-center">Website (The Car)</h3>
-                <p class="fs-5">A website is the final product that the user sees and interacts with in their browser. It's the collection of pages, images, and content.</p>
-            </div>
-            <div class="card p-4 flex-fill animated delay-4">
-                <h3 class="fw-bold text-center">Web System (The Factory)</h3>
-                <p class="fs-5">The web system is the entire infrastructure behind the scenes: the servers, databases, backend code, and everything else that builds, serves, and manages the website.</p>
-            </div>
-        </div>
-        <div class="content-card mt-4 col-10 animated delay-4">
+        <div class="col-md-10 animated delay-2 content-card">
             <h4 class="fw-bold text-center">Are they interchangeable?</h4>
             <p class="text-center mb-0">In casual conversation, people often use "website" to mean the whole thing. In a technical context, "web system" is more accurate because it includes all the backend components, not just the frontend pages.</p>
         </div>
     </div>
     
     <!-- Slide 9: Question for Web App -->
-    <div id="slide-9" class="slide bg-white question-slide">
-         <div class="col-md-8 animated">
-             <h3 class="fw-bold">Check for Understanding</h3>
+    <div id="slide-9" class="slide">
+        <div class="question-container animated">
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="bi bi-patch-question-fill fs-1 text-white me-3"></i>
+                <h3 class="fw-bold mb-0">Check for Understanding</h3>
+            </div>
              <p class="fs-4 mt-3">Is an e-commerce site like Shopee, where you add items to a cart, a static or a dynamic web application? Why?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
@@ -428,10 +467,10 @@
 
 
     <!-- Slide 10: Client vs Server -->
-    <div id="slide-10" class="slide bg-light-gray">
+    <div id="slide-10" class="slide">
         <i class="bi bi-cpu-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Client-Side vs. Server-Side</h2>
-        <div class="split-container col-md-10 text-start animated delay-2">
+        <div class="split-container col-md-10 text-start animated delay-2 content-card">
             <div class="col-md-6">
                 <h3 class="fw-bold">Client-Side (Frontend)</h3>
                 <p class="fs-5">This refers to everything the user sees and interacts with in their browser. It's the "front" of the house, responsible for the user interface and visual presentation.</p>
@@ -443,10 +482,20 @@
         </div>
     </div>
     
-    <!-- Slide 11: Question for Client/Server -->
-     <div id="slide-11" class="slide bg-white question-slide">
-         <div class="col-md-8 animated">
-             <h3 class="fw-bold">Check for Understanding</h3>
+     <!-- Slide 11: Client-Server Model -->
+    <div id="slide-11" class="slide">
+        <i class="bi bi-diagram-3-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">The Client-Server Model</h2>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/1280px-Client-server-model.svg.png" alt="Client-Server Model Diagram" class="img-fluid bg-white p-3 rounded animated delay-2" style="max-width: 700px;">
+    </div>
+    
+    <!-- Slide 12: Question for Client/Server -->
+     <div id="slide-12" class="slide">
+         <div class="question-container animated">
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="bi bi-patch-question-fill fs-1 text-white me-3"></i>
+                <h3 class="fw-bold mb-0">Check for Understanding</h3>
+            </div>
              <p class="fs-4 mt-3">When you see a loading spinner on a website after clicking a button, which side (client or server) is likely doing the most work at that moment?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
@@ -455,22 +504,8 @@
          </div>
     </div>
     
-    <!-- Slide 12: The Request-Response Cycle -->
-    <div id="slide-12" class="slide bg-light-gray">
-        <i class="bi bi-arrow-repeat icon-header mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">The Request-Response Cycle</h2>
-        <div class="container text-start col-md-10 animated delay-2">
-            <ol class="fs-5">
-                <li><strong>The Request:</strong> Your browser (the Client) sends a request over the internet to the server's address.</li>
-                <li><strong>The Processing:</strong> The Server receives the request, processes any logic, and gathers data from a database if needed.</li>
-                <li><strong>The Response:</strong> The Server sends the resource back to your browser, typically as HTML, CSS, and JavaScript files.</li>
-                <li><strong>The Rendering:</strong> Your browser receives these files and renders them into the visual webpage you see.</li>
-            </ol>
-        </div>
-    </div>
-    
     <!-- Slide 13: Request-Response Visualization -->
-    <div id="slide-13" class="slide bg-white">
+    <div id="slide-13" class="slide">
         <i class="bi bi-diagram-2-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Visualizing the Cycle</h2>
         <div class="visualization-container animated delay-2">
@@ -503,50 +538,103 @@
     </div>
 
     <!-- Slide 14: Client-Side Technologies -->
-    <div id="slide-14" class="slide bg-light-gray">
+    <div id="slide-14" class="slide">
         <i class="bi bi-display-fill icon-header text-success mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Client-Side Technologies</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">These are the three fundamental technologies that run in every modern web browser.</p>
-        <div class="container animated delay-3">
+        <div class="container animated delay-2 content-card">
             <div class="row g-4">
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-html tech-icon" style="color: #E44D26;"></i><h4 class="fw-bold">HTML</h4><p>The core structure and skeleton of a webpage.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-css tech-icon" style="color: #264DE4;"></i><h4 class="fw-bold">CSS</h4><p>Controls the visual presentation, layout, and colors.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-filetype-js tech-icon" style="color: #F0DB4F;"></i><h4 class="fw-bold">JavaScript</h4><p>Brings the page to life with interactivity.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-filetype-html tech-icon" style="color: #E44D26;"></i> <span style="color:#E44D26;">HTML</span></h4><p>HyperText Markup Language is the standard for creating web pages. It uses "tags" to define elements like headings, paragraphs, links, and images, forming the essential structure of the content.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-filetype-css tech-icon" style="color: #264DE4;"></i> <span style="color:#264DE4;">CSS</span></h4><p>Cascading Style Sheets is the language used to describe the presentation of a document written in HTML. It controls the layout, colors, fonts, and overall visual appearance.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-filetype-js tech-icon" style="color: #F0DB4F;"></i> <span style="color:#f0b84f;">JavaScript</span></h4><p>A programming language that enables interactive web pages. It is used for animations, validating forms, and dynamically updating content without reloading the page.</p></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Frontend Body Analogy -->
+    <div id="slide-15" class="slide">
+        <i class="bi bi-person-bounding-box icon-header text-success mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Analogy: The Frontend as a Human Body</h2>
+        <div class="container animated delay-2 content-card">
+            <div class="row g-4">
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-filetype-html tech-icon" style="color: #E44D26;"></i><h4 class="fw-bold" style="color:#E44D26;">HTML is the Skeleton</h4><p>Provides the core structure and framework of the body.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-filetype-css tech-icon" style="color: #264DE4;"></i><h4 class="fw-bold" style="color:#264DE4;">CSS is the Appearance</h4><p>Controls the visual presentation, like our skin, hair, and clothes.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-filetype-js tech-icon" style="color: #F0DB4F;"></i><h4 class="fw-bold" style="color:#f0b84f;">JavaScript is the Muscles</h4><p>Enables movement and action, like our nervous system telling our muscles to move.</p></div></div>
             </div>
         </div>
     </div>
     
-    <!-- Slide 15: Question on Frontend -->
-    <div id="slide-15" class="slide bg-white question-slide">
-         <div class="col-md-8 animated">
-             <h3 class="fw-bold">Check for Understanding</h3>
-             <p class="fs-4 mt-3">If you wanted to change the color of a button on a webpage, which of the three core client-side technologies would you use?</p>
+    <!-- Slide 16: Question on Frontend -->
+    <div id="slide-16" class="slide">
+         <div class="question-container animated">
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="bi bi-patch-question-fill fs-1 text-white me-3"></i>
+                <h3 class="fw-bold mb-0">Check for Understanding</h3>
+            </div>
+             <p class="fs-4 mt-3">If you wanted to change the color of a button on a webpage, which core client-side technology would you use?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
-                 You would use <strong>CSS</strong>. While HTML creates the button element itself, CSS is responsible for all styling, including its color, size, and position.
+                 <strong>CSS</strong>. While HTML creates the button element itself, CSS is responsible for all visual styling, including its color, size, and position.
              </div>
          </div>
     </div>
+    
+    <!-- Slide 17: What is a Framework? -->
+    <div id="slide-17" class="slide">
+        <i class="bi bi-tools icon-header text-success mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">What is a Framework?</h2>
+        <div class="content-card col-md-8 text-start animated delay-2">
+            <p class="fs-5">Think about baking a cake. You could source the flour, sugar, and eggs yourself (writing code from scratch), or you could use a cake mix (a <strong>framework</strong>).</p>
+            <p class="fs-5">A framework is a pre-built set of tools, code, and conventions that gives developers a head start. It provides a structure for their application so they don't have to build everything from zero, saving time and reducing errors.</p>
+        </div>
+    </div>
+    
+    <!-- Slide 18: Popular Frontend Frameworks -->
+    <div id="slide-18" class="slide">
+        <i class="bi bi-layers-fill icon-header text-success mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Popular Frontend Frameworks</h2>
+        <div class="container animated delay-2 content-card">
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" class="framework-logo mx-auto" alt="React Logo"><h4 class="fw-bold">React</h4><p>A popular library for building user interfaces. Developed by Facebook.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png" class="framework-logo mx-auto" alt="Angular Logo"><h4 class="fw-bold">Angular</h4><p>A comprehensive framework for building large-scale applications.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png" class="framework-logo mx-auto" alt="Vue.js Logo"><h4 class="fw-bold">Vue.js</h4><p>A progressive framework that is known for being easy to learn and flexible.</p></div></div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Slide 16: Server-Side Technologies -->
-    <div id="slide-16" class="slide bg-light-gray">
+    <!-- Slide 19: Server-Side Technologies -->
+    <div id="slide-19" class="slide">
         <i class="bi bi-server icon-header text-info mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Server-Side Technologies</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the engine room of the web system. It handles all the complex logic, data management, and security.</p>
-        <div class="container animated delay-3">
+        <div class="container animated delay-2 content-card">
             <div class="row g-4">
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-code-slash tech-icon"></i><h4 class="fw-bold">Programming Languages</h4><p>(e.g., Python, PHP, Node.js) Process user requests, and execute core business logic.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-database-fill tech-icon"></i><h4 class="fw-bold">Databases</h4><p>(e.g., MySQL, MongoDB) Store, organize, and retrieve all application data.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100 text-center"><i class="bi bi-hdd-network-fill tech-icon"></i><h4 class="fw-bold">Web Servers</h4><p>(e.g., Apache or Nginx) Listens for and responds to requests from clients.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-code-slash tech-icon" style="color: #563d7c;"></i> <span style="color: #563d7c;">Programming Languages</span></h4><p>Code (e.g., Python, PHP, Node.js) that runs on the server to process user input, interact with databases, and perform the application's core logic.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-database-fill tech-icon" style="color: #00758F;"></i> <span style="color: #00758F;">Databases</span></h4><p>Organized collections of data (e.g., MySQL, MongoDB) that store all the necessary information, from user profiles to product listings.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-start"><h4><i class="bi bi-hdd-network-fill tech-icon" style="color: #F37626;"></i> <span style="color: #F37626;">Web Servers</span></h4><p>Software (e.g., Apache, Nginx) that accepts HTTP requests from clients, fetches the requested resources, and sends them back to the client.</p></div></div>
             </div>
         </div>
     </div>
     
-    <!-- Slide 17: Question on Backend -->
-    <div id="slide-17" class="slide bg-white question-slide">
-         <div class="col-md-8 animated">
-             <h3 class="fw-bold">Check for Understanding</h3>
-             <p class="fs-4 mt-3">When you create a new account on a website, which backend component is responsible for saving your username and password?</p>
+    <!-- Slide 20: Backend Body Analogy -->
+    <div id="slide-20" class="slide">
+        <i class="bi bi-person-workspace icon-header text-info mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Analogy: The Backend as a Human Body</h2>
+        <div class="container animated delay-2 content-card">
+            <div class="row g-4">
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-code-slash tech-icon" style="color: #563d7c;"></i><h4 class="fw-bold" style="color: #563d7c;">Languages: The Brain</h4><p>Processes requests and makes decisions, like our conscious thought.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-database-fill tech-icon" style="color: #00758F;"></i><h4 class="fw-bold" style="color: #00758F;">Databases: The Memory</h4><p>Stores and retrieves all information, just like our long-term memory.</p></div></div>
+                <div class="col-md-4"><div class="card inner-card p-3 h-100 text-center"><i class="bi bi-hdd-network-fill tech-icon" style="color: #F37626;"></i><h4 class="fw-bold" style="color: #F37626;">Web Servers: The Senses</h4><p>Listens for and responds to requests, like our senses receiving information.</p></div></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 21: Question on Backend -->
+    <div id="slide-21" class="slide">
+         <div class="question-container animated">
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="bi bi-patch-question-fill fs-1 text-white me-3"></i>
+                <h3 class="fw-bold mb-0">Check for Understanding</h3>
+            </div>
+             <p class="fs-4 mt-3">When you create a new account, which backend component is responsible for saving your username and password?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
                 The <strong>Database</strong>. The backend programming language takes your information and sends it to the database to be stored securely for future logins.
@@ -554,11 +642,25 @@
          </div>
     </div>
     
-    <!-- Slide 18: Summary of Key Concepts -->
-    <div id="slide-18" class="slide bg-light-gray">
+    <!-- Slide 22: Why is it Important for IT Students? -->
+    <div id="slide-22" class="slide">
+        <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Why Learn About Web Systems?</h2>
+        <div class="col-md-8 text-start animated delay-2 content-card">
+            <p class="fs-5">As an IT student, understanding web systems is a fundamental skill. It's the foundation for many careers in technology.</p>
+            <ul class="fs-5">
+                <li><strong>Career Opportunities:</strong> It opens doors to jobs like Frontend, Backend, or Full-Stack development.</li>
+                <li><strong>Problem-Solving:</strong> It teaches you how complex systems work together to solve problems.</li>
+                <li><strong>Digital Literacy:</strong> In a world that runs on the web, understanding its architecture makes you a more informed and capable digital citizen.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 23: Summary of Key Concepts -->
+    <div id="slide-23" class="slide">
         <i class="bi bi-card-checklist icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Summary of Key Concepts</h2>
-        <div class="col-md-8 text-start animated delay-2">
+        <div class="col-md-8 text-start animated delay-2 content-card">
             <ul class="fs-5">
                 <li>A <strong>Web System</strong> is the complete ecosystem of hardware and software that delivers a web experience.</li>
                 <li><strong>Web Applications</strong> are interactive, while <strong>Websites</strong> are mostly informational.</li>
@@ -569,8 +671,8 @@
     </div>
 
 
-    <!-- Slide 19: Activity -->
-    <div id="slide-19" class="slide bg-white">
+    <!-- Slide 24: Activity -->
+    <div id="slide-24" class="slide">
         <i class="bi bi-people-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Group Activity: Website Dissection</h2>
         <div class="content-card col-md-8 animated delay-2">
@@ -585,38 +687,8 @@
         </div>
     </div>
     
-    <!-- Slide 20: Career Paths -->
-    <div id="slide-20" class="slide bg-light-gray">
-        <i class="bi bi-briefcase-fill icon-header mb-4 animated"></i>
-        <h2 class="slide-title animated delay-1">Career Paths in Web Development</h2>
-        <p class="slide-subtitle text-muted mb-5 animated delay-2">Understanding these concepts opens doors to many exciting careers.</p>
-        <div class="container animated delay-3">
-            <div class="row g-4">
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Frontend Developer</h4><p>Specializes in the client-side. They use HTML, CSS, and JavaScript to build the user interface and ensure a great user experience.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Backend Developer</h4><p>Specializes in the server-side. They build and maintain the server, application logic, and databases, focusing on performance and security.</p></div></div>
-                <div class="col-md-4"><div class="card p-3 h-100"><h4 class="fw-bold">Full-Stack Developer</h4><p>A "jack-of-all-trades" who is comfortable working on both the frontend and backend parts of a web system.</p></div></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 21: Integration -->
-    <div id="slide-21" class="slide bg-white">
-         <i class="bi bi-mortarboard-fill icon-header mb-4 animated"></i>
-         <h2 class="slide-title animated delay-1">Integration & Reflection</h2>
-         <div class="split-container text-start animated delay-2">
-             <div class="col-md-5">
-                 <h4 class="fw-bold">Digital Citizenship & Web Awareness</h4>
-                 <p>In our digital society, understanding how web systems work is a key part of being a responsible digital citizen. It empowers you to better identify security risks (like phishing), understand data privacy, and appreciate the complex infrastructure that supports fields like business, education, and healthcare.</p>
-             </div>
-             <div class="col-md-5">
-                 <h4 class="fw-bold">Ignacian Value: Excellence</h4>
-                 <p>As St. Ignatius valued excellence, so too should we in our digital creations. Learning the fundamental structure of web systems is the first step toward this excellence. It provides the foundation upon which you can innovate, solve real-world problems, and build digital tools that are not just functional, but truly exceptional.</p>
-             </div>
-         </div>
-    </div>
-    
-    <!-- Slide 22: Closing -->
-    <div id="slide-22" class="slide bg-light-gray">
+    <!-- Slide 25: Closing -->
+    <div id="slide-25" class="slide">
         <div class="container animated">
             <blockquote class="blockquote animated delay-1">
                 <p class="fs-3">"The beginning of wisdom is this: Get wisdom. Though it cost all you have, get understanding."</p>
