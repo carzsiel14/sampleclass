@@ -202,12 +202,40 @@
             margin-top: 1rem;
             border: 1px solid #bde0fe;
         }
-        .screenshot-img {
-            width: 100%;
-            max-width: 250px;
+        .iframe-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .iframe-wrapper {
+            border: 8px solid #333;
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            width: 380px;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+        }
+        .iframe-wrapper::before {
+            content: '● ● ●';
+            position: absolute;
+            top: -1px;
+            left: 10px;
+            font-size: 18px;
+            color: #888;
+            letter-spacing: 5px;
+            z-index: 10;
+        }
+        .iframe-screenshot {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 125%;
+            height: 125%;
         }
     </style>
 </head>
@@ -221,7 +249,7 @@
 
     <!-- Slide 2: Instructor Introduction -->
     <div id="slide-2" class="slide bg-light-gray">
-        <img src="https://i.imgur.com/g8rGfC8.jpeg" alt="Instructor John Carl Ray R. Lelis" class="instructor-img mb-4 animated">
+        <img src="https://scontent.fdvo1-1.fna.fbcdn.net/v/t39.30808-6/499421816_3975176996066522_5730849379930356855_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHmBS_16YMVqQ0Ku210ri7gK7bu7ycxl4krtu7vJzGXicRdZEHZenV0M96fwjr5QWwk3Q24zbRjV3yH67tJHiPb&_nc_ohc=1jdA8j9NO8QQ7kNvwEII30Z&_nc_oc=AdkoZUdtpvOleR1o9eaHHw41BiFlzmeMY7vavugGG6y5eOnyOEoUrAYPfLXa7V8xg8A&_nc_zt=23&_nc_ht=scontent.fdvo1-1.fna&_nc_gid=S8ujUBKu0uwm6o64A-lKlQ&oh=00_AfNiRQTGWwMnmno9BAl1-ymAv1SYG-8XZzfIUJyRzz6Mhg&oe=685F9572" alt="Instructor John Carl Ray R. Lelis" class="instructor-img mb-4 animated">
         <h2 class="slide-title animated delay-1">Your Instructor</h2>
         <p class="slide-subtitle animated delay-2">John Carl Ray R. Lelis</p>
         <p class="text-muted animated delay-3">Welcome to our journey into Web Systems and Technologies!</p>
@@ -231,12 +259,12 @@
     <div id="slide-3" class="slide bg-white">
         <i class="bi bi-lightbulb-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Web in Your Daily Life</h2>
-        <div class="d-flex justify-content-center align-items-center mb-4 animated delay-2">
-            <img src="https://help.shopee.ph/portal/uploads/article/60086/1.png" alt="Shopee Website" class="screenshot-img">
-            <img src="https://www.bworldonline.com/wp-content/uploads/2023/10/GCash-logo.jpg" alt="GCash App" class="screenshot-img">
-            <img src="https://about.fb.com/wp-content/uploads/2023/09/Facebook_New_Logo.jpg?fit=1920%2C1080" alt="Facebook Logo" class="screenshot-img">
+        <div class="iframe-container mb-4 animated delay-2">
+            <div class="iframe-wrapper">
+                 <iframe class="iframe-screenshot" src="https://www.facebook.com" sandbox="allow-scripts allow-same-origin" scrolling="no"></iframe>
+            </div>
         </div>
-        <p class="fs-5 animated delay-3 col-md-8">Have you used any of these websites or apps before? Have you ever stopped to think about how they work behind the scenes?</p>
+        <p class="fs-5 animated delay-3 col-md-8">Have you used a website like this before? Have you ever stopped to think about how it works behind the scenes?</p>
         <p class="fs-5 animated delay-4 col-md-8 text-muted">Today, we pull back the curtain to understand the magic.</p>
     </div>
     
@@ -290,42 +318,68 @@
          <div class="split-container">
              <div class="card p-4 flex-fill animated delay-2">
                 <h3 class="fw-bold text-center">Website (Static)</h3>
-                <p class="fs-5">A website is primarily informational. Its main goal is to present content that doesn't change based on user interaction. It's like a digital brochure or a book—you can read it, but you can't change its content.</p>
+                <p class="fs-5">Primarily informational. Content is pre-built and delivered to the user exactly as it's stored.</p>
                 <p class="text-center fs-1">📰</p>
-                <p class="text-muted text-center">Examples: A company's informational page, a blog, a portfolio site.</p>
              </div>
              <div class="card p-4 flex-fill animated delay-3">
                 <h3 class="fw-bold text-center">Web Application (Dynamic)</h3>
-                <p class="fs-5">A web application is interactive. It's designed for user engagement, allowing you to perform tasks, create content, and manipulate data. It's more like a software program that you access through your browser.</p>
+                <p class="fs-5">Interactive and responsive. Content is generated or changed based on user actions and data.</p>
                  <p class="text-center fs-1">🛒</p>
-                 <p class="text-muted text-center">Examples: Online banking, social media (Facebook), e-commerce (Shopee).</p>
              </div>
          </div>
     </div>
     
-    <!-- Slide 8: Question for Web App -->
-    <div id="slide-8" class="slide bg-light-gray question-slide">
+    <!-- Slide 8: Static Websites Deeper Dive -->
+    <div id="slide-8" class="slide bg-light-gray">
+        <i class="bi bi-file-earmark-text-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Static Websites: A Deeper Dive</h2>
+        <div class="col-md-8 text-start animated delay-2">
+            <p class="fs-5">The content of a static website is fixed. Each page is a separate HTML file, and the content only changes when a developer manually edits the files.</p>
+            <ul class="fs-5">
+                <li><strong>How it works:</strong> When you request a page, the server simply finds the corresponding HTML file and sends it to your browser.</li>
+                <li><strong>Characteristics:</strong> Very fast, secure, and cheap to host.</li>
+                <li><strong>Best for:</strong> Portfolios, simple blogs, company brochures, and informational sites that don't need frequent updates.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 9: Dynamic Websites Deeper Dive -->
+    <div id="slide-9" class="slide bg-white">
+        <i class="bi bi-gear-fill icon-header mb-4 animated"></i>
+        <h2 class="slide-title animated delay-1">Dynamic Websites: A Deeper Dive</h2>
+        <div class="col-md-8 text-start animated delay-2">
+            <p class="fs-5">The content is generated in real-time by the server. Instead of sending a fixed file, the server runs code, gets data from a database, and assembles a custom HTML page just for you.</p>
+            <ul class="fs-5">
+                <li><strong>How it works:</strong> The server uses a backend language (like Python) and a database to build a page based on your request (e.g., showing your specific news feed).</li>
+                <li><strong>Characteristics:</strong> Interactive, personalized, and can handle complex features.</li>
+                <li><strong>Best for:</strong> Social media, e-commerce, online banking, and any application that requires user logins and personalized content.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 10: Question for Web App -->
+    <div id="slide-10" class="slide bg-light-gray question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
-             <p class="fs-4 mt-3">Is an e-commerce site like Shopee, where you add items to a cart, a website or a web application? Why?</p>
+             <p class="fs-4 mt-3">Is an e-commerce site like Shopee, where you add items to a cart, a static or a dynamic web application? Why?</p>
              <button class="btn btn-primary mt-3" onclick="revealAnswer(this)">Reveal Answer</button>
              <div class="answer mt-3 fs-5">
-                 It's a <strong>web application</strong>. Because it allows you to perform actions (add to cart, checkout), manages data specific to you (your cart), and changes based on your interaction, it is a dynamic application.
+                 It's a <strong>dynamic web application</strong>. Because it allows you to perform actions (add to cart, checkout), manages data specific to you (your cart), and the content changes based on your interaction, it must be generated dynamically.
              </div>
          </div>
     </div>
 
 
-    <!-- Slide 9: Client vs Server -->
-    <div id="slide-9" class="slide bg-white">
+    <!-- Slide 11: Client vs Server -->
+    <div id="slide-11" class="slide bg-white">
         <i class="bi bi-cpu-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Client-Side vs. Server-Side</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">Every web system has two fundamental sides that communicate constantly to deliver the experience you see on your screen.</p>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Client-server-model.svg/1280px-Client-server-model.svg.png" alt="Client-Server Model Diagram" class="img-fluid bg-white p-3 rounded animated delay-3" style="max-width: 700px;">
     </div>
     
-    <!-- Slide 10: Question for Client/Server -->
-     <div id="slide-10" class="slide bg-light-gray question-slide">
+    <!-- Slide 12: Question for Client/Server -->
+     <div id="slide-12" class="slide bg-light-gray question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">When you see a loading spinner on a website after clicking a button, which side (client or server) is likely doing the most work at that moment?</p>
@@ -336,8 +390,8 @@
          </div>
     </div>
     
-    <!-- Slide 11: The Request-Response Cycle -->
-    <div id="slide-11" class="slide bg-white">
+    <!-- Slide 13: The Request-Response Cycle -->
+    <div id="slide-13" class="slide bg-white">
         <i class="bi bi-arrow-repeat icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Request-Response Cycle</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the fundamental conversation that happens every time you interact with a website.</p>
@@ -351,8 +405,8 @@
         </div>
     </div>
 
-    <!-- Slide 12: Client-Side Technologies -->
-    <div id="slide-12" class="slide bg-light-gray">
+    <!-- Slide 14: Client-Side Technologies -->
+    <div id="slide-14" class="slide bg-light-gray">
         <i class="bi bi-display-fill icon-header text-success mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Client-Side (Frontend)</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">This is everything the user sees and interacts with directly in the browser. Its primary job is to present data and capture user input.</p>
@@ -365,8 +419,8 @@
         </div>
     </div>
 
-    <!-- Slide 13: Frontend Frameworks -->
-    <div id="slide-13" class="slide bg-white">
+    <!-- Slide 15: Frontend Frameworks -->
+    <div id="slide-15" class="slide bg-white">
         <i class="bi bi-layers-fill icon-header text-success mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">A Quick Look at Frontend Frameworks</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">For complex web applications, developers often use frameworks—pre-written code libraries—to build user interfaces more efficiently.</p>
@@ -379,8 +433,8 @@
         </div>
     </div>
     
-    <!-- Slide 14: Question on Frontend -->
-    <div id="slide-14" class="slide bg-light-gray question-slide">
+    <!-- Slide 16: Question on Frontend -->
+    <div id="slide-16" class="slide bg-light-gray question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">If you wanted to change the color of a button on a webpage, which of the three core client-side technologies would you use?</p>
@@ -391,8 +445,8 @@
          </div>
     </div>
 
-    <!-- Slide 15: Server-Side Technologies -->
-    <div id="slide-15" class="slide bg-white">
+    <!-- Slide 17: Server-Side Technologies -->
+    <div id="slide-17" class="slide bg-white">
         <i class="bi bi-server icon-header text-info mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Server-Side (Backend)</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">This is the engine room of the web system. It runs on a remote computer (the server) and handles all the complex logic, data management, and security.</p>
@@ -405,8 +459,8 @@
         </div>
     </div>
     
-    <!-- Slide 16: Question on Backend -->
-    <div id="slide-16" class="slide bg-light-gray question-slide">
+    <!-- Slide 18: Question on Backend -->
+    <div id="slide-18" class="slide bg-light-gray question-slide">
          <div class="col-md-8 animated">
              <h3 class="fw-bold">Check for Understanding</h3>
              <p class="fs-4 mt-3">When you create a new account on a website, which backend component is responsible for saving your username and password?</p>
@@ -417,8 +471,8 @@
          </div>
     </div>
     
-    <!-- Slide 17: The Role of APIs -->
-    <div id="slide-17" class="slide bg-white">
+    <!-- Slide 19: The Role of APIs -->
+    <div id="slide-19" class="slide bg-white">
         <i class="bi bi-plug-fill icon-header text-info mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">The Role of APIs</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">APIs (Application Programming Interfaces) are the messengers that allow different software components to talk to each other.</p>
@@ -428,8 +482,8 @@
         </div>
     </div>
 
-    <!-- Slide 18: Putting It All Together -->
-    <div id="slide-18" class="slide bg-light-gray">
+    <!-- Slide 20: Putting It All Together -->
+    <div id="slide-20" class="slide bg-light-gray">
         <i class="bi bi-puzzle-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Putting It All Together</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">Let's trace a simple action: Liking a post on social media.</p>
@@ -445,8 +499,8 @@
         </div>
     </div>
 
-    <!-- Slide 19: Summary of Key Concepts -->
-    <div id="slide-19" class="slide bg-white">
+    <!-- Slide 21: Summary of Key Concepts -->
+    <div id="slide-21" class="slide bg-white">
         <i class="bi bi-card-checklist icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Summary of Key Concepts</h2>
         <div class="col-md-8 text-start animated delay-2">
@@ -462,8 +516,8 @@
     </div>
 
 
-    <!-- Slide 20: Activity -->
-    <div id="slide-20" class="slide bg-light-gray">
+    <!-- Slide 22: Activity -->
+    <div id="slide-22" class="slide bg-light-gray">
         <i class="bi bi-people-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Group Activity: Website Dissection</h2>
         <div class="content-card col-md-8 animated delay-2">
@@ -478,8 +532,8 @@
         </div>
     </div>
     
-    <!-- Slide 21: Career Paths -->
-    <div id="slide-21" class="slide bg-white">
+    <!-- Slide 23: Career Paths -->
+    <div id="slide-23" class="slide bg-white">
         <i class="bi bi-briefcase-fill icon-header mb-4 animated"></i>
         <h2 class="slide-title animated delay-1">Career Paths in Web Development</h2>
         <p class="slide-subtitle text-muted mb-5 animated delay-2">Understanding these concepts opens doors to many exciting careers.</p>
@@ -492,8 +546,8 @@
         </div>
     </div>
 
-    <!-- Slide 22: Integration -->
-    <div id="slide-22" class="slide bg-light-gray">
+    <!-- Slide 24: Integration -->
+    <div id="slide-24" class="slide bg-light-gray">
          <i class="bi bi-mortarboard-fill icon-header mb-4 animated"></i>
          <h2 class="slide-title animated delay-1">Integration & Reflection</h2>
          <div class="split-container text-start animated delay-2">
@@ -508,8 +562,8 @@
          </div>
     </div>
     
-    <!-- Slide 23: Closing -->
-    <div id="slide-23" class="slide bg-white">
+    <!-- Slide 25: Closing -->
+    <div id="slide-25" class="slide bg-white">
         <div class="container animated">
             <blockquote class="blockquote animated delay-1">
                 <p class="fs-3">"The beginning of wisdom is this: Get wisdom. Though it cost all you have, get understanding."</p>
