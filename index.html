@@ -1,631 +1,765 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>IT 221 | IAS1 Week 1–2 Web Slides (Lecture + Lab)</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>IT 221 • IAS1 Week 1–2 (Lecture + Lab)</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
   :root{
     --navy:#0c2240;
     --teal:#0096aa;
-    --light:#f2f4f7;
-    --dark:#30343b;
+    --bg:#0b1220;
+    --text:#e9edf3;
+    --muted:#b6c0d1;
   }
-  body{ background: var(--light); font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
-  .slide{ display:none; min-height:100vh; padding:72px 56px 72px 56px; background:white; }
-  .slide.active{ display:block; }
-  .topbar{
-    position:fixed; top:0; left:0; right:0; height:56px;
-    background:var(--light); border-bottom:1px solid #e6e8ee;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 18px; z-index:10;
+  html,body{height:100%; margin:0;}
+  body{background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; overflow:hidden;}
+
+  .stage{ position:relative; width:100vw; height:100vh; overflow:hidden; }
+  .deck{
+    position:absolute; inset:0; display:flex;
+    transition:transform 360ms ease; will-change:transform;
   }
-  .brand{ font-weight:800; color:var(--navy); display:flex; gap:10px; align-items:center; }
-  .pill{
-    font-size:12px; padding:6px 10px; border-radius:999px;
-    background:rgba(0,150,170,.10); color:var(--navy);
-    border:1px solid rgba(0,150,170,.25);
+  .slide{
+    width:100vw; height:100vh; flex:0 0 100vw;
+    padding:74px 74px 74px 74px; box-sizing:border-box;
+    background: radial-gradient(1200px 700px at 10% 0%, rgba(0,150,170,.18), transparent 60%),
+                radial-gradient(1200px 700px at 100% 30%, rgba(12,34,64,.55), transparent 55%),
+                linear-gradient(180deg, #0b1220 0%, #0a1020 100%);
   }
-  .controls button{ border-radius:12px; }
-  .footer{
-    position:fixed; bottom:0; left:0; right:0;
-    background:var(--navy); color:#fff; padding:8px 14px;
-    text-align:center; font-size:13px; z-index:10;
-  }
-  h1{ color:var(--navy); font-weight:900; letter-spacing:-.02em; font-size:42px; margin-bottom:14px; }
-  .sub{ color:#667085; font-size:20px; margin-bottom:16px; }
-  .block-title{ font-size:16px; letter-spacing:.08em; color:#667085; font-weight:800; margin-top:18px; }
-  ul,ol{ font-size:20px; color:var(--dark); }
-  li{ margin:8px 0; }
-  .section-slide{
-    background:var(--navy); color:white;
-    display:flex; align-items:center; justify-content:center; text-align:center;
-  }
-  .section-slide h1{ color:#fff; font-size:64px; margin:0; }
-  .section-slide p{ color:#e9edf3; font-size:22px; margin-top:16px; }
-  .callout{
-    border-left:6px solid var(--teal);
-    background:rgba(0,150,170,.08);
-    padding:14px 16px;
-    border-radius:14px;
-    color:var(--dark);
-    font-size:18px;
-  }
-  .two-col{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
+  .slide-inner{
+    height:100%;
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    box-shadow: 0 18px 60px rgba(0,0,0,.45);
+    padding:44px 46px;
+    display:flex;
+    flex-direction:column;
     gap:18px;
   }
+  .title{
+    font-weight:900; color:#ffffff; letter-spacing:-.02em;
+    line-height:1.05; font-size:56px; margin:0;
+  }
+  .subtitle{ margin:0; color:var(--muted); font-size:22px; }
+  .content{ margin-top:10px; font-size:26px; color:var(--text); }
+  .content ul, .content ol{ font-size:26px; margin:14px 0 0 22px; }
+  .content li{ margin:10px 0; }
+  .content strong{ color:#fff; }
+
+  .callout{
+    margin-top:auto;
+    border-left:6px solid var(--teal);
+    background: rgba(0,150,170,.10);
+    border:1px solid rgba(0,150,170,.22);
+    border-left-width:6px;
+    border-radius:16px;
+    padding:14px 16px;
+    color:var(--text);
+    font-size:18px;
+  }
+
+  /* Instructor Notes (hidden unless unlocked) */
+  .instructor-notes{
+    display:none;
+    margin-top:12px;
+    border-left:6px solid #ff9800;
+    background: rgba(255,152,0,.12);
+    border:1px solid rgba(255,152,0,.22);
+    border-left-width:6px;
+    border-radius:16px;
+    padding:14px 16px;
+    font-size:18px;
+    color:#fff3e0;
+  }
+  .instructor-notes.visible{ display:block; }
+
+  .topbar{
+    position:absolute; top:0; left:0; right:0; height:56px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 18px; z-index:5;
+    background: rgba(8,14,26,.75);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .brand{ display:flex; gap:10px; align-items:center; font-weight:800; }
+  .pill{
+    font-size:12px; padding:6px 10px; border-radius:999px;
+    background: rgba(0,150,170,.14);
+    border:1px solid rgba(0,150,170,.28);
+    color: #e8fbff;
+  }
+  .btn-ghost{
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.16);
+    color:var(--text);
+    background: rgba(255,255,255,.06);
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,.10); color:#fff; }
+
+  .hud{
+    position:absolute; left:0; right:0; bottom:0; height:52px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 18px; z-index:5;
+    background: rgba(8,14,26,.75);
+    backdrop-filter: blur(10px);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .progress{ height:8px; background: rgba(255,255,255,.10); border-radius:999px; overflow:hidden; width:min(520px, 46vw); }
+  .progress > div{ height:100%; width:0%; background: linear-gradient(90deg, rgba(0,150,170,1), rgba(72,210,220,1)); }
+  .meta{ font-size:13px; color:var(--muted); }
   .kbd{
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-    background:#111827; color:#fff; border-radius:8px; padding:2px 8px; font-size:13px;
+    background:#111827; color:#fff;
+    border-radius:8px; padding:2px 8px; font-size:12px;
+    border:1px solid rgba(255,255,255,.10);
   }
-  .card-choice{
-    border:1px solid #e6e8ee; border-radius:22px; padding:22px;
-    background:#fff; box-shadow:0 8px 24px rgba(12,34,64,.08);
-    transition:transform .12s ease, box-shadow .12s ease; cursor:pointer;
+
+  .home-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:18px; }
+  .home-card{
+    background: rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:22px; padding:22px;
+    cursor:pointer; transition: transform .12s ease, background .12s ease;
   }
-  .card-choice:hover{ transform:translateY(-2px); box-shadow:0 12px 32px rgba(12,34,64,.12); }
-  .big-btn{ font-size:22px; padding:18px 18px; border-radius:16px; }
+  .home-card:hover{ transform: translateY(-2px); background: rgba(255,255,255,.08); }
+  .home-card h3{ margin:0; font-weight:900; }
+  .home-card p{ margin:8px 0 0 0; color:var(--muted); }
+  .home-card ul{ margin:12px 0 0 20px; color:var(--text); font-size:20px; }
+
+  .section .slide-inner{ justify-content:center; text-align:center; }
+  .section .title{ font-size:72px; }
+  .section .subtitle{ font-size:26px; }
+
   @media (max-width: 992px){
-    .slide{ padding:72px 18px 72px 18px; }
-    .two-col{ grid-template-columns: 1fr; }
-    h1{ font-size:34px; }
-    ul,ol{ font-size:18px; }
+    .slide{ padding:62px 18px; }
+    .slide-inner{ padding:28px 22px; }
+    .title{ font-size:42px; }
+    .content, .content ul, .content ol{ font-size:20px; }
+    .home-grid{ grid-template-columns:1fr; }
   }
 </style>
 </head>
 
 <body>
-
-<div class="topbar">
-  <div class="brand">
-    <span>IT 221 • IAS1</span>
-    <span class="pill" id="modePill">Choose path</span>
+<div class="stage">
+  <div class="topbar">
+    <div class="brand">
+      <span>IT 221 • IAS1</span>
+      <span class="pill" id="modePill">Home</span>
+    </div>
+    <div class="d-flex gap-2 align-items-center">
+      <button class="btn btn-ghost btn-sm" onclick="goHome()">Home</button>
+      <button class="btn btn-ghost btn-sm" onclick="prev()">Prev</button>
+      <button class="btn btn-ghost btn-sm" onclick="next()">Next</button>
+    </div>
   </div>
-  <div class="controls d-flex gap-2 align-items-center">
-    <span class="text-secondary d-none d-md-inline">Keys: <span class="kbd">←</span> <span class="kbd">→</span> • <span class="kbd">Esc</span> Home</span>
-    <button class="btn btn-outline-secondary" onclick="goHome()">Home</button>
-    <button class="btn btn-outline-secondary" onclick="prevSlide()">Prev</button>
-    <button class="btn btn-primary" onclick="nextSlide()">Next</button>
+
+  <div class="deck" id="deck"></div>
+
+  <div class="hud">
+    <div class="d-flex align-items-center gap-3">
+      <div class="progress"><div id="bar"></div></div>
+      <div class="meta" id="counter">0 / 0</div>
+    </div>
+    <div class="meta">
+      Keys: <span class="kbd">←</span> <span class="kbd">→</span> • <span class="kbd">Space</span> • <span class="kbd">Esc</span> Home
+    </div>
   </div>
 </div>
 
-<div class="footer">
-  St. Mary's College Of Bansalan Inc. • IT 221 Information Assurance and Security 1 • Instructor: John Carl Ray R. Lelis
+<!-- Instructor Notes Password Modal -->
+<div id="notesModal" style="
+  position:fixed; inset:0; background:rgba(0,0,0,.85);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999;">
+  <div style="
+    background:#0f1b33; border:1px solid rgba(255,255,255,.12);
+    border-radius:20px; padding:28px; width:min(440px,90%);
+    color:#fff; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.6);">
+    <h3 style="margin-bottom:10px;">Instructor Notes</h3>
+    <p style="color:#b6c0d1; margin-bottom:12px;">
+      Enter password to unlock instructor-only notes.<br/>
+      <span style="font-size:12px; opacity:.9;">(Students can continue without unlocking.)</span>
+    </p>
+
+    <input id="notesPassword" type="password" placeholder="Password"
+      style="width:100%; padding:12px 14px; border-radius:12px; border:none; margin:10px 0; font-size:16px;"
+      autocomplete="off" />
+
+    <button onclick="unlockNotes()"
+      style="width:100%; padding:12px; border-radius:12px; border:none; background:#0096aa; color:white; font-size:16px; font-weight:600; cursor:pointer;">
+      Unlock Notes
+    </button>
+
+    <div id="notesError" style="margin-top:10px;color:#ffb4b4;display:none;">
+      Incorrect password.
+    </div>
+
+    <button onclick="skipNotes()"
+      style="margin-top:14px; background:none; border:none; color:#b6c0d1; cursor:pointer;">
+      Continue without notes
+    </button>
+  </div>
 </div>
-
-<!-- HOME -->
-<section class="slide active" id="home">
-  <div class="container">
-    <div class="row align-items-center" style="min-height:calc(100vh - 140px);">
-      <div class="col-lg-7">
-        <h1>Information Assurance and Security 1</h1>
-        <div class="sub">Week 1–2 Web Slides (with Discussion / Instructor Notes)</div>
-        <div class="callout mb-4">
-          Navigate like PowerPoint: <span class="kbd">←</span> / <span class="kbd">→</span> • Press <span class="kbd">Esc</span> to return Home.
-        </div>
-        <div class="d-flex gap-3 flex-wrap">
-          <button class="btn btn-primary big-btn" onclick="startPath('lecture')">📘 Lecture Slides</button>
-          <button class="btn btn-success big-btn" onclick="startPath('lab')">🧪 Laboratory Slides</button>
-        </div>
-      </div>
-      <div class="col-lg-5 mt-4 mt-lg-0">
-        <div class="card-choice" onclick="startPath('lecture')">
-          <div class="d-flex justify-content-between">
-            <div>
-              <div class="fs-5 fw-bold" style="color:var(--navy);">Lecture</div>
-              <div class="text-secondary">Concepts + discussion notes</div>
-            </div>
-            <span class="pill">Concepts</span>
-          </div>
-          <hr/>
-          <ul class="m-0">
-            <li>Foundations of IA</li>
-            <li>CIA Triad, controls, tradeoffs</li>
-            <li>Culture + ethics</li>
-          </ul>
-        </div>
-
-        <div class="card-choice mt-3" onclick="startPath('lab')">
-          <div class="d-flex justify-content-between">
-            <div>
-              <div class="fs-5 fw-bold" style="color:var(--navy);">Laboratory</div>
-              <div class="text-secondary">Exercises + submission guide</div>
-            </div>
-            <span class="pill">Hands-on</span>
-          </div>
-          <hr/>
-          <ul class="m-0">
-            <li>Lab rules and safety</li>
-            <li>Baseline workstation audit</li>
-            <li>CIA mapping + outputs</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= LECTURE ================= -->
-<section class="slide section-slide" data-path="lecture">
-  <div>
-    <h1>LECTURE</h1>
-    <p>Week 1–2: Foundations of Information Assurance</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Week 1–2 Lecture Overview</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li>Information Assurance (IA): definition and scope</li>
-    <li>InfoSec vs Cybersecurity vs IA</li>
-    <li>Security objectives: CIA triad and beyond</li>
-    <li>Controls and tradeoffs</li>
-    <li>Culture, ethics, professionalism</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    For Weeks 1–2, our goal is to build the foundation. Before we talk about hacking, tools, or incidents,
-    we must understand what we are protecting, why it matters, and what “good security” looks like.
-    Think of this as learning the rules of the game first—then later we study the attackers and defenses.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Why Information Assurance Matters</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Information assets</b>: student data, records, finances, systems</li>
-    <li><b>Consequences</b>: money loss, downtime, damaged reputation, legal issues</li>
-    <li><b>Security is socio-technical</b>: people + process + technology</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Schools are real targets because they store identity data, grades, accounts, and sometimes payment info.
-    One weak password can lead to unauthorized access; one ransomware incident can stop enrollment or classes.
-    This is why we study IA: not only to stop hackers, but to keep services running and protect people’s data.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Key Concepts: IA, InfoSec, Cybersecurity</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Information Assurance (IA)</b>: trustworthiness, resilience, governance + risk</li>
-    <li><b>Information Security (InfoSec)</b>: protects information from unauthorized access/changes</li>
-    <li><b>Cybersecurity</b>: protects digital systems and networks from cyber attacks</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    A simple way to remember: InfoSec focuses on protecting the data. Cybersecurity focuses on defending systems online.
-    Information Assurance is broader—it includes policies, risk decisions, continuity plans, and ensuring the system
-    stays trustworthy over time.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>IA vs InfoSec vs Cybersecurity (Example)</h1>
-  <div class="block-title">DISCUSSION EXAMPLE</div>
-  <div class="callout">
-    Scenario: A school portal stores grades and student profiles.<br><br>
-    <b>InfoSec</b> asks: Are the grades protected from unauthorized viewing or changes?<br>
-    <b>Cybersecurity</b> asks: Can attackers break into the portal through the network or web vulnerabilities?<br>
-    <b>IA</b> asks: Do we have policies, backups, monitoring, access review, and incident response so the portal remains trustworthy and available?
-  </div>
-  <div class="block-title">CHECK FOR UNDERSTANDING</div>
-  <ul>
-    <li>Which area covers backups and recovery planning?</li>
-    <li>Which area focuses on network defense?</li>
-  </ul>
-</section>
-
-<section class="slide section-slide" data-path="lecture">
-  <div>
-    <h1>SECURITY OBJECTIVES</h1>
-    <p>CIA triad and other goals</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>The CIA Triad</h1>
-  <div class="two-col">
-    <div class="callout">
-      <b>Confidentiality</b><br>
-      Only authorized people can access information.<br>
-      <span class="text-secondary">Examples:</span> access control, encryption, MFA
-    </div>
-    <div class="callout">
-      <b>Integrity</b><br>
-      Information stays accurate and unmodified.<br>
-      <span class="text-secondary">Examples:</span> hashing, checksums, change control
-    </div>
-  </div>
-  <div class="callout mt-3">
-    <b>Availability</b><br>
-    Systems and data are accessible when needed.<br>
-    <span class="text-secondary">Examples:</span> backups, redundancy, fault tolerance
-  </div>
-
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    The CIA triad is the most common security model. Most controls you’ll encounter are designed to protect one or more of these.
-    When you evaluate a system, always ask: “What can harm confidentiality? integrity? availability?”
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>CIA Examples (Campus Context)</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Confidentiality</b>: leaked grades, stolen student IDs, exposed passwords</li>
-    <li><b>Integrity</b>: unauthorized grade changes, altered records</li>
-    <li><b>Availability</b>: portal down during enrollment, ransomware locking files</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    A good security mindset is to connect theory to real life. In a school environment, even “small” issues (like sharing passwords)
-    can lead to serious confidentiality and integrity violations.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Beyond CIA</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Authentication</b>: proving identity (passwords, biometrics, MFA)</li>
-    <li><b>Authorization</b>: giving correct permissions (roles, access levels)</li>
-    <li><b>Non-repudiation</b>: actions can’t be denied later (logs, digital signatures)</li>
-    <li><b>Accountability</b>: tracing actions to individuals (audit trails)</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Many security failures happen because identity and access are weak. Even if encryption exists,
-    the wrong user having the wrong permission is still a breach.
-  </div>
-</section>
-
-<section class="slide section-slide" data-path="lecture">
-  <div>
-    <h1>CONTROLS & TRADEOFFS</h1>
-    <p>How protection works in organizations</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Security Controls</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Administrative</b>: policies, training, procedures, risk management</li>
-    <li><b>Technical</b>: firewalls, MFA, encryption, antivirus, IDS/IPS</li>
-    <li><b>Physical</b>: locks, CCTV, guards, secure rooms</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Good security isn’t only “tools.” Policies and training matter because people make mistakes.
-    Physical controls matter because access to a computer can bypass many digital protections.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Security Tradeoffs</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Security vs Usability</b>: strong rules may be inconvenient</li>
-    <li><b>Security vs Cost</b>: tools + staff + training cost money</li>
-    <li><b>Security vs Performance</b>: controls can slow systems</li>
-    <li><b>Goal</b>: balance controls with real risks</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Security decisions are business decisions too. “Perfect security” is impossible.
-    We reduce risk to an acceptable level by choosing the right controls for the most likely and most damaging threats.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Threats, Vulnerabilities, Risk</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li><b>Threat</b>: something that can cause harm (actor/event)</li>
-    <li><b>Vulnerability</b>: weakness that can be exploited</li>
-    <li><b>Risk</b>: likelihood × impact</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Example: “Phisher” is a threat actor. “User reuses password” is a vulnerability.
-    Risk depends on how likely the phishing is and how bad the impact is (e.g., portal takeover).
-  </div>
-</section>
-
-<section class="slide section-slide" data-path="lecture">
-  <div>
-    <h1>CULTURE & ETHICS</h1>
-    <p>Security is also about behavior</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Security Culture</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li>Security is everyone’s responsibility</li>
-    <li>Human error is a major attack path</li>
-    <li>Least privilege and need-to-know</li>
-    <li>Report suspicious activity early</li>
-    <li>Update and back up systems regularly</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Many attacks succeed because of behavior: clicking links, sharing passwords, ignoring updates.
-    A strong culture reduces those risks.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Ethics & Professional Responsibility</h1>
-  <div class="block-title">KEY POINTS</div>
-  <ul>
-    <li>Use security tools only with permission and within lab scope</li>
-    <li>Respect privacy and confidentiality</li>
-    <li>Follow laws, school rules, and policies</li>
-    <li>Document actions honestly</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    In this course, we study attacks to understand defense. That means we must be strict about scope.
-    Unauthorized scanning or phishing on real systems is not “practice”—it’s misconduct.
-  </div>
-</section>
-
-<section class="slide" data-path="lecture">
-  <h1>Lecture Wrap-Up</h1>
-  <div class="block-title">TAKEAWAYS</div>
-  <ul>
-    <li>IA ensures trustworthiness and resilience of information</li>
-    <li>CIA triad guides most security decisions</li>
-    <li>Controls: administrative, technical, physical</li>
-    <li>Tradeoffs must be managed</li>
-    <li>Culture and ethics are foundational</li>
-  </ul>
-</section>
-
-<!-- ================= LAB ================= -->
-<section class="slide section-slide" data-path="lab">
-  <div>
-    <h1>LABORATORY</h1>
-    <p>Week 1–2: Orientation & Baseline Security Audit</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Week 1–2 Lab Goals</h1>
-  <div class="block-title">WHAT WE WILL DO</div>
-  <ul>
-    <li>Set up a safe VM sandbox environment</li>
-    <li>Review lab rules and ethical scope</li>
-    <li>Perform a baseline security audit checklist</li>
-    <li>Document evidence (screenshots) and recommendations</li>
-  </ul>
-  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
-  <div class="callout">
-    Your first lab is not “hacking.” It’s professional security practice: checking configuration, updates, protection settings,
-    and documenting what you see. This is how real audits begin.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Lab Rules (Non-Negotiable)</h1>
-  <ul>
-    <li>Use tools only on your VM or assigned targets</li>
-    <li>Do NOT scan/attack real networks or accounts</li>
-    <li>No sharing of passwords or exploit files</li>
-    <li>Ask first before running unfamiliar tools</li>
-    <li>Back up and save your work</li>
-  </ul>
-  <div class="callout">
-    If you are unsure whether an action is allowed, stop and ask. Permission and scope are the core of ethical security work.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Tools for Weeks 1–2</h1>
-  <div class="two-col">
-    <div class="callout">
-      <b>Required</b>
-      <ul class="mb-0">
-        <li>VirtualBox/VMware</li>
-        <li>Assigned Windows or Linux VM</li>
-        <li>Browser + text editor</li>
-      </ul>
-    </div>
-    <div class="callout">
-      <b>Optional (demo only)</b>
-      <ul class="mb-0">
-        <li>Task Manager / Activity Monitor</li>
-        <li>Windows Security / Linux security panels</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="slide section-slide" data-path="lab">
-  <div>
-    <h1>LAB EXERCISE 1</h1>
-    <p>Baseline Workstation Security Audit</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Exercise 1 Objectives</h1>
-  <ul>
-    <li>Assess security posture using a checklist</li>
-    <li>Check accounts, updates, firewall, AV, backups</li>
-    <li>Map findings to CIA triad</li>
-    <li>Write recommendations like a real auditor</li>
-  </ul>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part A: Prepare Your Sandbox</h1>
-  <ol>
-    <li>Install VirtualBox/VMware (if needed)</li>
-    <li>Import/Create your assigned VM</li>
-    <li>Create snapshot: <b>IAS1-Week1-Baseline</b></li>
-    <li>Confirm internet access (NAT)</li>
-    <li>Create a folder for screenshots and notes</li>
-  </ol>
-  <div class="callout">
-    The snapshot is your safety net. If you make a mistake, you can roll back and continue without losing progress.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part B: Account & Password Check</h1>
-  <div class="block-title">STEPS</div>
-  <ul>
-    <li>Open Users/Accounts settings</li>
-    <li>List accounts; identify admin/root accounts</li>
-    <li>Check password policy (length, complexity, expiration)</li>
-    <li>Enable MFA where available (demo)</li>
-  </ul>
-  <div class="block-title">EVIDENCE TO RECORD</div>
-  <ul>
-    <li>Screenshot of account list</li>
-    <li>Notes on default/weak accounts</li>
-    <li>Password policy summary</li>
-  </ul>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part C: Patch & Update Status</h1>
-  <div class="block-title">STEPS</div>
-  <ul>
-    <li>Open Windows Update / package manager</li>
-    <li>Check last update date</li>
-    <li>Install security updates (if allowed)</li>
-    <li>Reboot if required</li>
-  </ul>
-  <div class="callout">
-    Updates matter because most attacks reuse known vulnerabilities. Patch management is one of the best “basic” defenses.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part D: Protection Settings</h1>
-  <ul>
-    <li>Check antivirus/endpoint protection status</li>
-    <li>Confirm firewall is ON</li>
-    <li>Review screen lock & timeout</li>
-    <li>Check disk encryption status (if available)</li>
-  </ul>
-  <div class="callout">
-    This is where you often find “easy wins” like a disabled firewall or no screen lock.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part E: Storage & Backup Check</h1>
-  <ul>
-    <li>Verify disk space</li>
-    <li>Locate backup settings (File History/TimeShift)</li>
-    <li>Confirm backup schedule or manual backup option</li>
-  </ul>
-  <div class="callout">
-    Availability isn’t only “server uptime.” Backups are how you recover after mistakes, failures, or ransomware.
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Part F: Map Findings to CIA</h1>
-  <ul>
-    <li>For each issue, identify CIA impact:</li>
-    <li><b>Confidentiality</b>, <b>Integrity</b>, and/or <b>Availability</b></li>
-    <li>Example: Disabled firewall → Availability + Confidentiality risk</li>
-  </ul>
-</section>
-
-<section class="slide section-slide" data-path="lab">
-  <div>
-    <h1>LAB OUTPUTS</h1>
-    <p>What to submit</p>
-  </div>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>What to Submit (Lab 1)</h1>
-  <ul>
-    <li>Lab Portfolio PDF (or printed)</li>
-    <li>Screenshots per checklist section</li>
-    <li>Baseline Audit Table</li>
-    <li>CIA Mapping Summary</li>
-    <li>Reflection (5–8 sentences)</li>
-  </ul>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Baseline Audit Table Template</h1>
-  <div class="callout">
-    <b>Check Item</b> | <b>Status (OK/Issue)</b> | <b>Evidence</b> | <b>CIA Impact</b> | <b>Recommendation</b>
-  </div>
-  <ul>
-    <li>Minimum of 10 check items required</li>
-    <li>Recommendations must be actionable (ex: “Enable firewall” not “Improve security”)</li>
-  </ul>
-</section>
-
-<section class="slide" data-path="lab">
-  <h1>Lab Wrap-Up</h1>
-  <ul>
-    <li>Baseline audits are the first step of IA</li>
-    <li>Security begins with configuration and discipline</li>
-    <li>Evidence + documentation are part of professional work</li>
-    <li>Next labs will build on this foundation</li>
-  </ul>
-</section>
 
 <script>
-  const HOME_ID = "home";
-  let activePath = null;
-  let pathSlides = [];
-  let idx = -1;
+const SCHOOL = "St. Mary's College Of Bansalan Inc.";
+const COURSE = "Information Assurance and Security 1";
+const CODE = "IT 221";
+const INSTRUCTOR = "John Carl Ray R. Lelis";
 
-  function setModePill(text){ document.getElementById("modePill").textContent = text; }
-  function showOnly(slideEl){
-    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
-    slideEl.classList.add("active");
-    window.scrollTo({top:0, behavior:"instant"});
-  }
-  function goHome(){
-    activePath = null; pathSlides = []; idx = -1;
-    setModePill("Choose path");
-    showOnly(document.getElementById(HOME_ID));
-  }
-  function startPath(path){
-    activePath = path;
-    pathSlides = Array.from(document.querySelectorAll(`.slide[data-path="${path}"]`));
-    idx = 0;
-    setModePill(path === "lecture" ? "Lecture mode" : "Laboratory mode");
-    showOnly(pathSlides[idx]);
-  }
-  function nextSlide(){
-    if(!activePath) return;
-    if(idx < pathSlides.length - 1){ idx++; showOnly(pathSlides[idx]); }
-  }
-  function prevSlide(){
-    if(!activePath) return;
-    if(idx > 0){ idx--; showOnly(pathSlides[idx]); }
-  }
-  document.addEventListener("keydown", (e) => {
-    if(e.key === "ArrowRight") nextSlide();
-    if(e.key === "ArrowLeft") prevSlide();
-    if(e.key === "Escape") goHome();
+/* Static password in JS as requested */
+const NOTES_PASSWORD = "adminnotes";
+
+const decks = {
+  home: [
+    {
+      kind: "home",
+      title: COURSE,
+      subtitle: `${CODE} • Week 1–2 • Web Slides`,
+      body: `
+        <div class="content">
+          <p class="subtitle" style="margin-top:0">Choose the session deck you want to present:</p>
+          <div class="home-grid">
+            <div class="home-card" onclick="start('lecture')">
+              <h3>📘 Lecture</h3>
+              <p>Foundations of Information Assurance</p>
+              <ul>
+                <li>IA vs InfoSec vs Cybersecurity</li>
+                <li>CIA Triad + examples</li>
+                <li>Controls, tradeoffs, culture, ethics</li>
+              </ul>
+            </div>
+            <div class="home-card" onclick="start('lab')">
+              <h3>🧪 Laboratory</h3>
+              <p>Orientation & Baseline Security Audit</p>
+              <ul>
+                <li>Safe sandbox / VM setup</li>
+                <li>Baseline workstation audit checklist</li>
+                <li>Portfolio outputs + CIA mapping</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout">
+            <b>${SCHOOL}</b><br/>
+            <span style="color:var(--muted)">${COURSE} • ${CODE} • Instructor: ${INSTRUCTOR}</span>
+          </div>
+
+          <div class="instructor-notes">
+            <b>Instructor Notes:</b> If you unlocked notes, remind students: lecture slides focus on concepts; lab slides focus on procedure and evidence.
+          </div>
+        </div>
+      `
+    }
+  ],
+
+  lecture: [
+    { kind:"section", title:"LECTURE", subtitle:"Week 1–2: Foundations of Information Assurance", body:"" },
+
+    {
+      title:"Week 1–2 Lecture Overview",
+      subtitle:"What we cover this session",
+      body:`<div class="content">
+        <ul>
+          <li>Information Assurance (IA): definition and scope</li>
+          <li>Information Security vs. Cybersecurity vs. IA</li>
+          <li>Security objectives: CIA triad and beyond</li>
+          <li>Security controls and tradeoffs</li>
+          <li>Security culture, ethics, and professionalism</li>
+        </ul>
+        <div class="callout">Use this slide as your roadmap. Each slide builds toward a security mindset.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Quick opener: Ask students to name “assets” the school must protect (grades, IDs, portal accounts, HR/payroll data).</div>
+      </div>`
+    },
+
+    {
+      title:"Why Information Assurance Matters",
+      subtitle:"Why this subject is important",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Information assets</strong>: student data, records, finances, intellectual property</li>
+          <li><strong>Consequences</strong>: money loss, downtime, reputation damage, penalties</li>
+          <li><strong>Socio-technical</strong>: security = people + process + technology</li>
+        </ul>
+        <div class="callout">Campus example: If enrollment systems fail, it affects operations, students, and staff.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize “trust.” IA is about maintaining trust in information systems over time, not just stopping attackers.</div>
+      </div>`
+    },
+
+    {
+      title:"Key Concepts and Definitions",
+      subtitle:"IA, InfoSec, Cybersecurity",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Information Assurance (IA)</strong>: trustworthiness, resilience, governance + risk</li>
+          <li><strong>Information Security (InfoSec)</strong>: protects information from unauthorized access/alteration</li>
+          <li><strong>Cybersecurity</strong>: protects digital systems and networks from cyber attacks</li>
+        </ul>
+        <div class="callout">Memory trick: InfoSec = data; Cybersecurity = systems/network; IA = trust + continuity + governance.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Give a quick analogy: IA is “healthcare system,” cybersecurity is “ER defense,” InfoSec is “patient record privacy.”</div>
+      </div>`
+    },
+
+    {
+      title:"IA vs. InfoSec vs. Cybersecurity",
+      subtitle:"How they differ in focus",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Information Security</strong>: safeguards data assets (CIA)</li>
+          <li><strong>Cybersecurity</strong>: defense in cyberspace (network, web, endpoints)</li>
+          <li><strong>Information Assurance</strong>: broader—continuity, governance, policy, risk decisions</li>
+        </ul>
+        <div class="callout">Example: Backups & recovery planning are strongly aligned with IA.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Ask: “If the portal is hacked, what’s the recovery plan?” Use this to connect to IA scope (continuity/response).</div>
+      </div>`
+    },
+
+    { kind:"section", title:"SECURITY OBJECTIVES", subtitle:"CIA triad and beyond", body:"" },
+
+    {
+      title:"The CIA Triad",
+      subtitle:"Core security objectives",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Confidentiality</strong>: only authorized access (encryption, access control, MFA)</li>
+          <li><strong>Integrity</strong>: accurate, unmodified information (hashing, checksums, change control)</li>
+          <li><strong>Availability</strong>: accessible when needed (backups, redundancy, fault tolerance)</li>
+        </ul>
+        <div class="callout">Security analysis often starts by asking: “What breaks C, I, or A?”</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Mini-activity: students classify 3 examples (shared password, power outage, edited grades) into CIA.</div>
+      </div>`
+    },
+
+    {
+      title:"CIA Examples",
+      subtitle:"Concrete examples in real life",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Confidentiality breach</strong>: leaked grades, exposed passwords, stolen IDs</li>
+          <li><strong>Integrity breach</strong>: unauthorized grade changes, altered records</li>
+          <li><strong>Availability breach</strong>: ransomware, portal outage, DDoS disruption</li>
+        </ul>
+        <div class="callout">Prompt: Give one local/school example for each category.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize that one incident can hit multiple goals (e.g., ransomware affects availability + confidentiality if data is exfiltrated).</div>
+      </div>`
+    },
+
+    {
+      title:"Beyond CIA",
+      subtitle:"Other important security goals",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Authentication</strong>: prove identity (passwords, biometrics, MFA)</li>
+          <li><strong>Authorization</strong>: correct permissions (roles, least privilege)</li>
+          <li><strong>Non-repudiation</strong>: actions can’t be denied later (digital signatures, logs)</li>
+          <li><strong>Accountability</strong>: actions traceable to individuals (audit trails)</li>
+        </ul>
+        <div class="callout">Identity + access failures are among the most common root causes of breaches.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Quick question: “Authentication vs Authorization—what’s the difference?” Give student portal role examples.</div>
+      </div>`
+    },
+
+    { kind:"section", title:"CONTROLS & TRADEOFFS", subtitle:"How protection is implemented", body:"" },
+
+    {
+      title:"Security Controls",
+      subtitle:"Three high-level categories",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Administrative</strong>: policies, training, procedures, risk management</li>
+          <li><strong>Technical</strong>: firewalls, MFA, encryption, antivirus, IDS/IPS</li>
+          <li><strong>Physical</strong>: locks, CCTV, guards, secure rooms</li>
+        </ul>
+        <div class="callout">Security is not “tools only.” Policies and physical controls matter too.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Ask: “Which control type is a ‘no-sharing-passwords’ rule?” (Administrative). “Door lock?” (Physical).</div>
+      </div>`
+    },
+
+    {
+      title:"Security Tradeoffs",
+      subtitle:"Security always involves balance",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Security vs. Usability</strong>: more steps can reduce convenience</li>
+          <li><strong>Security vs. Cost</strong>: tools, training, and personnel require budget</li>
+          <li><strong>Security vs. Performance</strong>: controls can add overhead</li>
+          <li><strong>Goal</strong>: reduce risk to an acceptable level</li>
+        </ul>
+        <div class="callout">We manage risk; we don’t eliminate it completely.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Simple class prompt: “Would you accept 12-character passwords everywhere if logins become slower?” Connect to tradeoffs.</div>
+      </div>`
+    },
+
+    {
+      title:"Threats, Vulnerabilities, Risk",
+      subtitle:"Risk thinking in one slide",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Threat</strong>: something that can cause harm (actor/event)</li>
+          <li><strong>Vulnerability</strong>: weakness that can be exploited</li>
+          <li><strong>Risk</strong>: likelihood × impact</li>
+        </ul>
+        <div class="callout">Example: Phisher (threat) + password reuse (vulnerability) = high risk of account takeover.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Quick check: Ask students to identify threat/vulnerability in a “lost phone with no PIN” scenario.</div>
+      </div>`
+    },
+
+    { kind:"section", title:"CULTURE & ETHICS", subtitle:"Security is also about people", body:"" },
+
+    {
+      title:"Security Culture",
+      subtitle:"Habits that reduce risk",
+      body:`<div class="content">
+        <ul>
+          <li>Security is everyone’s responsibility</li>
+          <li>Human error is a major attack path</li>
+          <li>Least privilege and need-to-know</li>
+          <li>Report suspicious activity early</li>
+          <li>Update and back up systems regularly</li>
+        </ul>
+        <div class="callout">Culture = what people do even when no one is watching.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Give 2 “habits” examples: checking URLs before clicking; locking the screen when leaving.</div>
+      </div>`
+    },
+
+    {
+      title:"Ethics & Professional Responsibility",
+      subtitle:"Rules for this course and real practice",
+      body:`<div class="content">
+        <ul>
+          <li>Use security tools only with permission and within lab scope</li>
+          <li>Respect privacy and confidentiality</li>
+          <li>Follow laws, school rules, and policies</li>
+          <li>Document actions honestly</li>
+          <li>We learn security to protect—not to harm</li>
+        </ul>
+        <div class="callout">Permission + scope are the foundation of ethical security work.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Make expectations explicit: No real phishing, no scanning campus networks. Lab targets only.</div>
+      </div>`
+    },
+
+    {
+      title:"Lecture Wrap-Up",
+      subtitle:"Key takeaways",
+      body:`<div class="content">
+        <ul>
+          <li>IA keeps information trustworthy and resilient</li>
+          <li>CIA triad guides most security decisions</li>
+          <li>Controls: administrative, technical, physical</li>
+          <li>Tradeoffs must be managed using risk thinking</li>
+          <li>Culture and ethics are essential foundations</li>
+        </ul>
+        <div class="callout">Next: apply these ideas in the lab with a baseline security audit.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Transition: “In lab, we check real settings (accounts, updates, firewall) and document evidence.”</div>
+      </div>`
+    }
+  ],
+
+  lab: [
+    { kind:"section", title:"LABORATORY", subtitle:"Week 1–2: Orientation & Baseline Security Audit", body:"" },
+
+    {
+      title:"Week 1–2 Lab Goals",
+      subtitle:"What you will do today",
+      body:`<div class="content">
+        <ul>
+          <li>Set up a safe lab / VM sandbox environment</li>
+          <li>Review lab ethics, rules, and tool scope</li>
+          <li>Perform a baseline workstation security audit</li>
+          <li>Document findings in a lab portfolio</li>
+        </ul>
+        <div class="callout">This lab is professional practice: checklist + evidence + recommendations.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Remind students: screenshots are evidence. Encourage clear file naming for screenshots.</div>
+      </div>`
+    },
+
+    {
+      title:"Lab Rules (Non-Negotiable)",
+      subtitle:"Scope and safety",
+      body:`<div class="content">
+        <ul>
+          <li>Use tools ONLY on your own VM / assigned lab targets</li>
+          <li>Do NOT scan, probe, or attack real networks/devices</li>
+          <li>No sharing of passwords or exploit files outside lab</li>
+          <li>Ask before running unfamiliar commands/tools</li>
+          <li>Back up your work and follow instructor guidance</li>
+        </ul>
+        <div class="callout">If you’re unsure: stop. Ask. Proceed only with permission and scope.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Clarify consequences for out-of-scope actions (course policy / school policy).</div>
+      </div>`
+    },
+
+    {
+      title:"Tools for Weeks 1–2",
+      subtitle:"What you need",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Required</strong>: VirtualBox/VMware, assigned Windows/Linux VM, browser + text editor</li>
+          <li><strong>Optional</strong> (demo): Task Manager/Activity Monitor, Windows Security panels</li>
+        </ul>
+        <div class="callout">Keep one folder for screenshots and notes to make submission easy.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> If students lack virtualization support, allow paired work or shared lab PCs.</div>
+      </div>`
+    },
+
+    { kind:"section", title:"LAB EXERCISE 1", subtitle:"Baseline Workstation Security Audit", body:"" },
+
+    {
+      title:"Exercise 1 Objectives",
+      subtitle:"What success looks like",
+      body:`<div class="content">
+        <ul>
+          <li>Identify basic security posture of a system</li>
+          <li>Check accounts, passwords, updates, protections, backups</li>
+          <li>Relate findings to the CIA triad</li>
+          <li>Produce a short audit report with evidence</li>
+        </ul>
+        <div class="callout">Think like an auditor: observe → collect evidence → recommend actions.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Stress that “recommendations” must be actionable and specific.</div>
+      </div>`
+    },
+
+    {
+      title:"Part A: Prepare Your Sandbox",
+      subtitle:"Setup checklist",
+      body:`<div class="content">
+        <ol>
+          <li>Install VirtualBox/VMware (if not installed)</li>
+          <li>Import/Create your assigned VM</li>
+          <li>Create snapshot: <strong>IAS1-Week1-Baseline</strong></li>
+          <li>Verify VM has internet access (NAT)</li>
+          <li>Create a folder for screenshots + notes</li>
+        </ol>
+        <div class="callout">Snapshot = reset button. Restore it anytime you need.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Walk around and confirm everyone has a snapshot before moving on.</div>
+      </div>`
+    },
+
+    {
+      title:"Part B: Account & Password Check",
+      subtitle:"Accounts, roles, and policy",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Steps</strong>: open accounts → list users → identify admin/root → check password policy → demo MFA (if available)</li>
+          <li><strong>Record</strong>: account list screenshot, notes on weak/default accounts, password policy summary</li>
+        </ul>
+        <div class="callout">CIA link: weak passwords threaten confidentiality and integrity.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Encourage students to note “default/guest” accounts and why they’re risky.</div>
+      </div>`
+    },
+
+    {
+      title:"Part C: Patch & Update Status",
+      subtitle:"Keep the system current",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Steps</strong>: open update tool → check last update date → install pending security updates (if allowed) → reboot if required</li>
+          <li><strong>Record</strong>: update status screenshot + notes on pending critical updates</li>
+        </ul>
+        <div class="callout">Most attacks reuse known vulnerabilities. Updating is a high-impact defense.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> If updates are disabled in the VM image, have students record “policy restriction” and still discuss risk.</div>
+      </div>`
+    },
+
+    {
+      title:"Part D: Protection Settings",
+      subtitle:"Firewall, antivirus, lock screen",
+      body:`<div class="content">
+        <ul>
+          <li>Check antivirus/endpoint protection status</li>
+          <li>Confirm firewall is ON</li>
+          <li>Review screen lock & timeout settings</li>
+          <li>Check full-disk encryption status (if available)</li>
+        </ul>
+        <div class="callout">Look for quick wins: disabled firewall, no lock screen, outdated AV.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Ask students to write one recommendation per issue found (enable/turn on/configure).</div>
+      </div>`
+    },
+
+    {
+      title:"Part E: Storage & Backup Check",
+      subtitle:"Availability and recovery",
+      body:`<div class="content">
+        <ul>
+          <li>Verify available disk space</li>
+          <li>Locate backup settings (File History/TimeShift/etc.)</li>
+          <li>Confirm backup schedule or manual backup option</li>
+        </ul>
+        <div class="callout">Backups protect availability and reduce ransomware impact.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize 3-2-1 backup rule briefly (optional preview for later weeks).</div>
+      </div>`
+    },
+
+    {
+      title:"Part F: Map Findings to CIA",
+      subtitle:"Classify your issues",
+      body:`<div class="content">
+        <ul>
+          <li>For each issue you found, label CIA impact:</li>
+          <li><strong>Confidentiality</strong>, <strong>Integrity</strong>, and/or <strong>Availability</strong></li>
+          <li>Example: disabled firewall → Availability + Confidentiality risk</li>
+        </ul>
+        <div class="callout">This turns observations into security reasoning.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> For grading: require at least 5 issues mapped to CIA (even if “no issue,” map why it supports CIA).</div>
+      </div>`
+    },
+
+    { kind:"section", title:"LAB OUTPUTS", subtitle:"What to submit", body:"" },
+
+    {
+      title:"What to Submit (Lab 1)",
+      subtitle:"Portfolio checklist",
+      body:`<div class="content">
+        <ul>
+          <li>Lab Portfolio PDF (or printed)</li>
+          <li>Screenshots for each checklist section</li>
+          <li>Baseline Audit Table</li>
+          <li>CIA Mapping Summary</li>
+          <li>Reflection (5–8 sentences)</li>
+        </ul>
+        <div class="callout">Grade basis: completeness, evidence quality, and actionable recommendations.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Suggest submission naming format: IT221_Lab1_LastName_FirstName.pdf</div>
+      </div>`
+    },
+
+    {
+      title:"Baseline Audit Table (Template)",
+      subtitle:"Use this format",
+      body:`<div class="content">
+        <ul>
+          <li><strong>Check Item</strong> | <strong>Status (OK/Issue)</strong> | <strong>Evidence</strong> | <strong>CIA Impact</strong> | <strong>Recommendation</strong></li>
+          <li>Minimum of <strong>10</strong> check items required.</li>
+        </ul>
+        <div class="callout">Actionable recommendations: “Enable firewall” &gt; “Improve security.”</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Encourage students to include where they found the setting (path/menu) as part of “Evidence.”</div>
+      </div>`
+    },
+
+    {
+      title:"Lab Wrap-Up",
+      subtitle:"Key takeaways",
+      body:`<div class="content">
+        <ul>
+          <li>Baseline audits are the first step of IA</li>
+          <li>Good security starts with configuration and discipline</li>
+          <li>Evidence + documentation are professional practice</li>
+          <li>Next labs build on this foundation</li>
+        </ul>
+        <div class="instructor-notes"><b>Instructor Notes:</b> End with: “Your portfolio is your security notebook—keep it organized for midterm/final review.”</div>
+      </div>`
+    }
+  ]
+};
+
+let currentDeck = "home";
+let index = 0;
+
+const deckEl = document.getElementById("deck");
+const barEl = document.getElementById("bar");
+const counterEl = document.getElementById("counter");
+const modePill = document.getElementById("modePill");
+
+function renderDeck(name){
+  currentDeck = name;
+  index = 0;
+  modePill.textContent = name === "home" ? "Home" : (name === "lecture" ? "Lecture" : "Laboratory");
+
+  const slides = decks[name];
+  deckEl.innerHTML = slides.map((s, i) => {
+    const kind = s.kind || "normal";
+    const sectionClass = kind === "section" ? "section" : "";
+    return `
+      <section class="slide ${sectionClass}" data-i="${i}">
+        <div class="slide-inner">
+          <div>
+            <h1 class="title">${s.title}</h1>
+            ${s.subtitle ? `<p class="subtitle">${s.subtitle}</p>` : ``}
+          </div>
+          ${s.body || ""}
+          ${kind === "home" ? "" : `<div class="mt-auto" style="color:var(--muted);font-size:14px;">
+            ${SCHOOL} • ${CODE} • ${INSTRUCTOR}
+          </div>`}
+        </div>
+      </section>
+    `;
+  }).join("");
+
+  // Apply visibility state for notes after re-render (in case deck switches)
+  applyNotesVisibility();
+
+  updateUI();
+  move();
+}
+
+function updateUI(){
+  const total = decks[currentDeck].length;
+  counterEl.textContent = `${index+1} / ${total}`;
+  barEl.style.width = total <= 1 ? "0%" : `${(index/(total-1))*100}%`;
+}
+function move(){
+  deckEl.style.transform = `translateX(${-index*100}vw)`;
+  updateUI();
+}
+function next(){
+  const total = decks[currentDeck].length;
+  if(index < total-1){ index++; move(); }
+}
+function prev(){
+  if(index > 0){ index--; move(); }
+}
+function goHome(){ renderDeck("home"); }
+function start(name){ renderDeck(name); }
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "ArrowRight" || e.key === " "){ next(); }
+  if(e.key === "ArrowLeft"){ prev(); }
+  if(e.key === "Escape"){ goHome(); }
+});
+
+let touchStartX = null;
+document.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener("touchend", (e) => {
+  if(touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  touchStartX = null;
+  if(Math.abs(dx) < 40) return;
+  if(dx < 0) next(); else prev();
+}, {passive:true});
+
+/* Notes unlock logic */
+let notesUnlocked = false;
+
+function applyNotesVisibility(){
+  document.querySelectorAll(".instructor-notes").forEach(n => {
+    n.classList.toggle("visible", notesUnlocked);
   });
-</script>
+}
 
+function unlockNotes(){
+  const input = document.getElementById("notesPassword").value;
+  if(input === NOTES_PASSWORD){
+    notesUnlocked = true;
+    applyNotesVisibility();
+    document.getElementById("notesModal").style.display = "none";
+  }else{
+    document.getElementById("notesError").style.display = "block";
+  }
+}
+
+function skipNotes(){
+  notesUnlocked = false;
+  applyNotesVisibility();
+  document.getElementById("notesModal").style.display = "none";
+}
+
+/* Start */
+renderDeck("home");
+</script>
 </body>
 </html>
