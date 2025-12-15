@@ -1,403 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Final Examination - Web Systems</title>
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Tailwind CSS for Styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<meta charset="UTF-8">
+<title>IT 221 | Information Assurance and Security 1</title>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap');
-        
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
-        }
-        
-        .code-font {
-            font-family: 'Roboto Mono', monospace;
-        }
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        .input-blank {
-            border-bottom: 2px solid #9ca3af;
-            background: rgba(255,255,255,0.5);
-            padding: 0 4px;
-            color: #1d4ed8;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        
-        .input-blank:focus {
-            border-bottom-color: #2563eb;
-            background: #fff;
-            outline: none;
-        }
-
-        .correct-answer {
-            color: #059669; /* Green */
-            border-bottom-color: #059669;
-        }
-
-        .wrong-answer {
-            color: #dc2626; /* Red */
-            border-bottom-color: #dc2626;
-            text-decoration: line-through;
-        }
-
-        .correction {
-            color: #059669;
-            font-size: 0.8em;
-            margin-left: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
-
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-
-        // --- EXAM DATA ---
-
-        const mcqQuestions = [
-            { id: 1, q: "HTML: What does the acronym stand for and what is its primary purpose?", options: ["High Tech Markup Language; used for database connectivity.", "Hyperlink Text Mode Language; used for styling text.", "Hypertext Markup Language; used for creating the structure of web pages.", "Home Tool Markup Language; used for server configurations."], correct: 2 }, // C (0-indexed: 2)
-            { id: 2, q: "PHP: What does the recursive acronym PHP stand for?", options: ["PHP: Hypertext Preprocessor", "Personal Home Page", "Private Hosting Platform", "Preprocessed Hypertext Page"], correct: 0 }, // A
-            { id: 3, q: "CSS: What does the acronym CSS stand for in web development?", options: ["Creative Style Sheets", "Cascading Style Sheets", "Computer Style System", "Colorful Sheet Style"], correct: 1 }, // B
-            { id: 4, q: "Self-Closing Tag: Which statement best defines a self-closing tag in HTML?", options: ["A tag that starts with a forward slash.", "A tag that effectively closes the browser window.", "A tag that requires a separate closing tag to function.", "A tag that does not require a closing tag, such as <br> or <img>."], correct: 3 }, // D
-            { id: 5, q: "Session Variable: What is the primary function of a session variable?", options: ["To store data in the user's browser cookies permanently.", "To store data that disappears immediately after a page reload.", "To store user data on the server to be accessible across multiple pages.", "To variable used exclusively for establishing database connections."], correct: 2 }, // C
-            { id: 6, q: "PHP Session Syntax: Which of the following is the valid syntax to assign a value to a PHP session variable?", options: ["$_SESSION['username'] = 'Juan';", "session.set('username', 'Juan');", "$username.session = 'Juan';", "SET SESSION 'username' = 'Juan';"], correct: 0 }, // A
-            { id: 7, q: "HTML Attribute: What is an HTML attribute?", options: ["The content displayed between the opening and closing tags.", "Additional information provided within the opening tag (e.g., id, class).", "The closing part of a tag structure.", "The main body text of the website visible to the user."], correct: 1 }, // B
-            { id: 8, q: "JavaScript Object: Which description best fits a JavaScript Object?", options: ["A primitive data type similar to a standard integer.", "A function that acts as a variable but cannot return a value.", "A variable type that is restricted to holding only text strings.", "A collection of key-value pairs representing properties and methods."], correct: 3 }, // D
-            { id: 9, q: "Bootstrap: What is Bootstrap?", options: ["A database management system for SQL.", "A server-side programming language similar to PHP.", "A front-end framework for developing responsive, mobile-first websites.", "A tool used primarily for managing server hardware."], correct: 2 }, // C
-            { id: 10, q: "AJAX: What does the acronym AJAX stand for?", options: ["Asynchronous Java And XHTML", "Asynchronous JavaScript and XML", "Advanced Java Active X", "Automated JavaScript and XML"], correct: 1 }, // B
-            { id: 11, q: "SQL: What does the acronym SQL stand for?", options: ["Structured Question Language", "Standard Query Logic", "Structured Query Language", "Simple Query List"], correct: 2 }, // C
-            { id: 12, q: "PHP Syntax: Which character is used to declare a variable in PHP?", options: ["@", "&", "#", "$"], correct: 3 }, // D
-            { id: 13, q: "HTML Headings: Which HTML tag defines the largest heading?", options: ["<h6>", "<head>", "<h1>", "<heading>"], correct: 2 }, // C
-            { id: 14, q: "Hyperlinks: Which HTML tag is used to define a hyperlink?", options: ["<link>", "<a>", "<href>", "<nav>"], correct: 1 }, // B
-            { id: 15, q: "Javascript Output: Which method is used to write into the browser console?", options: ["console.log()", "print()", "System.out.println()", "document.write()"], correct: 0 }, // A
-            { id: 16, q: "PHP Output: What is the output of the following code snippet? $x = \"Web\"; echo \"Hello \" . $x;", options: ["Hello+Web", "Hello Web", "HelloWeb", "Hello.Web"], correct: 1 }, // B
-            { id: 17, q: "PHP Logic: Review the code: $score = 50; if($score >= 75) { echo \"Pass\"; } else { echo \"Fail\"; }. What will be printed?", options: ["Pass", "Fail", "50", "Error"], correct: 1 } // B
-        ];
-
-        // Key: item number mapped to correct answer string
-        const blankAnswers = {
-            18: "POST",
-            19: "action.php",
-            20: "username",
-            21: "password",
-            22: "submit", // or "button" or "Login" - but "submit" is standard type
-            23: "host.smcbi.edu.ph",
-            24: "superadmin",
-            25: "superpassword",
-            26: "login_form_db",
-            27: "$user", // Variable name
-            28: "password", // Post key
-            29: "SELECT",
-            30: "WHERE"
-        };
-
-        // --- COMPONENTS ---
-
-        const CodeBlank = ({ id, value, onChange, isSubmitted }) => {
-            const correct = blankAnswers[id];
-            
-            // Normalize for checking
-            const isCorrect = value?.trim().toLowerCase() === correct.toLowerCase();
-            const showCorrection = isSubmitted && !isCorrect;
-
-            let inputClass = "input-blank text-center mx-1 w-32 border-none outline-none";
-            if (isSubmitted) {
-                inputClass += isCorrect ? " correct-answer" : " wrong-answer";
-            }
-
-            return (
-                <span className="inline-block relative">
-                    <input 
-                        type="text" 
-                        value={value || ''} 
-                        onChange={(e) => onChange(id, e.target.value)}
-                        className={inputClass}
-                        disabled={isSubmitted}
-                        placeholder={`(${id})`}
-                    />
-                    {showCorrection && (
-                        <span className="absolute -top-6 left-0 bg-green-100 text-green-800 text-xs px-2 py-1 rounded shadow whitespace-nowrap z-10">
-                            {correct}
-                        </span>
-                    )}
-                </span>
-            );
-        };
-
-        const App = () => {
-            const [step, setStep] = useState('start'); // start, exam, result
-            const [studentName, setStudentName] = useState('');
-            const [mcqAnswers, setMcqAnswers] = useState({});
-            const [fillAnswers, setFillAnswers] = useState({});
-            const [score, setScore] = useState(0);
-
-            const handleStart = (e) => {
-                e.preventDefault();
-                if(studentName.trim()) setStep('exam');
-            };
-
-            const handleSubmit = () => {
-                if(!window.confirm("Are you sure you want to submit your exam?")) return;
-
-                let calculatedScore = 0;
-
-                // Grade MCQs
-                mcqQuestions.forEach(q => {
-                    if (mcqAnswers[q.id] === q.correct) {
-                        calculatedScore += 2;
-                    }
-                });
-
-                // Grade Blanks
-                Object.keys(blankAnswers).forEach(key => {
-                    const userAnswer = fillAnswers[key]?.trim().toLowerCase() || "";
-                    const correctAnswer = blankAnswers[key].toLowerCase();
-                    // Basic flexible checking
-                    if (userAnswer === correctAnswer) {
-                        calculatedScore += 2;
-                    } else if (key == 22 && (userAnswer === 'button' || userAnswer === 'submit')) {
-                         // Allow 'submit' or 'button' for input type, though submit is best
-                         calculatedScore += 2;
-                    }
-                });
-
-                setScore(calculatedScore);
-                setStep('result');
-                window.scrollTo(0, 0);
-            };
-
-            const TotalItems = mcqQuestions.length + Object.keys(blankAnswers).length;
-            const MaxScore = TotalItems * 2;
-
-            if (step === 'start') {
-                return (
-                    <div className="min-h-screen flex items-center justify-center p-4">
-                        <div className="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full text-center border-t-8 border-blue-800">
-                            <img src="https://via.placeholder.com/80?text=SMC" alt="Logo" className="mx-auto mb-4 rounded-full bg-blue-100" /> 
-                            <h1 className="text-2xl font-bold text-gray-800 mb-2">St. Mary’s College of Bansalan, Inc.</h1>
-                            <h2 className="text-lg text-blue-600 font-semibold mb-6">Web Systems & Technologies Final Exam</h2>
-                            <form onSubmit={handleStart}>
-                                <div className="mb-6 text-left">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2">Enter your Full Name</label>
-                                    <input 
-                                        type="text" 
-                                        required
-                                        className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500"
-                                        placeholder="e.g. Juan Dela Cruz"
-                                        value={studentName}
-                                        onChange={(e) => setStudentName(e.target.value)}
-                                    />
-                                </div>
-                                <button type="submit" className="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-                                    Start Examination
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="min-h-screen pb-12">
-                    {/* Header */}
-                    <header className="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
-                        <div className="container mx-auto flex justify-between items-center">
-                            <div>
-                                <h1 className="font-bold text-lg hidden md:block">St. Mary’s College of Bansalan, Inc.</h1>
-                                <p className="text-sm opacity-80">Web Systems Finals</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="font-semibold">{studentName}</p>
-                                {step === 'result' && <span className="bg-yellow-400 text-blue-900 px-2 py-0.5 rounded text-xs font-bold">Score: {score}/{MaxScore}</span>}
-                            </div>
-                        </div>
-                    </header>
-
-                    <div className="container mx-auto p-4 max-w-4xl">
-                        
-                        {/* RESULT BANNER */}
-                        {step === 'result' && (
-                            <div className="bg-white p-6 rounded-lg shadow-lg mb-8 text-center border-l-4 border-green-500 animate-fade-in-up">
-                                <h2 className="text-3xl font-bold text-gray-800 mb-2">Examination Completed!</h2>
-                                <p className="text-gray-600 mb-4">You have submitted your answers.</p>
-                                <div className="text-5xl font-bold text-blue-600 mb-2">{score} <span className="text-2xl text-gray-400">/ {MaxScore}</span></div>
-                                <p className={`font-bold ${score >= (MaxScore * 0.6) ? 'text-green-600' : 'text-red-500'}`}>
-                                    {score >= (MaxScore * 0.6) ? "PASSED" : "NEEDS IMPROVEMENT"}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* TEST I */}
-                        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                            <div className="border-b pb-4 mb-6">
-                                <h2 className="text-xl font-bold text-gray-800">Test I: Multiple Choice</h2>
-                                <p className="text-gray-500 text-sm">Select the best answer. (2 points each)</p>
-                            </div>
-                            
-                            <div className="space-y-8">
-                                {mcqQuestions.map((q, index) => {
-                                    const isSubmitted = step === 'result';
-                                    const isCorrect = mcqAnswers[q.id] === q.correct;
-                                    
-                                    return (
-                                        <div key={q.id} className={`p-4 rounded-lg transition ${isSubmitted ? (isCorrect ? 'bg-green-50' : 'bg-red-50') : 'hover:bg-gray-50'}`}>
-                                            <p className="font-medium text-gray-800 mb-3"><span className="font-bold text-blue-600 mr-2">{index + 1}.</span> {q.q}</p>
-                                            <div className="space-y-2 ml-6">
-                                                {q.options.map((opt, optIndex) => (
-                                                    <label key={optIndex} className="flex items-start cursor-pointer">
-                                                        <input 
-                                                            type="radio" 
-                                                            name={`q_${q.id}`} 
-                                                            className="mt-1 mr-3"
-                                                            disabled={isSubmitted}
-                                                            checked={mcqAnswers[q.id] === optIndex}
-                                                            onChange={() => setMcqAnswers({...mcqAnswers, [q.id]: optIndex})}
-                                                        />
-                                                        <span className={`text-sm ${
-                                                            isSubmitted && optIndex === q.correct ? 'font-bold text-green-700' : 
-                                                            isSubmitted && mcqAnswers[q.id] === optIndex && optIndex !== q.correct ? 'text-red-600 line-through' : 'text-gray-700'
-                                                        }`}>
-                                                            {String.fromCharCode(65 + optIndex)}. {opt}
-                                                        </span>
-                                                    </label>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* TEST II */}
-                        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                            <div className="border-b pb-4 mb-6">
-                                <h2 className="text-xl font-bold text-gray-800">Test II: Practical Application</h2>
-                                <p className="text-gray-500 text-sm">Fill in the blanks to complete the Login System code. (2 points each)</p>
-                            </div>
-
-                            {/* Scenario Info */}
-                            <div className="bg-blue-50 border border-blue-200 p-4 rounded mb-6 text-sm">
-                                <h3 className="font-bold text-blue-800 mb-2">Database Configuration:</h3>
-                                <ul className="list-disc list-inside text-blue-900 grid grid-cols-1 md:grid-cols-2 gap-2">
-                                    <li>Server: <code>host.smcbi.edu.ph</code></li>
-                                    <li>User: <code>superadmin</code></li>
-                                    <li>Password: <code>superpassword</code></li>
-                                    <li>DB Name: <code>login_form_db</code></li>
-                                </ul>
-                                <div className="mt-3 pt-3 border-t border-blue-200">
-                                    <h3 className="font-bold text-blue-800 mb-1">Users Table Data:</h3>
-                                    <p>Contains columns: <code>id</code>, <code>username</code>, <code>password</code></p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-6">
-                                {/* File 1 */}
-                                <div>
-                                    <h4 className="font-bold text-gray-700 mb-2 bg-gray-200 px-3 py-1 rounded inline-block">File 1: index.php</h4>
-                                    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto shadow-inner">
-                                        <pre className="code-font text-sm leading-relaxed">
-{`<!-- Login Form -->
-<form method='`}<CodeBlank id={18} value={fillAnswers[18]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`' action='`}<CodeBlank id={19} value={fillAnswers[19]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`'>
-    
-    <div>
-        <label>Username</label><br>
-        <input type='text' name='`}<CodeBlank id={20} value={fillAnswers[20]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`' required>
-    </div>
-    
-    <div>
-        <label>Password</label><br>
-        <input type='`}<CodeBlank id={21} value={fillAnswers[21]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`' name='password' required>
-    </div>
-
-    <!-- Submit Button -->
-    <input type='`}<CodeBlank id={22} value={fillAnswers[22]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`' value="Login">
-
-</form>`}
-                                        </pre>
-                                    </div>
-                                </div>
-
-                                {/* File 2 */}
-                                <div>
-                                    <h4 className="font-bold text-gray-700 mb-2 bg-gray-200 px-3 py-1 rounded inline-block">File 2: action.php</h4>
-                                    <div className="bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto shadow-inner">
-                                        <pre className="code-font text-sm leading-relaxed">
-{`<?php
-// Database Config
-$servername  = "`}<CodeBlank id={23} value={fillAnswers[23]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`";
-$db_username = "`}<CodeBlank id={24} value={fillAnswers[24]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`";
-$db_password = "`}<CodeBlank id={25} value={fillAnswers[25]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`";
-$db_name     = "`}<CodeBlank id={26} value={fillAnswers[26]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`";
-
-// Connect
-$conn = mysqli_connect($servername, $db_username, $db_password, $db_name);
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Retrieve inputs (Variable Name & Post Key)
-    `}<CodeBlank id={27} value={fillAnswers[27]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{` = $_POST['username'];
-    $pass = $_POST['`}<CodeBlank id={28} value={fillAnswers[28]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{`'];
-
-    // SQL Query
-    $sql = "`}<CodeBlank id={29} value={fillAnswers[29]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{` * FROM users `}<CodeBlank id={30} value={fillAnswers[30]} onChange={(id, v) => setFillAnswers({...fillAnswers, [id]: v})} isSubmitted={step==='result'} />{` username = '$user' AND password = '$pass'";
-
-    $result = mysqli_query($conn, $sql);
-
-    if (mysqli_num_rows($result) > 0) {
-        echo "Login Successful!";
-    } else {
-        echo "Invalid login.";
-    }
+<style>
+body {
+    background: #f4f6f9;
+    font-family: "Segoe UI", sans-serif;
 }
-?>`}
-                                        </pre>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+.slide {
+    display: none;
+    height: 100vh;
+    padding: 80px;
+    background: white;
+}
+.slide.active {
+    display: block;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #0c2240;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+}
+h1, h2 {
+    color: #0c2240;
+}
+.btn-main {
+    font-size: 28px;
+    padding: 30px;
+}
+</style>
+</head>
 
-                        {step !== 'result' && (
-                            <button 
-                                onClick={handleSubmit}
-                                className="w-full bg-blue-800 hover:bg-blue-900 text-white font-bold py-4 rounded-lg shadow-lg text-xl transition transform hover:-translate-y-1 mb-12"
-                            >
-                                Submit Examination
-                            </button>
-                        )}
-                        
-                        {step === 'result' && (
-                            <button 
-                                onClick={() => window.location.reload()}
-                                className="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 rounded-lg shadow text-lg mb-12"
-                            >
-                                Take Exam Again
-                            </button>
-                        )}
+<body>
 
-                    </div>
-                </div>
-            );
-        };
+<!-- LANDING -->
+<div class="slide active" id="slide-0">
+    <div class="text-center">
+        <h1>Information Assurance and Security 1</h1>
+        <h3>IT 221</h3>
+        <p>St. Mary's College Of Bansalan Inc.</p>
+        <p><strong>Instructor:</strong> John Carl Ray R. Lelis</p>
+        <hr>
+        <h2>Select Class Type</h2>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <button class="btn btn-primary w-100 btn-main" onclick="startLecture()">
+                    📘 Lecture
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-success w-100 btn-main" onclick="startLab()">
+                    🧪 Laboratory
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LECTURE SLIDES ===== -->
+
+<div class="slide" data-path="lecture">
+    <h1>Lecture Overview (Week 1–2)</h1>
+    <ul>
+        <li>What is Information Assurance?</li>
+        <li>IA vs InfoSec vs Cybersecurity</li>
+        <li>CIA Triad</li>
+        <li>Security controls and tradeoffs</li>
+        <li>Security culture and ethics</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lecture">
+    <h1>What is Information Assurance?</h1>
+    <ul>
+        <li>Ensures information is trustworthy and reliable</li>
+        <li>Protects confidentiality, integrity, and availability</li>
+        <li>Includes governance, risk, and continuity</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lecture">
+    <h1>IA vs InfoSec vs Cybersecurity</h1>
+    <ul>
+        <li><strong>Information Security</strong> – protects data</li>
+        <li><strong>Cybersecurity</strong> – protects systems and networks</li>
+        <li><strong>Information Assurance</strong> – umbrella of trust, risk, and resilience</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lecture">
+    <h1>The CIA Triad</h1>
+    <ul>
+        <li><strong>Confidentiality</strong> – authorized access only</li>
+        <li><strong>Integrity</strong> – data is accurate</li>
+        <li><strong>Availability</strong> – systems are accessible</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lecture">
+    <h1>Security Controls</h1>
+    <ul>
+        <li>Administrative – policies, training</li>
+        <li>Technical – firewalls, MFA, encryption</li>
+        <li>Physical – locks, CCTV</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lecture">
+    <h1>Security Culture & Ethics</h1>
+    <ul>
+        <li>Security is everyone’s responsibility</li>
+        <li>Use tools ethically and legally</li>
+        <li>Protect, not exploit</li>
+    </ul>
+</div>
+
+<!-- ===== LAB SLIDES ===== -->
+
+<div class="slide" data-path="lab">
+    <h1>Laboratory Goals (Week 1–2)</h1>
+    <ul>
+        <li>Set up secure lab environment</li>
+        <li>Understand lab rules</li>
+        <li>Perform baseline security audit</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lab">
+    <h1>Lab Rules & Ethics</h1>
+    <ul>
+        <li>Use tools only on assigned VM</li>
+        <li>Do NOT attack real systems</li>
+        <li>No credential sharing</li>
+        <li>Ask before running unknown tools</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lab">
+    <h1>Lab Exercise 1: Baseline Security Audit</h1>
+    <ul>
+        <li>User accounts & passwords</li>
+        <li>System updates</li>
+        <li>Firewall & antivirus</li>
+        <li>Backup configuration</li>
+    </ul>
+</div>
+
+<div class="slide" data-path="lab">
+    <h1>Lab Tasks</h1>
+    <ol>
+        <li>Create VM snapshot</li>
+        <li>Check user accounts</li>
+        <li>Verify updates</li>
+        <li>Confirm firewall & AV status</li>
+        <li>Document findings</li>
+    </ol>
+</div>
+
+<div class="slide" data-path="lab">
+    <h1>Lab Submission</h1>
+    <ul>
+        <li>Screenshots</li>
+        <li>Audit checklist</li>
+        <li>CIA mapping</li>
+        <li>Short reflection</li>
+    </ul>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    St. Mary's College Of Bansalan Inc. • IT 221 • John Carl Ray R. Lelis
+</div>
+
+<script>
+let slides = [];
+let current = 0;
+
+function startLecture() {
+    slides = [...document.querySelectorAll('[data-path="lecture"]')];
+    activateSlides();
+}
+
+function startLab() {
+    slides = [...document.querySelectorAll('[data-path="lab"]')];
+    activateSlides();
+}
+
+function activateSlides() {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    current = 0;
+    slides[current].classList.add('active');
+}
+
+document.addEventListener('keydown', e => {
+    if (!slides.length) return;
+
+    if (e.key === "ArrowRight") {
+        if (current < slides.length - 1) {
+            slides[current].classList.remove('active');
+            current++;
+            slides[current].classList.add('active');
+        }
+    }
+
+    if (e.key === "ArrowLeft") {
+        if (current > 0) {
+            slides[current].classList.remove('active');
+            current--;
+            slides[current].classList.add('active');
+        }
+    }
+});
+</script>
+
 </body>
 </html>
+
