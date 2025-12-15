@@ -1,227 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>IT 221 | Information Assurance and Security 1</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IT 221 | IAS1 Week 1–2 Web Slides (Lecture + Lab)</title>
 
-<!-- Bootstrap 5 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
 <style>
-body {
-    background: #f4f6f9;
-    font-family: "Segoe UI", sans-serif;
-}
-.slide {
-    display: none;
-    height: 100vh;
-    padding: 80px;
-    background: white;
-}
-.slide.active {
-    display: block;
-}
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #0c2240;
-    color: white;
-    padding: 8px;
-    text-align: center;
-    font-size: 14px;
-}
-h1, h2 {
-    color: #0c2240;
-}
-.btn-main {
-    font-size: 28px;
-    padding: 30px;
-}
+  :root{
+    --navy:#0c2240;
+    --teal:#0096aa;
+    --light:#f2f4f7;
+    --dark:#30343b;
+  }
+  body{ background: var(--light); font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  .slide{ display:none; min-height:100vh; padding:72px 56px 72px 56px; background:white; }
+  .slide.active{ display:block; }
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:56px;
+    background:var(--light); border-bottom:1px solid #e6e8ee;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 18px; z-index:10;
+  }
+  .brand{ font-weight:800; color:var(--navy); display:flex; gap:10px; align-items:center; }
+  .pill{
+    font-size:12px; padding:6px 10px; border-radius:999px;
+    background:rgba(0,150,170,.10); color:var(--navy);
+    border:1px solid rgba(0,150,170,.25);
+  }
+  .controls button{ border-radius:12px; }
+  .footer{
+    position:fixed; bottom:0; left:0; right:0;
+    background:var(--navy); color:#fff; padding:8px 14px;
+    text-align:center; font-size:13px; z-index:10;
+  }
+  h1{ color:var(--navy); font-weight:900; letter-spacing:-.02em; font-size:42px; margin-bottom:14px; }
+  .sub{ color:#667085; font-size:20px; margin-bottom:16px; }
+  .block-title{ font-size:16px; letter-spacing:.08em; color:#667085; font-weight:800; margin-top:18px; }
+  ul,ol{ font-size:20px; color:var(--dark); }
+  li{ margin:8px 0; }
+  .section-slide{
+    background:var(--navy); color:white;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .section-slide h1{ color:#fff; font-size:64px; margin:0; }
+  .section-slide p{ color:#e9edf3; font-size:22px; margin-top:16px; }
+  .callout{
+    border-left:6px solid var(--teal);
+    background:rgba(0,150,170,.08);
+    padding:14px 16px;
+    border-radius:14px;
+    color:var(--dark);
+    font-size:18px;
+  }
+  .two-col{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:18px;
+  }
+  .kbd{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    background:#111827; color:#fff; border-radius:8px; padding:2px 8px; font-size:13px;
+  }
+  .card-choice{
+    border:1px solid #e6e8ee; border-radius:22px; padding:22px;
+    background:#fff; box-shadow:0 8px 24px rgba(12,34,64,.08);
+    transition:transform .12s ease, box-shadow .12s ease; cursor:pointer;
+  }
+  .card-choice:hover{ transform:translateY(-2px); box-shadow:0 12px 32px rgba(12,34,64,.12); }
+  .big-btn{ font-size:22px; padding:18px 18px; border-radius:16px; }
+  @media (max-width: 992px){
+    .slide{ padding:72px 18px 72px 18px; }
+    .two-col{ grid-template-columns: 1fr; }
+    h1{ font-size:34px; }
+    ul,ol{ font-size:18px; }
+  }
 </style>
 </head>
 
 <body>
 
-<!-- LANDING -->
-<div class="slide active" id="slide-0">
-    <div class="text-center">
-        <h1>Information Assurance and Security 1</h1>
-        <h3>IT 221</h3>
-        <p>St. Mary's College Of Bansalan Inc.</p>
-        <p><strong>Instructor:</strong> John Carl Ray R. Lelis</p>
-        <hr>
-        <h2>Select Class Type</h2>
-
-        <div class="row mt-5">
-            <div class="col-md-6">
-                <button class="btn btn-primary w-100 btn-main" onclick="startLecture()">
-                    📘 Lecture
-                </button>
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-success w-100 btn-main" onclick="startLab()">
-                    🧪 Laboratory
-                </button>
-            </div>
-        </div>
-    </div>
+<div class="topbar">
+  <div class="brand">
+    <span>IT 221 • IAS1</span>
+    <span class="pill" id="modePill">Choose path</span>
+  </div>
+  <div class="controls d-flex gap-2 align-items-center">
+    <span class="text-secondary d-none d-md-inline">Keys: <span class="kbd">←</span> <span class="kbd">→</span> • <span class="kbd">Esc</span> Home</span>
+    <button class="btn btn-outline-secondary" onclick="goHome()">Home</button>
+    <button class="btn btn-outline-secondary" onclick="prevSlide()">Prev</button>
+    <button class="btn btn-primary" onclick="nextSlide()">Next</button>
+  </div>
 </div>
 
-<!-- ===== LECTURE SLIDES ===== -->
-
-<div class="slide" data-path="lecture">
-    <h1>Lecture Overview (Week 1–2)</h1>
-    <ul>
-        <li>What is Information Assurance?</li>
-        <li>IA vs InfoSec vs Cybersecurity</li>
-        <li>CIA Triad</li>
-        <li>Security controls and tradeoffs</li>
-        <li>Security culture and ethics</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lecture">
-    <h1>What is Information Assurance?</h1>
-    <ul>
-        <li>Ensures information is trustworthy and reliable</li>
-        <li>Protects confidentiality, integrity, and availability</li>
-        <li>Includes governance, risk, and continuity</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lecture">
-    <h1>IA vs InfoSec vs Cybersecurity</h1>
-    <ul>
-        <li><strong>Information Security</strong> – protects data</li>
-        <li><strong>Cybersecurity</strong> – protects systems and networks</li>
-        <li><strong>Information Assurance</strong> – umbrella of trust, risk, and resilience</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lecture">
-    <h1>The CIA Triad</h1>
-    <ul>
-        <li><strong>Confidentiality</strong> – authorized access only</li>
-        <li><strong>Integrity</strong> – data is accurate</li>
-        <li><strong>Availability</strong> – systems are accessible</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lecture">
-    <h1>Security Controls</h1>
-    <ul>
-        <li>Administrative – policies, training</li>
-        <li>Technical – firewalls, MFA, encryption</li>
-        <li>Physical – locks, CCTV</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lecture">
-    <h1>Security Culture & Ethics</h1>
-    <ul>
-        <li>Security is everyone’s responsibility</li>
-        <li>Use tools ethically and legally</li>
-        <li>Protect, not exploit</li>
-    </ul>
-</div>
-
-<!-- ===== LAB SLIDES ===== -->
-
-<div class="slide" data-path="lab">
-    <h1>Laboratory Goals (Week 1–2)</h1>
-    <ul>
-        <li>Set up secure lab environment</li>
-        <li>Understand lab rules</li>
-        <li>Perform baseline security audit</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lab">
-    <h1>Lab Rules & Ethics</h1>
-    <ul>
-        <li>Use tools only on assigned VM</li>
-        <li>Do NOT attack real systems</li>
-        <li>No credential sharing</li>
-        <li>Ask before running unknown tools</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lab">
-    <h1>Lab Exercise 1: Baseline Security Audit</h1>
-    <ul>
-        <li>User accounts & passwords</li>
-        <li>System updates</li>
-        <li>Firewall & antivirus</li>
-        <li>Backup configuration</li>
-    </ul>
-</div>
-
-<div class="slide" data-path="lab">
-    <h1>Lab Tasks</h1>
-    <ol>
-        <li>Create VM snapshot</li>
-        <li>Check user accounts</li>
-        <li>Verify updates</li>
-        <li>Confirm firewall & AV status</li>
-        <li>Document findings</li>
-    </ol>
-</div>
-
-<div class="slide" data-path="lab">
-    <h1>Lab Submission</h1>
-    <ul>
-        <li>Screenshots</li>
-        <li>Audit checklist</li>
-        <li>CIA mapping</li>
-        <li>Short reflection</li>
-    </ul>
-</div>
-
-<!-- FOOTER -->
 <div class="footer">
-    St. Mary's College Of Bansalan Inc. • IT 221 • John Carl Ray R. Lelis
+  St. Mary's College Of Bansalan Inc. • IT 221 Information Assurance and Security 1 • Instructor: John Carl Ray R. Lelis
 </div>
+
+<!-- HOME -->
+<section class="slide active" id="home">
+  <div class="container">
+    <div class="row align-items-center" style="min-height:calc(100vh - 140px);">
+      <div class="col-lg-7">
+        <h1>Information Assurance and Security 1</h1>
+        <div class="sub">Week 1–2 Web Slides (with Discussion / Instructor Notes)</div>
+        <div class="callout mb-4">
+          Navigate like PowerPoint: <span class="kbd">←</span> / <span class="kbd">→</span> • Press <span class="kbd">Esc</span> to return Home.
+        </div>
+        <div class="d-flex gap-3 flex-wrap">
+          <button class="btn btn-primary big-btn" onclick="startPath('lecture')">📘 Lecture Slides</button>
+          <button class="btn btn-success big-btn" onclick="startPath('lab')">🧪 Laboratory Slides</button>
+        </div>
+      </div>
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="card-choice" onclick="startPath('lecture')">
+          <div class="d-flex justify-content-between">
+            <div>
+              <div class="fs-5 fw-bold" style="color:var(--navy);">Lecture</div>
+              <div class="text-secondary">Concepts + discussion notes</div>
+            </div>
+            <span class="pill">Concepts</span>
+          </div>
+          <hr/>
+          <ul class="m-0">
+            <li>Foundations of IA</li>
+            <li>CIA Triad, controls, tradeoffs</li>
+            <li>Culture + ethics</li>
+          </ul>
+        </div>
+
+        <div class="card-choice mt-3" onclick="startPath('lab')">
+          <div class="d-flex justify-content-between">
+            <div>
+              <div class="fs-5 fw-bold" style="color:var(--navy);">Laboratory</div>
+              <div class="text-secondary">Exercises + submission guide</div>
+            </div>
+            <span class="pill">Hands-on</span>
+          </div>
+          <hr/>
+          <ul class="m-0">
+            <li>Lab rules and safety</li>
+            <li>Baseline workstation audit</li>
+            <li>CIA mapping + outputs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LECTURE ================= -->
+<section class="slide section-slide" data-path="lecture">
+  <div>
+    <h1>LECTURE</h1>
+    <p>Week 1–2: Foundations of Information Assurance</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Week 1–2 Lecture Overview</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li>Information Assurance (IA): definition and scope</li>
+    <li>InfoSec vs Cybersecurity vs IA</li>
+    <li>Security objectives: CIA triad and beyond</li>
+    <li>Controls and tradeoffs</li>
+    <li>Culture, ethics, professionalism</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    For Weeks 1–2, our goal is to build the foundation. Before we talk about hacking, tools, or incidents,
+    we must understand what we are protecting, why it matters, and what “good security” looks like.
+    Think of this as learning the rules of the game first—then later we study the attackers and defenses.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Why Information Assurance Matters</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Information assets</b>: student data, records, finances, systems</li>
+    <li><b>Consequences</b>: money loss, downtime, damaged reputation, legal issues</li>
+    <li><b>Security is socio-technical</b>: people + process + technology</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Schools are real targets because they store identity data, grades, accounts, and sometimes payment info.
+    One weak password can lead to unauthorized access; one ransomware incident can stop enrollment or classes.
+    This is why we study IA: not only to stop hackers, but to keep services running and protect people’s data.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Key Concepts: IA, InfoSec, Cybersecurity</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Information Assurance (IA)</b>: trustworthiness, resilience, governance + risk</li>
+    <li><b>Information Security (InfoSec)</b>: protects information from unauthorized access/changes</li>
+    <li><b>Cybersecurity</b>: protects digital systems and networks from cyber attacks</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    A simple way to remember: InfoSec focuses on protecting the data. Cybersecurity focuses on defending systems online.
+    Information Assurance is broader—it includes policies, risk decisions, continuity plans, and ensuring the system
+    stays trustworthy over time.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>IA vs InfoSec vs Cybersecurity (Example)</h1>
+  <div class="block-title">DISCUSSION EXAMPLE</div>
+  <div class="callout">
+    Scenario: A school portal stores grades and student profiles.<br><br>
+    <b>InfoSec</b> asks: Are the grades protected from unauthorized viewing or changes?<br>
+    <b>Cybersecurity</b> asks: Can attackers break into the portal through the network or web vulnerabilities?<br>
+    <b>IA</b> asks: Do we have policies, backups, monitoring, access review, and incident response so the portal remains trustworthy and available?
+  </div>
+  <div class="block-title">CHECK FOR UNDERSTANDING</div>
+  <ul>
+    <li>Which area covers backups and recovery planning?</li>
+    <li>Which area focuses on network defense?</li>
+  </ul>
+</section>
+
+<section class="slide section-slide" data-path="lecture">
+  <div>
+    <h1>SECURITY OBJECTIVES</h1>
+    <p>CIA triad and other goals</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>The CIA Triad</h1>
+  <div class="two-col">
+    <div class="callout">
+      <b>Confidentiality</b><br>
+      Only authorized people can access information.<br>
+      <span class="text-secondary">Examples:</span> access control, encryption, MFA
+    </div>
+    <div class="callout">
+      <b>Integrity</b><br>
+      Information stays accurate and unmodified.<br>
+      <span class="text-secondary">Examples:</span> hashing, checksums, change control
+    </div>
+  </div>
+  <div class="callout mt-3">
+    <b>Availability</b><br>
+    Systems and data are accessible when needed.<br>
+    <span class="text-secondary">Examples:</span> backups, redundancy, fault tolerance
+  </div>
+
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    The CIA triad is the most common security model. Most controls you’ll encounter are designed to protect one or more of these.
+    When you evaluate a system, always ask: “What can harm confidentiality? integrity? availability?”
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>CIA Examples (Campus Context)</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Confidentiality</b>: leaked grades, stolen student IDs, exposed passwords</li>
+    <li><b>Integrity</b>: unauthorized grade changes, altered records</li>
+    <li><b>Availability</b>: portal down during enrollment, ransomware locking files</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    A good security mindset is to connect theory to real life. In a school environment, even “small” issues (like sharing passwords)
+    can lead to serious confidentiality and integrity violations.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Beyond CIA</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Authentication</b>: proving identity (passwords, biometrics, MFA)</li>
+    <li><b>Authorization</b>: giving correct permissions (roles, access levels)</li>
+    <li><b>Non-repudiation</b>: actions can’t be denied later (logs, digital signatures)</li>
+    <li><b>Accountability</b>: tracing actions to individuals (audit trails)</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Many security failures happen because identity and access are weak. Even if encryption exists,
+    the wrong user having the wrong permission is still a breach.
+  </div>
+</section>
+
+<section class="slide section-slide" data-path="lecture">
+  <div>
+    <h1>CONTROLS & TRADEOFFS</h1>
+    <p>How protection works in organizations</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Security Controls</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Administrative</b>: policies, training, procedures, risk management</li>
+    <li><b>Technical</b>: firewalls, MFA, encryption, antivirus, IDS/IPS</li>
+    <li><b>Physical</b>: locks, CCTV, guards, secure rooms</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Good security isn’t only “tools.” Policies and training matter because people make mistakes.
+    Physical controls matter because access to a computer can bypass many digital protections.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Security Tradeoffs</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Security vs Usability</b>: strong rules may be inconvenient</li>
+    <li><b>Security vs Cost</b>: tools + staff + training cost money</li>
+    <li><b>Security vs Performance</b>: controls can slow systems</li>
+    <li><b>Goal</b>: balance controls with real risks</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Security decisions are business decisions too. “Perfect security” is impossible.
+    We reduce risk to an acceptable level by choosing the right controls for the most likely and most damaging threats.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Threats, Vulnerabilities, Risk</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li><b>Threat</b>: something that can cause harm (actor/event)</li>
+    <li><b>Vulnerability</b>: weakness that can be exploited</li>
+    <li><b>Risk</b>: likelihood × impact</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Example: “Phisher” is a threat actor. “User reuses password” is a vulnerability.
+    Risk depends on how likely the phishing is and how bad the impact is (e.g., portal takeover).
+  </div>
+</section>
+
+<section class="slide section-slide" data-path="lecture">
+  <div>
+    <h1>CULTURE & ETHICS</h1>
+    <p>Security is also about behavior</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Security Culture</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li>Security is everyone’s responsibility</li>
+    <li>Human error is a major attack path</li>
+    <li>Least privilege and need-to-know</li>
+    <li>Report suspicious activity early</li>
+    <li>Update and back up systems regularly</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Many attacks succeed because of behavior: clicking links, sharing passwords, ignoring updates.
+    A strong culture reduces those risks.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Ethics & Professional Responsibility</h1>
+  <div class="block-title">KEY POINTS</div>
+  <ul>
+    <li>Use security tools only with permission and within lab scope</li>
+    <li>Respect privacy and confidentiality</li>
+    <li>Follow laws, school rules, and policies</li>
+    <li>Document actions honestly</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    In this course, we study attacks to understand defense. That means we must be strict about scope.
+    Unauthorized scanning or phishing on real systems is not “practice”—it’s misconduct.
+  </div>
+</section>
+
+<section class="slide" data-path="lecture">
+  <h1>Lecture Wrap-Up</h1>
+  <div class="block-title">TAKEAWAYS</div>
+  <ul>
+    <li>IA ensures trustworthiness and resilience of information</li>
+    <li>CIA triad guides most security decisions</li>
+    <li>Controls: administrative, technical, physical</li>
+    <li>Tradeoffs must be managed</li>
+    <li>Culture and ethics are foundational</li>
+  </ul>
+</section>
+
+<!-- ================= LAB ================= -->
+<section class="slide section-slide" data-path="lab">
+  <div>
+    <h1>LABORATORY</h1>
+    <p>Week 1–2: Orientation & Baseline Security Audit</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Week 1–2 Lab Goals</h1>
+  <div class="block-title">WHAT WE WILL DO</div>
+  <ul>
+    <li>Set up a safe VM sandbox environment</li>
+    <li>Review lab rules and ethical scope</li>
+    <li>Perform a baseline security audit checklist</li>
+    <li>Document evidence (screenshots) and recommendations</li>
+  </ul>
+  <div class="block-title">DISCUSSION / INSTRUCTOR NOTES</div>
+  <div class="callout">
+    Your first lab is not “hacking.” It’s professional security practice: checking configuration, updates, protection settings,
+    and documenting what you see. This is how real audits begin.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Lab Rules (Non-Negotiable)</h1>
+  <ul>
+    <li>Use tools only on your VM or assigned targets</li>
+    <li>Do NOT scan/attack real networks or accounts</li>
+    <li>No sharing of passwords or exploit files</li>
+    <li>Ask first before running unfamiliar tools</li>
+    <li>Back up and save your work</li>
+  </ul>
+  <div class="callout">
+    If you are unsure whether an action is allowed, stop and ask. Permission and scope are the core of ethical security work.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Tools for Weeks 1–2</h1>
+  <div class="two-col">
+    <div class="callout">
+      <b>Required</b>
+      <ul class="mb-0">
+        <li>VirtualBox/VMware</li>
+        <li>Assigned Windows or Linux VM</li>
+        <li>Browser + text editor</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <b>Optional (demo only)</b>
+      <ul class="mb-0">
+        <li>Task Manager / Activity Monitor</li>
+        <li>Windows Security / Linux security panels</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide section-slide" data-path="lab">
+  <div>
+    <h1>LAB EXERCISE 1</h1>
+    <p>Baseline Workstation Security Audit</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Exercise 1 Objectives</h1>
+  <ul>
+    <li>Assess security posture using a checklist</li>
+    <li>Check accounts, updates, firewall, AV, backups</li>
+    <li>Map findings to CIA triad</li>
+    <li>Write recommendations like a real auditor</li>
+  </ul>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part A: Prepare Your Sandbox</h1>
+  <ol>
+    <li>Install VirtualBox/VMware (if needed)</li>
+    <li>Import/Create your assigned VM</li>
+    <li>Create snapshot: <b>IAS1-Week1-Baseline</b></li>
+    <li>Confirm internet access (NAT)</li>
+    <li>Create a folder for screenshots and notes</li>
+  </ol>
+  <div class="callout">
+    The snapshot is your safety net. If you make a mistake, you can roll back and continue without losing progress.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part B: Account & Password Check</h1>
+  <div class="block-title">STEPS</div>
+  <ul>
+    <li>Open Users/Accounts settings</li>
+    <li>List accounts; identify admin/root accounts</li>
+    <li>Check password policy (length, complexity, expiration)</li>
+    <li>Enable MFA where available (demo)</li>
+  </ul>
+  <div class="block-title">EVIDENCE TO RECORD</div>
+  <ul>
+    <li>Screenshot of account list</li>
+    <li>Notes on default/weak accounts</li>
+    <li>Password policy summary</li>
+  </ul>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part C: Patch & Update Status</h1>
+  <div class="block-title">STEPS</div>
+  <ul>
+    <li>Open Windows Update / package manager</li>
+    <li>Check last update date</li>
+    <li>Install security updates (if allowed)</li>
+    <li>Reboot if required</li>
+  </ul>
+  <div class="callout">
+    Updates matter because most attacks reuse known vulnerabilities. Patch management is one of the best “basic” defenses.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part D: Protection Settings</h1>
+  <ul>
+    <li>Check antivirus/endpoint protection status</li>
+    <li>Confirm firewall is ON</li>
+    <li>Review screen lock & timeout</li>
+    <li>Check disk encryption status (if available)</li>
+  </ul>
+  <div class="callout">
+    This is where you often find “easy wins” like a disabled firewall or no screen lock.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part E: Storage & Backup Check</h1>
+  <ul>
+    <li>Verify disk space</li>
+    <li>Locate backup settings (File History/TimeShift)</li>
+    <li>Confirm backup schedule or manual backup option</li>
+  </ul>
+  <div class="callout">
+    Availability isn’t only “server uptime.” Backups are how you recover after mistakes, failures, or ransomware.
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Part F: Map Findings to CIA</h1>
+  <ul>
+    <li>For each issue, identify CIA impact:</li>
+    <li><b>Confidentiality</b>, <b>Integrity</b>, and/or <b>Availability</b></li>
+    <li>Example: Disabled firewall → Availability + Confidentiality risk</li>
+  </ul>
+</section>
+
+<section class="slide section-slide" data-path="lab">
+  <div>
+    <h1>LAB OUTPUTS</h1>
+    <p>What to submit</p>
+  </div>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>What to Submit (Lab 1)</h1>
+  <ul>
+    <li>Lab Portfolio PDF (or printed)</li>
+    <li>Screenshots per checklist section</li>
+    <li>Baseline Audit Table</li>
+    <li>CIA Mapping Summary</li>
+    <li>Reflection (5–8 sentences)</li>
+  </ul>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Baseline Audit Table Template</h1>
+  <div class="callout">
+    <b>Check Item</b> | <b>Status (OK/Issue)</b> | <b>Evidence</b> | <b>CIA Impact</b> | <b>Recommendation</b>
+  </div>
+  <ul>
+    <li>Minimum of 10 check items required</li>
+    <li>Recommendations must be actionable (ex: “Enable firewall” not “Improve security”)</li>
+  </ul>
+</section>
+
+<section class="slide" data-path="lab">
+  <h1>Lab Wrap-Up</h1>
+  <ul>
+    <li>Baseline audits are the first step of IA</li>
+    <li>Security begins with configuration and discipline</li>
+    <li>Evidence + documentation are part of professional work</li>
+    <li>Next labs will build on this foundation</li>
+  </ul>
+</section>
 
 <script>
-let slides = [];
-let current = 0;
+  const HOME_ID = "home";
+  let activePath = null;
+  let pathSlides = [];
+  let idx = -1;
 
-function startLecture() {
-    slides = [...document.querySelectorAll('[data-path="lecture"]')];
-    activateSlides();
-}
-
-function startLab() {
-    slides = [...document.querySelectorAll('[data-path="lab"]')];
-    activateSlides();
-}
-
-function activateSlides() {
-    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-    current = 0;
-    slides[current].classList.add('active');
-}
-
-document.addEventListener('keydown', e => {
-    if (!slides.length) return;
-
-    if (e.key === "ArrowRight") {
-        if (current < slides.length - 1) {
-            slides[current].classList.remove('active');
-            current++;
-            slides[current].classList.add('active');
-        }
-    }
-
-    if (e.key === "ArrowLeft") {
-        if (current > 0) {
-            slides[current].classList.remove('active');
-            current--;
-            slides[current].classList.add('active');
-        }
-    }
-});
+  function setModePill(text){ document.getElementById("modePill").textContent = text; }
+  function showOnly(slideEl){
+    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+    slideEl.classList.add("active");
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+  function goHome(){
+    activePath = null; pathSlides = []; idx = -1;
+    setModePill("Choose path");
+    showOnly(document.getElementById(HOME_ID));
+  }
+  function startPath(path){
+    activePath = path;
+    pathSlides = Array.from(document.querySelectorAll(`.slide[data-path="${path}"]`));
+    idx = 0;
+    setModePill(path === "lecture" ? "Lecture mode" : "Laboratory mode");
+    showOnly(pathSlides[idx]);
+  }
+  function nextSlide(){
+    if(!activePath) return;
+    if(idx < pathSlides.length - 1){ idx++; showOnly(pathSlides[idx]); }
+  }
+  function prevSlide(){
+    if(!activePath) return;
+    if(idx > 0){ idx--; showOnly(pathSlides[idx]); }
+  }
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "ArrowRight") nextSlide();
+    if(e.key === "ArrowLeft") prevSlide();
+    if(e.key === "Escape") goHome();
+  });
 </script>
 
 </body>
