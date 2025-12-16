@@ -18,18 +18,21 @@
   html,body{height:100%; margin:0;}
   body{background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif; overflow:hidden;}
 
+  /* Stage */
   .stage{ position:relative; width:100vw; height:100vh; overflow:hidden; }
-  .deck{
-    position:absolute; inset:0; display:flex;
-    transition:transform 360ms ease; will-change:transform;
-  }
+
+  /* Slides track (horizontal) */
+  .deck{ position:absolute; inset:0; display:flex; transition:transform 360ms ease; will-change:transform; }
+
   .slide{
     width:100vw; height:100vh; flex:0 0 100vw;
-    padding:74px 74px 74px 74px; box-sizing:border-box;
+    padding:74px 74px 74px 74px;
+    box-sizing:border-box;
     background: radial-gradient(1200px 700px at 10% 0%, rgba(0,150,170,.18), transparent 60%),
                 radial-gradient(1200px 700px at 100% 30%, rgba(12,34,64,.55), transparent 55%),
                 linear-gradient(180deg, #0b1220 0%, #0a1020 100%);
   }
+
   .slide-inner{
     height:100%;
     border-radius:26px;
@@ -41,11 +44,17 @@
     flex-direction:column;
     gap:18px;
   }
+
   .title{
-    font-weight:900; color:#ffffff; letter-spacing:-.02em;
-    line-height:1.05; font-size:56px; margin:0;
+    font-weight:900;
+    color:#ffffff;
+    letter-spacing:-.02em;
+    line-height:1.05;
+    font-size:56px;
+    margin:0;
   }
   .subtitle{ margin:0; color:var(--muted); font-size:22px; }
+
   .content{ margin-top:10px; font-size:26px; color:var(--text); }
   .content ul, .content ol{ font-size:26px; margin:14px 0 0 22px; }
   .content li{ margin:10px 0; }
@@ -63,7 +72,7 @@
     font-size:18px;
   }
 
-  /* Instructor Notes (hidden unless unlocked) */
+  /* Instructor Notes (optional; hidden unless unlocked) */
   .instructor-notes{
     display:none;
     margin-top:12px;
@@ -78,17 +87,25 @@
   }
   .instructor-notes.visible{ display:block; }
 
+  /* Top bar */
   .topbar{
-    position:absolute; top:0; left:0; right:0; height:56px;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 18px; z-index:5;
+    position:absolute;
+    top:0; left:0; right:0;
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    z-index:5;
     background: rgba(8,14,26,.75);
     backdrop-filter: blur(10px);
     border-bottom:1px solid rgba(255,255,255,.08);
   }
   .brand{ display:flex; gap:10px; align-items:center; font-weight:800; }
   .pill{
-    font-size:12px; padding:6px 10px; border-radius:999px;
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:999px;
     background: rgba(0,150,170,.14);
     border:1px solid rgba(0,150,170,.28);
     color: #e8fbff;
@@ -101,16 +118,32 @@
   }
   .btn-ghost:hover{ background: rgba(255,255,255,.10); color:#fff; }
 
+  /* Bottom HUD */
   .hud{
-    position:absolute; left:0; right:0; bottom:0; height:52px;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0 18px; z-index:5;
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    z-index:5;
     background: rgba(8,14,26,.75);
     backdrop-filter: blur(10px);
     border-top:1px solid rgba(255,255,255,.08);
   }
-  .progress{ height:8px; background: rgba(255,255,255,.10); border-radius:999px; overflow:hidden; width:min(520px, 46vw); }
-  .progress > div{ height:100%; width:0%; background: linear-gradient(90deg, rgba(0,150,170,1), rgba(72,210,220,1)); }
+  .progress{
+    height:8px;
+    background: rgba(255,255,255,.10);
+    border-radius:999px;
+    overflow:hidden;
+    width:min(520px, 46vw);
+  }
+  .progress > div{
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, rgba(0,150,170,1), rgba(72,210,220,1));
+  }
   .meta{ font-size:13px; color:var(--muted); }
   .kbd{
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
@@ -119,21 +152,60 @@
     border:1px solid rgba(255,255,255,.10);
   }
 
-  .home-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:18px; }
+  /* Home cards */
+  .home-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:18px;
+    margin-top:18px;
+  }
   .home-card{
     background: rgba(255,255,255,.06);
     border:1px solid rgba(255,255,255,.10);
-    border-radius:22px; padding:22px;
-    cursor:pointer; transition: transform .12s ease, background .12s ease;
+    border-radius:22px;
+    padding:22px;
+    cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
   }
   .home-card:hover{ transform: translateY(-2px); background: rgba(255,255,255,.08); }
   .home-card h3{ margin:0; font-weight:900; }
   .home-card p{ margin:8px 0 0 0; color:var(--muted); }
   .home-card ul{ margin:12px 0 0 20px; color:var(--text); font-size:20px; }
 
+  /* Section slide */
   .section .slide-inner{ justify-content:center; text-align:center; }
   .section .title{ font-size:72px; }
   .section .subtitle{ font-size:26px; }
+
+  /* Modal (shared) */
+  .modal-mask{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.85);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  }
+  .modal-box{
+    background:#0f1b33;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:20px;
+    padding:28px;
+    width:min(460px, 92%);
+    color:#fff;
+    text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+  }
+  .modal-box h3{ margin-bottom:10px; }
+  .modal-box p{ color:var(--muted); margin-bottom:12px; }
+  .modal-box input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    border:none;
+    margin:10px 0;
+    font-size:16px;
+  }
 
   @media (max-width: 992px){
     .slide{ padding:62px 18px; }
@@ -172,50 +244,58 @@
   </div>
 </div>
 
-<!-- Instructor Notes Password Modal -->
-<div id="notesModal" style="
-  position:fixed; inset:0; background:rgba(0,0,0,.85);
-  display:flex; align-items:center; justify-content:center;
-  z-index:9999;">
-  <div style="
-    background:#0f1b33; border:1px solid rgba(255,255,255,.12);
-    border-radius:20px; padding:28px; width:min(440px,90%);
-    color:#fff; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.6);">
-    <h3 style="margin-bottom:10px;">Instructor Notes</h3>
-    <p style="color:#b6c0d1; margin-bottom:12px;">
-      Enter password to unlock instructor-only notes.<br/>
-      <span style="font-size:12px; opacity:.9;">(Students can continue without unlocking.)</span>
-    </p>
+<!-- Access Password Modal (Lecture / Lab) -->
+<div class="modal-mask" id="accessModal">
+  <div class="modal-box">
+    <h3 id="accessTitle">Access Required</h3>
+    <p id="accessDesc">Enter password to continue.</p>
+    <input id="accessPassword" type="password" placeholder="Password" autocomplete="off" />
+    <button class="btn btn-primary w-100" onclick="unlockAccess()">Enter</button>
+    <div id="accessError" style="margin-top:10px;color:#ffb4b4;display:none;">Incorrect password.</div>
+    <button class="btn btn-link text-light mt-2" onclick="cancelAccess()">Cancel</button>
+  </div>
+</div>
 
-    <input id="notesPassword" type="password" placeholder="Password"
-      style="width:100%; padding:12px 14px; border-radius:12px; border:none; margin:10px 0; font-size:16px;"
-      autocomplete="off" />
-
-    <button onclick="unlockNotes()"
-      style="width:100%; padding:12px; border-radius:12px; border:none; background:#0096aa; color:white; font-size:16px; font-weight:600; cursor:pointer;">
-      Unlock Notes
-    </button>
-
-    <div id="notesError" style="margin-top:10px;color:#ffb4b4;display:none;">
-      Incorrect password.
-    </div>
-
-    <button onclick="skipNotes()"
-      style="margin-top:14px; background:none; border:none; color:#b6c0d1; cursor:pointer;">
-      Continue without notes
-    </button>
+<!-- Instructor Notes Password Modal (optional) -->
+<div class="modal-mask" id="notesModal">
+  <div class="modal-box">
+    <h3>Instructor Notes</h3>
+    <p>Enter password to unlock instructor-only notes. (Optional)</p>
+    <input id="notesPassword" type="password" placeholder="Password" autocomplete="off" />
+    <button class="btn btn-primary w-100" onclick="unlockNotes()">Unlock Notes</button>
+    <div id="notesError" style="margin-top:10px;color:#ffb4b4;display:none;">Incorrect password.</div>
+    <button class="btn btn-link text-light mt-2" onclick="skipNotes()">Continue without notes</button>
   </div>
 </div>
 
 <script>
+/* Branding */
 const SCHOOL = "St. Mary's College Of Bansalan Inc.";
 const COURSE = "Information Assurance and Security 1";
 const CODE = "IT 221";
 const INSTRUCTOR = "John Carl Ray R. Lelis";
 
-/* Static password in JS as requested */
+/* Access passwords (as requested) */
+const LECTURE_PASSWORD = "LecPass";
+const LAB_PASSWORD = "LabWord";
+
+/* Instructor notes password (from earlier request; keep as optional) */
 const NOTES_PASSWORD = "adminnotes";
 
+/* State */
+let currentDeck = "home";
+let index = 0;
+let pendingDeck = null;
+let accessUnlocked = { lecture:false, lab:false };
+let notesUnlocked = false;
+
+/* DOM */
+const deckEl = document.getElementById("deck");
+const barEl = document.getElementById("bar");
+const counterEl = document.getElementById("counter");
+const modePill = document.getElementById("modePill");
+
+/* Slide content (RESTORED FULL CONTENT) */
 const decks = {
   home: [
     {
@@ -224,9 +304,12 @@ const decks = {
       subtitle: `${CODE} • Week 1–2 • Web Slides`,
       body: `
         <div class="content">
-          <p class="subtitle" style="margin-top:0">Choose the session deck you want to present:</p>
+          <p class="subtitle" style="margin-top:0">
+            Choose the session deck. Each one requires a password before opening.
+          </p>
+
           <div class="home-grid">
-            <div class="home-card" onclick="start('lecture')">
+            <div class="home-card" onclick="requestDeck('lecture')">
               <h3>📘 Lecture</h3>
               <p>Foundations of Information Assurance</p>
               <ul>
@@ -235,7 +318,8 @@ const decks = {
                 <li>Controls, tradeoffs, culture, ethics</li>
               </ul>
             </div>
-            <div class="home-card" onclick="start('lab')">
+
+            <div class="home-card" onclick="requestDeck('lab')">
               <h3>🧪 Laboratory</h3>
               <p>Orientation & Baseline Security Audit</p>
               <ul>
@@ -248,11 +332,12 @@ const decks = {
 
           <div class="callout">
             <b>${SCHOOL}</b><br/>
-            <span style="color:var(--muted)">${COURSE} • ${CODE} • Instructor: ${INSTRUCTOR}</span>
+            <span style="color:var(--muted)">${COURSE} • ${CODE} • Instructor: ${INSTRUCTOR}</span><br/>
+            <span style="color:var(--muted)">Tip: Press Esc anytime to return Home.</span>
           </div>
 
           <div class="instructor-notes">
-            <b>Instructor Notes:</b> If you unlocked notes, remind students: lecture slides focus on concepts; lab slides focus on procedure and evidence.
+            <b>Instructor Notes:</b> Use Home to explain the flow: choose deck → enter password → navigate with arrow keys like PowerPoint.
           </div>
         </div>
       `
@@ -274,7 +359,7 @@ const decks = {
           <li>Security culture, ethics, and professionalism</li>
         </ul>
         <div class="callout">Use this slide as your roadmap. Each slide builds toward a security mindset.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Quick opener: Ask students to name “assets” the school must protect (grades, IDs, portal accounts, HR/payroll data).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Opener: Ask students to name “assets” the school must protect (grades, IDs, accounts, payroll, records).</div>
       </div>`
     },
 
@@ -288,7 +373,7 @@ const decks = {
           <li><strong>Socio-technical</strong>: security = people + process + technology</li>
         </ul>
         <div class="callout">Campus example: If enrollment systems fail, it affects operations, students, and staff.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize “trust.” IA is about maintaining trust in information systems over time, not just stopping attackers.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize “trust.” IA is about maintaining trust in information systems over time—not only stopping attackers.</div>
       </div>`
     },
 
@@ -302,7 +387,7 @@ const decks = {
           <li><strong>Cybersecurity</strong>: protects digital systems and networks from cyber attacks</li>
         </ul>
         <div class="callout">Memory trick: InfoSec = data; Cybersecurity = systems/network; IA = trust + continuity + governance.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Give a quick analogy: IA is “healthcare system,” cybersecurity is “ER defense,” InfoSec is “patient record privacy.”</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Analogy: IA is the whole “health system,” cybersecurity is “ER defense,” InfoSec is “patient record privacy.”</div>
       </div>`
     },
 
@@ -316,7 +401,7 @@ const decks = {
           <li><strong>Information Assurance</strong>: broader—continuity, governance, policy, risk decisions</li>
         </ul>
         <div class="callout">Example: Backups & recovery planning are strongly aligned with IA.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Ask: “If the portal is hacked, what’s the recovery plan?” Use this to connect to IA scope (continuity/response).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Ask: “If the portal is hacked, what’s the recovery plan?” Connect to IA scope (continuity/response).</div>
       </div>`
     },
 
@@ -346,7 +431,7 @@ const decks = {
           <li><strong>Availability breach</strong>: ransomware, portal outage, DDoS disruption</li>
         </ul>
         <div class="callout">Prompt: Give one local/school example for each category.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize that one incident can hit multiple goals (e.g., ransomware affects availability + confidentiality if data is exfiltrated).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize multi-impact incidents (e.g., ransomware can affect availability + confidentiality if data is exfiltrated).</div>
       </div>`
     },
 
@@ -360,8 +445,8 @@ const decks = {
           <li><strong>Non-repudiation</strong>: actions can’t be denied later (digital signatures, logs)</li>
           <li><strong>Accountability</strong>: actions traceable to individuals (audit trails)</li>
         </ul>
-        <div class="callout">Identity + access failures are among the most common root causes of breaches.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Quick question: “Authentication vs Authorization—what’s the difference?” Give student portal role examples.</div>
+        <div class="callout">Identity + access failures are common root causes of breaches.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Quick question: “Authentication vs Authorization—what’s the difference?” Use student portal role examples.</div>
       </div>`
     },
 
@@ -392,7 +477,7 @@ const decks = {
           <li><strong>Goal</strong>: reduce risk to an acceptable level</li>
         </ul>
         <div class="callout">We manage risk; we don’t eliminate it completely.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Simple class prompt: “Would you accept 12-character passwords everywhere if logins become slower?” Connect to tradeoffs.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Prompt: “Would you accept 12-character passwords everywhere if logins become slower?” Connect to tradeoffs.</div>
       </div>`
     },
 
@@ -406,7 +491,7 @@ const decks = {
           <li><strong>Risk</strong>: likelihood × impact</li>
         </ul>
         <div class="callout">Example: Phisher (threat) + password reuse (vulnerability) = high risk of account takeover.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Quick check: Ask students to identify threat/vulnerability in a “lost phone with no PIN” scenario.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Check: Identify threat/vulnerability in “lost phone with no PIN.”</div>
       </div>`
     },
 
@@ -424,7 +509,7 @@ const decks = {
           <li>Update and back up systems regularly</li>
         </ul>
         <div class="callout">Culture = what people do even when no one is watching.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Give 2 “habits” examples: checking URLs before clicking; locking the screen when leaving.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Give two habits: check URL before clicking; lock the screen when leaving.</div>
       </div>`
     },
 
@@ -440,7 +525,7 @@ const decks = {
           <li>We learn security to protect—not to harm</li>
         </ul>
         <div class="callout">Permission + scope are the foundation of ethical security work.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Make expectations explicit: No real phishing, no scanning campus networks. Lab targets only.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Make expectations explicit: no real phishing, no scanning campus networks. Lab targets only.</div>
       </div>`
     },
 
@@ -475,7 +560,7 @@ const decks = {
           <li>Document findings in a lab portfolio</li>
         </ul>
         <div class="callout">This lab is professional practice: checklist + evidence + recommendations.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Remind students: screenshots are evidence. Encourage clear file naming for screenshots.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Remind students: screenshots are evidence. Encourage clear file naming.</div>
       </div>`
     },
 
@@ -520,8 +605,8 @@ const decks = {
           <li>Relate findings to the CIA triad</li>
           <li>Produce a short audit report with evidence</li>
         </ul>
-        <div class="callout">Think like an auditor: observe → collect evidence → recommend actions.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Stress that “recommendations” must be actionable and specific.</div>
+        <div class="callout">Think like an auditor: observe → evidence → recommendations.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Stress that recommendations must be actionable and specific.</div>
       </div>`
     },
 
@@ -563,7 +648,7 @@ const decks = {
           <li><strong>Record</strong>: update status screenshot + notes on pending critical updates</li>
         </ul>
         <div class="callout">Most attacks reuse known vulnerabilities. Updating is a high-impact defense.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> If updates are disabled in the VM image, have students record “policy restriction” and still discuss risk.</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> If updates are disabled in the VM image, record “policy restriction” and discuss risk.</div>
       </div>`
     },
 
@@ -578,7 +663,7 @@ const decks = {
           <li>Check full-disk encryption status (if available)</li>
         </ul>
         <div class="callout">Look for quick wins: disabled firewall, no lock screen, outdated AV.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Ask students to write one recommendation per issue found (enable/turn on/configure).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Require one recommendation per issue found (enable/configure/update).</div>
       </div>`
     },
 
@@ -592,7 +677,7 @@ const decks = {
           <li>Confirm backup schedule or manual backup option</li>
         </ul>
         <div class="callout">Backups protect availability and reduce ransomware impact.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Emphasize 3-2-1 backup rule briefly (optional preview for later weeks).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Optional: mention 3-2-1 backup rule as preview.</div>
       </div>`
     },
 
@@ -606,7 +691,7 @@ const decks = {
           <li>Example: disabled firewall → Availability + Confidentiality risk</li>
         </ul>
         <div class="callout">This turns observations into security reasoning.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> For grading: require at least 5 issues mapped to CIA (even if “no issue,” map why it supports CIA).</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> For grading: require at least 5 items mapped to CIA.</div>
       </div>`
     },
 
@@ -624,7 +709,7 @@ const decks = {
           <li>Reflection (5–8 sentences)</li>
         </ul>
         <div class="callout">Grade basis: completeness, evidence quality, and actionable recommendations.</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Suggest submission naming format: IT221_Lab1_LastName_FirstName.pdf</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Suggest naming format: IT221_Lab1_LastName_FirstName.pdf</div>
       </div>`
     },
 
@@ -637,7 +722,7 @@ const decks = {
           <li>Minimum of <strong>10</strong> check items required.</li>
         </ul>
         <div class="callout">Actionable recommendations: “Enable firewall” &gt; “Improve security.”</div>
-        <div class="instructor-notes"><b>Instructor Notes:</b> Encourage students to include where they found the setting (path/menu) as part of “Evidence.”</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> Encourage students to include the setting path/menu in “Evidence.”</div>
       </div>`
     },
 
@@ -651,20 +736,13 @@ const decks = {
           <li>Evidence + documentation are professional practice</li>
           <li>Next labs build on this foundation</li>
         </ul>
-        <div class="instructor-notes"><b>Instructor Notes:</b> End with: “Your portfolio is your security notebook—keep it organized for midterm/final review.”</div>
+        <div class="instructor-notes"><b>Instructor Notes:</b> End: “Your portfolio is your security notebook—keep it organized for midterm/final review.”</div>
       </div>`
     }
   ]
 };
 
-let currentDeck = "home";
-let index = 0;
-
-const deckEl = document.getElementById("deck");
-const barEl = document.getElementById("bar");
-const counterEl = document.getElementById("counter");
-const modePill = document.getElementById("modePill");
-
+/* Rendering */
 function renderDeck(name){
   currentDeck = name;
   index = 0;
@@ -690,9 +768,7 @@ function renderDeck(name){
     `;
   }).join("");
 
-  // Apply visibility state for notes after re-render (in case deck switches)
   applyNotesVisibility();
-
   updateUI();
   move();
 }
@@ -702,10 +778,12 @@ function updateUI(){
   counterEl.textContent = `${index+1} / ${total}`;
   barEl.style.width = total <= 1 ? "0%" : `${(index/(total-1))*100}%`;
 }
+
 function move(){
   deckEl.style.transform = `translateX(${-index*100}vw)`;
   updateUI();
 }
+
 function next(){
   const total = decks[currentDeck].length;
   if(index < total-1){ index++; move(); }
@@ -714,16 +792,86 @@ function prev(){
   if(index > 0){ index--; move(); }
 }
 function goHome(){ renderDeck("home"); }
-function start(name){ renderDeck(name); }
 
+/* Deck access gating */
+function requestDeck(deckName){
+  pendingDeck = deckName;
+  document.getElementById("accessError").style.display = "none";
+  document.getElementById("accessPassword").value = "";
+  document.getElementById("accessTitle").textContent = deckName === "lecture" ? "Lecture Password Required" : "Laboratory Password Required";
+  document.getElementById("accessDesc").textContent = deckName === "lecture" ? "Enter the lecture access password to open the slides." : "Enter the laboratory access password to open the slides.";
+  document.getElementById("accessModal").style.display = "flex";
+  setTimeout(()=>document.getElementById("accessPassword").focus(), 50);
+}
+
+function unlockAccess(){
+  const val = document.getElementById("accessPassword").value;
+  const ok = (pendingDeck === "lecture" && val === LECTURE_PASSWORD) || (pendingDeck === "lab" && val === LAB_PASSWORD);
+  if(ok){
+    accessUnlocked[pendingDeck] = true;
+    document.getElementById("accessModal").style.display = "none";
+    renderDeck(pendingDeck);
+
+    // Optional: show instructor-notes unlock modal when entering deck (only once per session)
+    // You can comment this out if you don't want the extra prompt.
+    document.getElementById("notesError").style.display = "none";
+    document.getElementById("notesPassword").value = "";
+    document.getElementById("notesModal").style.display = "flex";
+    setTimeout(()=>document.getElementById("notesPassword").focus(), 50);
+  }else{
+    document.getElementById("accessError").style.display = "block";
+  }
+}
+
+function cancelAccess(){
+  document.getElementById("accessModal").style.display = "none";
+  pendingDeck = null;
+}
+
+/* Instructor notes unlock (optional) */
+function applyNotesVisibility(){
+  document.querySelectorAll(".instructor-notes").forEach(n => {
+    n.classList.toggle("visible", notesUnlocked);
+  });
+}
+function unlockNotes(){
+  const val = document.getElementById("notesPassword").value;
+  if(val === NOTES_PASSWORD){
+    notesUnlocked = true;
+    applyNotesVisibility();
+    document.getElementById("notesModal").style.display = "none";
+  }else{
+    document.getElementById("notesError").style.display = "block";
+  }
+}
+function skipNotes(){
+  notesUnlocked = false;
+  applyNotesVisibility();
+  document.getElementById("notesModal").style.display = "none";
+}
+
+/* Input handling */
 document.addEventListener("keydown", (e) => {
+  // If a modal is open, Enter submits
+  const accessOpen = document.getElementById("accessModal").style.display === "flex";
+  const notesOpen = document.getElementById("notesModal").style.display === "flex";
+
+  if(accessOpen && e.key === "Enter"){ unlockAccess(); return; }
+  if(notesOpen && e.key === "Enter"){ unlockNotes(); return; }
+
   if(e.key === "ArrowRight" || e.key === " "){ next(); }
   if(e.key === "ArrowLeft"){ prev(); }
-  if(e.key === "Escape"){ goHome(); }
+  if(e.key === "Escape"){
+    if(accessOpen){ cancelAccess(); return; }
+    if(notesOpen){ skipNotes(); return; }
+    goHome();
+  }
 });
 
 let touchStartX = null;
-document.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener("touchstart", (e) => {
+  touchStartX = e.touches[0].clientX;
+}, {passive:true});
 document.addEventListener("touchend", (e) => {
   if(touchStartX === null) return;
   const dx = e.changedTouches[0].clientX - touchStartX;
@@ -732,34 +880,9 @@ document.addEventListener("touchend", (e) => {
   if(dx < 0) next(); else prev();
 }, {passive:true});
 
-/* Notes unlock logic */
-let notesUnlocked = false;
-
-function applyNotesVisibility(){
-  document.querySelectorAll(".instructor-notes").forEach(n => {
-    n.classList.toggle("visible", notesUnlocked);
-  });
-}
-
-function unlockNotes(){
-  const input = document.getElementById("notesPassword").value;
-  if(input === NOTES_PASSWORD){
-    notesUnlocked = true;
-    applyNotesVisibility();
-    document.getElementById("notesModal").style.display = "none";
-  }else{
-    document.getElementById("notesError").style.display = "block";
-  }
-}
-
-function skipNotes(){
-  notesUnlocked = false;
-  applyNotesVisibility();
-  document.getElementById("notesModal").style.display = "none";
-}
-
 /* Start */
 renderDeck("home");
 </script>
+
 </body>
 </html>
