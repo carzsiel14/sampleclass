@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IT 221 • IAS1 Week 2 (Student Slides)</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body{background:#0b1220;color:#e9edf3}
+  .cardx{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1rem}
+  .choice{border:1px solid rgba(255,255,255,.2);border-radius:.75rem;padding:.55rem .7rem;margin-top:.45rem;background:rgba(255,255,255,.03)}
+  .choice.correct{background:rgba(46,229,157,.15);border-color:rgba(46,229,157,.5)}
+  .muted{color:#b6c0d1}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <span class="navbar-brand">IT 221 • IAS1 – Week 2</span>
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-light btn-sm" id="prevBtn">Prev</button>
+      <button class="btn btn-outline-light btn-sm" id="nextBtn">Next</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:80px;max-width:900px" id="app"></div>
+
+<script>
+const SLIDES = [{"num": 1, "title": "Week 2: The Security Landscape", "bullets": ["Information Assurance & Security 1", "By: John Carl Ray Lelis"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 2, "title": "Learning Objectives", "bullets": ["Explain the modern information security landscape", "Identify key security professionals and their responsibilities", "Understand career pathways in cybersecurity", "Discuss the Security Systems Development Life Cycle (SecSDLC)", "Analyze how security is integrated into organizational systems"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 3, "title": "Understanding the Security Landscape", "bullets": ["The security landscape refers to the overall environment of threats, defenses, technologies, and professionals", "It is constantly evolving due to new technologies, threats, and regulations", "Organizations must balance security, usability, cost, and performance", "Security is no longer optional—it is a business requirement"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}, {"num": 4, "title": "Why Information Security Matters", "bullets": ["Protects confidentiality, integrity, and availability (CIA Triad)", "Prevents financial loss and reputational damage", "Ensures compliance with laws and regulations", "Builds trust with customers, partners, and stakeholders"], "questions": [{"type": "mcq", "q": "Which CIA objective focuses on accurate and unmodified data?", "choices": ["Confidentiality", "Integrity", "Availability", "Authentication"], "answer": 1}]}, {"num": 5, "title": "Key Domains of Information Security", "bullets": ["Network Security – protecting data in transit", "Application Security – securing software and code", "Endpoint Security – protecting user devices", "Cloud Security – shared responsibility model", "Physical Security – protecting facilities and hardware"], "questions": [{"type": "mcq", "q": "Which is an administrative control?", "choices": ["Firewall", "Door lock", "Security policy", "Encryption"], "answer": 2}]}, {"num": 6, "title": "Who Are Security Professionals?", "bullets": ["Security Analyst – monitors and responds to security events", "Security Engineer – designs and implements security solutions", "Incident Responder – handles breaches and cyber incidents", "Security Architect – creates secure system designs", "Chief Information Security Officer (CISO) – leads security strategy"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 7, "title": "Roles & Responsibilities", "bullets": ["Risk assessment and vulnerability management", "Monitoring systems and analyzing security logs", "Developing and enforcing security policies", "Incident detection, response, and recovery", "Security awareness and training"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}, {"num": 8, "title": "Cybersecurity Career Paths", "bullets": ["Entry-Level: SOC Analyst, IT Support, Junior Security Analyst", "Mid-Level: Security Engineer, Penetration Tester, Incident Responder", "Senior-Level: Security Architect, Security Manager, CISO", "Careers span government, private sector, and consulting"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 9, "title": "Skills Required for Security Careers", "bullets": ["Technical skills: networking, operating systems, security tools", "Analytical skills: problem-solving and critical thinking", "Communication skills: reporting and coordination", "Ethical mindset and attention to detail", "Continuous learning due to evolving threats"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}, {"num": 10, "title": "Security Certifications Overview", "bullets": ["CompTIA Security+ – foundational cybersecurity certification", "CISSP – advanced certification for experienced professionals", "CEH – Certified Ethical Hacker", "Certifications validate skills and improve employability"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 11, "title": "Security Systems Development Life Cycle (SecSDLC)", "bullets": ["A structured process to integrate security into system development", "Ensures security is considered from the beginning, not added later", "Reduces vulnerabilities and long-term costs", "Aligns security with business objectives"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}, {"num": 12, "title": "SecSDLC Phases", "bullets": ["Investigation – defining the problem and scope", "Analysis – identifying risks and security requirements", "Logical Design – planning security controls", "Physical Design – selecting technologies and solutions", "Implementation – deploying security measures", "Maintenance & Change – monitoring and updating systems"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}, {"num": 13, "title": "Real-World SecSDLC Example", "bullets": ["Online banking system", "Security requirements defined during analysis", "Encryption and authentication designed logically", "Firewalls and IDS implemented physically", "Continuous monitoring and updates after deployment"], "questions": [{"type": "mcq", "q": "Which is an administrative control?", "choices": ["Firewall", "Door lock", "Security policy", "Encryption"], "answer": 2}]}, {"num": 14, "title": "Class Discussion Questions", "bullets": ["Why do organizations fail to prioritize security early?", "Which security role would you want and why?", "Should security slow down innovation?", "Is certification more important than experience?"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 15, "title": "Assignment / Activity", "bullets": ["Research one security certification (CompTIA Security+ or CISSP)", "Explain its purpose, requirements, and career value", "Prepare a short report or presentation", "Class discussion in the next session"], "questions": [{"type": "short", "q": "Summarize the key idea of this slide in one sentence."}]}, {"num": 16, "title": "PH Case Study: PhilHealth Data Breach (2023)", "bullets": ["Ransomware attack exposed sensitive citizen data", "Demonstrates lack of proactive security controls", "Highlights importance of SecSDLC and risk management", "Shows real-world impact of poor security planning"], "questions": [{"type": "short", "q": "Explain the difference between a threat and a vulnerability."}]}];
+let idx = 0;
+let showAns = false;
+
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function render(){
+  const s = SLIDES[idx];
+  const bullets = (s.bullets && s.bullets.length)
+    ? s.bullets.map(b => '<li class="mb-2">' + esc(b) + '</li>').join('')
+    : '<li class="muted">(No text)</li>';
+
+  let qhtml = '';
+  (s.questions || []).forEach((q, qi) => {
+    if(q.type === 'mcq'){
+      qhtml += '<div class="mt-3"><div class="fw-semibold">Q' + (qi+1) + ': ' + esc(q.q) + '</div>';
+      (q.choices || []).forEach((c, ci) => {
+        let cls = 'choice';
+        if(showAns && ci === q.answer) cls += ' correct';
+        qhtml += '<div class="' + cls + '"><span class="muted me-2">' + String.fromCharCode(65+ci) + '.</span>' + esc(c) + '</div>';
+      });
+      if(showAns){
+        qhtml += '<div class="small text-success mt-2">Answer: ' + String.fromCharCode(65 + q.answer) + '</div>';
+      }
+      qhtml += '</div>';
+    } else {
+      qhtml += '<div class="mt-3"><div class="fw-semibold">Q' + (qi+1) + ': ' + esc(q.q) + '</div><div class="small muted">(Short answer — discuss.)</div></div>';
+    }
+  });
+
+  document.getElementById('app').innerHTML =
+    '<div class="cardx p-4 mb-4">' +
+      '<div class="muted">Slide ' + s.num + ' / ' + SLIDES.length + '</div>' +
+      '<h2 class="mt-1">' + esc(s.title) + '</h2>' +
+      '<ul class="fs-5 mt-3">' + bullets + '</ul>' +
+      '<hr class="border-secondary">' +
+      '<div class="d-flex justify-content-between align-items-center flex-wrap gap-2">' +
+        '<h5 class="mb-0">Quick Questions</h5>' +
+        '<button class="btn btn-outline-info btn-sm" id="toggleBtn">Toggle Answers</button>' +
+      '</div>' +
+      '<div>' + qhtml + '</div>' +
+    '</div>';
+
+  document.getElementById('toggleBtn').onclick = () => { showAns = !showAns; render(); };
+  document.getElementById('prevBtn').disabled = (idx === 0);
+  document.getElementById('nextBtn').textContent = (idx === SLIDES.length - 1) ? 'End' : 'Next';
+}
+
+function prev(){ if(idx > 0){ idx--; render(); } }
+function next(){ if(idx < SLIDES.length - 1){ idx++; render(); } }
+
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('nextBtn').addEventListener('click', next);
+
+// Keyboard + swipe (mobile)
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'ArrowLeft') prev();
+  if(e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+});
+
+let touchStartX = null;
+document.addEventListener('touchstart', (e)=>{ touchStartX = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', (e)=>{
+  if(touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  touchStartX = null;
+  if(Math.abs(dx) < 40) return;
+  if(dx < 0) next(); else prev();
+}, {passive:true});
+
+render();
+</script>
+</body>
+</html>
