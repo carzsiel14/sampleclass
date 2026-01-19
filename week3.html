@@ -35,6 +35,8 @@
       overflow:hidden;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
     }
 
     /* Subtle “terminal grid” */
@@ -150,7 +152,7 @@
       border:1px solid rgba(232,236,255,.14);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      overflow:hidden; /* slide handles its own scrolling */
     }
 
     .deck::before{
@@ -165,13 +167,15 @@
     .slide{
       position:absolute; inset:0;
       padding: 22px 18px;
-      display:block; /* safety: ensure slides render on mobile */
+      display:flex;
       flex-direction:column;
-      justify-content:space-between;
+      justify-content:flex-start;
       gap: 16px;
       opacity:0;
       transform: translateY(8px) scale(.995);
       transition: opacity .22s ease, transform .22s ease;
+      overflow-y:auto; /* allow vertical scrolling per slide on mobile */
+      -webkit-overflow-scrolling: touch;
     }
 
     .slide.active{
@@ -462,7 +466,7 @@
   <div class="app">
     <header>
       <div class="brand">
-        <div class="badge">IAS 101</div>
+        <div class="badge">IT 221</div>
         <div class="title">Week 3 — Malware & Computer Viruses (Threat Landscape)</div>
       </div>
       <div class="controls">
