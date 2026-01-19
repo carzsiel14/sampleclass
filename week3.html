@@ -4,40 +4,40 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>IT 221 — Week 3: The Malware Menace</title>
-
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
     :root{
       --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0A0F1A;
       --text:#E8ECFF;
       --muted:#A9B1D6;
       --grid:rgba(122,162,247,.12);
       --cyan:#33F6FF;
       --mag:#FF2BD6;
       --lime:#7CFF6B;
+      --amber:#FFB86B;
+      --red:#FF3B5C;
       --shadow: 0 18px 60px rgba(0,0,0,.55);
       --radius: 18px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
     }
 
-    html, body{ height:100%; }
-    body{
+    *{ box-sizing:border-box; }
+    html,body{
       margin:0;
-      background:
-        radial-gradient(1200px 700px at 80% 10%, rgba(255,43,214,.10), transparent 60%),
-        radial-gradient(900px 650px at 15% 25%, rgba(51,246,255,.12), transparent 55%),
-        radial-gradient(800px 600px at 50% 90%, rgba(124,255,107,.08), transparent 55%),
-        linear-gradient(180deg, #050713, var(--bg));
-      color: var(--text);
-      font-family: var(--sans);
-      overflow:hidden; /* IMPORTANT: slide handles scrolling */
+      height:100%;
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(255,43,214,.10), transparent 60%),
+                  radial-gradient(900px 650px at 15% 25%, rgba(51,246,255,.12), transparent 55%),
+                  radial-gradient(800px 600px at 50% 90%, rgba(124,255,107,.08), transparent 55%),
+                  linear-gradient(180deg, #050713, var(--bg));
+      color:var(--text);
+      font-family:var(--sans);
+      overflow:hidden;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    /* terminal grid */
+    /* Subtle “terminal grid” */
     body::before{
       content:"";
       position:fixed; inset:0;
@@ -50,7 +50,7 @@
       mix-blend-mode: screen;
     }
 
-    /* scanlines */
+    /* Scanlines */
     body::after{
       content:"";
       position:fixed; inset:0;
@@ -65,64 +65,119 @@
       opacity:.45;
     }
 
-    .mono{ font-family: var(--mono) !important; }
-    .text-muted2{ color: var(--muted) !important; }
-
-    .badge-course{
-      padding: .35rem .65rem;
-      border-radius: 999px;
-      background: rgba(51,246,255,.10);
-      border:1px solid rgba(51,246,255,.35);
-      color: var(--cyan);
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:.78rem;
+    .app{
+      min-height:100vh;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
     }
 
-    .btn-terminal{
+    header{
+      padding: 12px 14px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-family:var(--mono);
+    }
+
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(51,246,255,.10);
+      border:1px solid rgba(51,246,255,.35);
+      color:var(--cyan);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .brand .title{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .btn{
+      appearance:none;
       border:1px solid rgba(232,236,255,.16);
       background: rgba(11,16,32,.7);
       color: var(--text);
+      padding: 9px 11px;
       border-radius: 12px;
-      padding: .55rem .75rem;
+      cursor:pointer;
+      transition: transform .06s ease, border-color .2s ease, box-shadow .2s ease;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      touch-action: manipulation;
     }
-    .btn-terminal:hover{
-      border-color: rgba(51,246,255,.55);
-      box-shadow: 0 0 0 3px rgba(51,246,255,.12);
+    .btn:hover{ border-color: rgba(51,246,255,.55); box-shadow: 0 0 0 3px rgba(51,246,255,.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    main{
+      padding: 0 12px 14px;
+      display:flex;
+      flex: 1 1 auto;
+      min-height:0;
+    }
+
+    .stage{
+      position:relative;
+      flex: 1 1 auto;
+      min-height:0;
+      display:flex;
     }
 
     .deck{
-      position: relative;
-      border-radius: var(--radius);
-      border: 1px solid rgba(232,236,255,.14);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      position:relative;
+      flex: 1 1 auto;
+      min-height:0;
       background: linear-gradient(180deg, rgba(11,16,32,.70), rgba(10,15,26,.72));
-      min-height: 0;
+      border:1px solid rgba(232,236,255,.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden; /* slide handles its own scrolling */
     }
 
     .deck::before{
       content:"";
       position:absolute; inset:0;
-      background:
-        radial-gradient(900px 500px at 40% 15%, rgba(51,246,255,.10), transparent 60%),
-        radial-gradient(700px 480px at 80% 85%, rgba(255,43,214,.10), transparent 55%);
+      background: radial-gradient(900px 500px at 40% 15%, rgba(51,246,255,.10), transparent 60%),
+                  radial-gradient(700px 480px at 80% 85%, rgba(255,43,214,.10), transparent 55%);
       pointer-events:none;
-      opacity:.85;
+      opacity:.8;
+      z-index:0; /* keep overlay BEHIND slides */
     }
 
-    /* Key mobile fix:
-       - slide scrolls
-       - large bottom padding ensures sticky meta never hides content */
     .slide{
       position:absolute; inset:0;
+      padding: 22px 18px 120px; /* extra bottom room on mobile */
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+      gap: 16px;
       opacity:0;
       transform: translateY(8px) scale(.995);
       transition: opacity .22s ease, transform .22s ease;
-      overflow-y:auto;
+      overflow-y:auto; /* allow vertical scrolling per slide on mobile */
       -webkit-overflow-scrolling: touch;
-      padding: 16px 14px 120px;
+      z-index:1; /* above deck overlay */
     }
+
     .slide.active{
       opacity:1;
       transform: translateY(0) scale(1);
@@ -132,31 +187,54 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
-      font-family: var(--mono);
+      gap: 16px;
+      font-family:var(--mono);
       color: var(--muted);
-      font-size: .78rem;
+      font-size: 12px;
       letter-spacing:.04em;
-      flex-wrap:wrap;
     }
 
-    .pip{ width:10px; height:10px; border-radius:50%; display:inline-block; box-shadow: 0 0 0 3px rgba(255,255,255,.03); background: rgba(232,236,255,.18); }
+    .topline .left{
+      display:flex; align-items:center; gap:10px;
+    }
+
+    .pip{
+      width:10px; height:10px; border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.03);
+      background: rgba(232,236,255,.18);
+    }
     .pip.cyan{ background: rgba(51,246,255,.85); }
     .pip.mag{ background: rgba(255,43,214,.85); }
     .pip.lime{ background: rgba(124,255,107,.85); }
 
     .h1{
-      font-size: clamp(1.55rem, 4.0vw, 2.8rem);
+      font-size: 30px;
       line-height:1.08;
       letter-spacing: -0.02em;
-      margin: .35rem 0 0;
+      margin:0;
     }
+    .h2{
+      font-size: 26px;
+      line-height:1.15;
+      margin:0;
+      color: var(--text);
+    }
+
     .subtitle{
       color: var(--muted);
-      font-size: 0.95rem;
-      margin-top: .5rem;
+      font-size: 14px;
+      margin-top: 10px;
       max-width: 78ch;
     }
+
+    .content{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      min-height:0;
+    }
+
+    .content.onecol{ grid-template-columns: 1fr; }
 
     .panel{
       background: rgba(7,10,18,.38);
@@ -164,70 +242,108 @@
       border-radius: 16px;
       padding: 14px 14px;
     }
+
     .kicker{
       font-family:var(--mono);
       color: var(--cyan);
       text-transform: uppercase;
       letter-spacing:.12em;
-      font-size: .78rem;
-      margin-bottom: .55rem;
+      font-size: 12px;
+      margin-bottom: 10px;
     }
-    .panel-content{
+
+    ul{
+      margin: 10px 0 0 0;
+      padding-left: 18px;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 15px;
       line-height: 1.55;
-      overflow-wrap: anywhere;
-      word-break: break-word;
+    }
+
+    li{ margin: 8px 0; }
+
+    .callout{
+      border-left: 3px solid rgba(51,246,255,.8);
+      padding: 12px 14px;
+      background: rgba(51,246,255,.08);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 15px;
+      line-height:1.5;
+    }
+
+    .callout.red{
+      border-left-color: rgba(255,59,92,.85);
+      background: rgba(255,59,92,.08);
+    }
+
+    .callout.mag{
+      border-left-color: rgba(255,43,214,.85);
+      background: rgba(255,43,214,.08);
     }
 
     .codebox{
       font-family: var(--mono);
-      font-size: .9rem;
-      line-height: 1.45;
+      font-size: 14px;
+      line-height: 1.5;
       color: #EAFDFF;
       background: rgba(5,7,19,.65);
       border: 1px solid rgba(51,246,255,.22);
       border-radius: 16px;
-      padding: 12px 12px;
+      padding: 16px 16px;
       white-space: pre;
       overflow:auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
     }
 
-    /* Sticky meta bar: visible but never blocks content due to slide bottom padding */
     .meta{
-      position: sticky;
-      bottom: 0;
-      margin-top: 14px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      border-top: 1px solid rgba(232,236,255,.10);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
+      gap:16px;
       font-family: var(--mono);
       color: var(--muted);
-      font-size: .78rem;
-      background: linear-gradient(180deg, rgba(10,15,26,0.08), rgba(10,15,26,0.90));
-      backdrop-filter: blur(6px);
+      font-size: 12px;
+      margin-top:auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(232,236,255,.10);
+    }
+
+    .progress{
+      width: 170px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(232,236,255,.12);
+      overflow:hidden;
+      border:1px solid rgba(232,236,255,.10);
+    }
+
+    .bar{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(51,246,255,.9), rgba(255,43,214,.85));
+      box-shadow: 0 0 16px rgba(51,246,255,.25);
     }
 
     .notes{
-      position: fixed;
+      position: absolute;
       left: 12px;
       right: 12px;
       bottom: 12px;
-      max-height: 55vh;
+      width: auto;
+      max-height: 46vh;
       overflow:auto;
-      background: rgba(5,7,19,.90);
+      background: rgba(5,7,19,.78);
       border: 1px solid rgba(255,43,214,.25);
       border-radius: 16px;
       padding: 14px 14px;
       box-shadow: var(--shadow);
       display:none;
-      z-index: 1055;
+      z-index: 2;
     }
+
     .notes.visible{ display:block; }
+
     .notes .hdr{
       display:flex;
       justify-content:space-between;
@@ -237,112 +353,167 @@
       color: var(--mag);
       letter-spacing:.08em;
       text-transform:uppercase;
-      font-size: .78rem;
+      font-size: 12px;
       margin-bottom: 8px;
     }
+
     .notes p{
       margin:0;
       color: var(--text);
-      font-size: .95rem;
+      font-size: 14px;
       line-height: 1.55;
       white-space: pre-wrap;
     }
 
-    .progress{
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(232,236,255,.12);
+    footer{
+      padding: 10px 12px 14px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      flex: 0 0 auto;
+    }
+
+    .hint{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      opacity:.92;
+    }
+
+    kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: rgba(232,236,255,.08);
+      border: 1px solid rgba(232,236,255,.14);
+      color: var(--text);
+    }
+
+    /* Glitch header effect for the title slide */
+    .glitch{
+      position:relative;
+      display:inline-block;
+      text-shadow: 0 0 22px rgba(51,246,255,.18);
+    }
+    .glitch::before,
+    .glitch::after{
+      content: attr(data-text);
+      position:absolute;
+      left:0; top:0;
+      width:100%;
       overflow:hidden;
-      border:1px solid rgba(232,236,255,.10);
+      clip-path: inset(0 0 0 0);
+      opacity:.75;
     }
-    .bar{
-      height:100%;
-      width:0%;
-      background: linear-gradient(90deg, rgba(51,246,255,.9), rgba(255,43,214,.85));
-      box-shadow: 0 0 16px rgba(51,246,255,.25);
+    .glitch::before{
+      transform: translate(2px,-2px);
+      color: var(--cyan);
+      animation: glitch 2.2s infinite linear alternate-reverse;
     }
-
-    /* Mobile: reclaim vertical space by hiding keyboard hints */
-    @media (max-width: 560px){
-      .hints{ display:none !important; }
-      .topline{ font-size: 11px; }
-      .subtitle{ font-size: 13px; }
-      .panel-content{ font-size: .98rem; }
+    .glitch::after{
+      transform: translate(-2px,2px);
+      color: var(--mag);
+      animation: glitch 1.8s infinite linear alternate;
     }
 
-    @media (min-width: 992px){
-      .slide{ padding: 28px 26px 120px; }
+    @keyframes glitch{
+      0%{ clip-path: inset(0 0 92% 0); }
+      10%{ clip-path: inset(12% 0 55% 0); }
+      20%{ clip-path: inset(65% 0 20% 0); }
+      30%{ clip-path: inset(22% 0 58% 0); }
+      40%{ clip-path: inset(76% 0 8% 0); }
+      50%{ clip-path: inset(35% 0 44% 0); }
+      60%{ clip-path: inset(8% 0 76% 0); }
+      70%{ clip-path: inset(58% 0 26% 0); }
+      80%{ clip-path: inset(18% 0 63% 0); }
+      90%{ clip-path: inset(84% 0 7% 0); }
+      100%{ clip-path: inset(42% 0 39% 0); }
     }
 
+    /* Mobile-first baseline already. Enhance for larger screens */
+    @media (min-width: 980px){
+      .slide{ padding: 44px 54px; }
+      .content{ grid-template-columns: 1.2fr .8fr; }
+      .notes{ width: min(560px, 40vw); max-height: 42vh; right: 18px; bottom: 18px; }
+      .progress{ width: 240px; }
+      .h1{ font-size: 44px; }
+    }
+
+    /* Print-friendly: one slide per page */
     @media print{
       body{ overflow:visible; }
       header, footer, .notes{ display:none !important; }
+      .app{ display:block; }
+      main{ padding:0; }
       .deck{ border:none; box-shadow:none; }
-      .slide{ position:relative; opacity:1 !important; transform:none !important; page-break-after: always; height: 100vh; }
+      .slide{
+        position:relative;
+        opacity:1 !important;
+        transform:none !important;
+        page-break-after: always;
+        height: 100vh;
+      }
     }
   </style>
 </head>
-
 <body>
-  <div class="container-fluid d-flex flex-column min-vh-100 position-relative" style="z-index:1;">
-
-    <!-- Top Bar -->
-    <header class="py-2">
-      <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-          <span class="badge-course mono">IT 221</span>
-          <div class="mono text-muted2" style="font-size:.9rem;">
-            Week 3 — Malware &amp; Computer Viruses (Threat Landscape)
-          </div>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-          <button class="btn btn-terminal mono" id="prevBtn" type="button" title="Previous (←)">← Prev</button>
-          <button class="btn btn-terminal mono" id="nextBtn" type="button" title="Next (→)">Next →</button>
-          <button class="btn btn-terminal mono" id="notesBtn" type="button" title="Toggle speaker notes (S)">Notes</button>
-        </div>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="badge">IT 221</div>
+        <div class="title">Week 3 — Malware & Computer Viruses (Threat Landscape)</div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="prevBtn" title="Previous (←)">← Prev</button>
+        <button class="btn" id="nextBtn" title="Next (→)">Next →</button>
+        <button class="btn" id="notesBtn" title="Toggle speaker notes (S)">Notes</button>
       </div>
     </header>
 
-    <!-- Stage -->
-    <main class="flex-grow-1 pb-2" style="min-height:0;">
-      <div class="deck w-100 h-100 position-relative" id="deck"></div>
-
-      <!-- Notes overlay -->
-      <div class="notes" id="notes" aria-live="polite">
-        <div class="hdr">
-          <span>Speaker Notes</span>
-          <span id="notesSlide">Slide 1</span>
+    <main>
+      <div class="stage">
+        <div class="deck" id="deck">
+          <!-- slides injected here -->
+          <div class="notes" id="notes">
+            <div class="hdr">
+              <span>Speaker Notes</span>
+              <span id="notesSlide">Slide 1</span>
+            </div>
+            <p id="notesText"></p>
+          </div>
         </div>
-        <p id="notesText"></p>
       </div>
     </main>
 
-    <!-- Bottom Bar -->
-    <footer class="pb-3">
-      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mono text-muted2" style="font-size:.82rem;">
-        <div class="d-flex align-items-center flex-wrap gap-2 hints">
-          <span>Navigate:</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">←</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">→</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">Space</span>
-          <span class="ms-2">Notes:</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">S</span>
-          <span class="ms-2">Jump:</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">1–9</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">0=10</span>
-          <span class="px-2 py-1 rounded" style="border:1px solid rgba(232,236,255,.14); background: rgba(232,236,255,.08);">G…Enter</span>
-        </div>
-
-        <div class="d-flex align-items-center gap-3">
-          <div id="counter">1 / 18</div>
-          <div class="progress" style="width:min(240px, 42vw);"><div class="bar" id="bar"></div></div>
-        </div>
+    <footer>
+      <div class="hint">
+        <span>Navigate:</span> <kbd>←</kbd> <kbd>→</kbd> <kbd>Space</kbd>
+        <span style="margin-left:10px;">Notes:</span> <kbd>S</kbd>
+        <span style="margin-left:10px;">Jump:</span> <kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd>=10, <kbd>G</kbd> then number then <kbd>Enter</kbd>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div id="counter">1 / 18</div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
       </div>
     </footer>
   </div>
 
   <script>
-    // ===== Slides (ALL 18) =====
+    /**
+     * PPT-like Web Deck (no external libraries)
+     * - Arrow keys / Space: navigate
+     * - S: toggle speaker notes
+     * - Number keys: quick jump (1-9); 0 jumps to 10
+     * - G + digits + Enter: go to slide #
+     */
+
     const slides = [
       {
         title: "The Malware Menace: Code, Vectors, and Payloads",
@@ -386,7 +557,7 @@
 2) likely CIA impact
 3) likely stage in the kill chain
 4) best prevention point in SecSDLC`,
-        notes: "Make it explicit: assessment is reasoning, not tooling. Students should learn structured thinking: classify → map to CIA → place in the kill chain → propose control."
+        notes: "Make it explicit: assessment is reasoning, not tooling. Students should learn structured thinking: classify → map to CIA → place in kill chain → propose control (SecSDLC)."
       },
       {
         title: "Recall: The CIA Triad (Week 1 Connection)",
@@ -409,7 +580,7 @@
 
 **Professor cue:** “Which pillar is hit FIRST?”
 Often: C → then I/A as follow-on damage.`,
-        notes: "Use relatable examples (grades, payroll, school systems). Ask: primary vs secondary impact."
+        notes: "Reinforce: CIA is not abstract—use relatable examples (grades, payroll, school systems). Ask: primary vs secondary impact."
       },
       {
         title: "Malware Anatomy: Vector vs Payload",
@@ -432,7 +603,7 @@ Often: C → then I/A as follow-on damage.`,
 **Controls:**
 • Vector controls: email filtering, user training, patching
 • Payload controls: least privilege, backups, monitoring`,
-        notes: "Two-axis thinking: entry controls vs blast-radius controls."
+        notes: "Give students the two-axis thinking. Many defenses focus only on entry; good security also limits what malware can do after entry."
       },
       {
         title: "History Lesson: Philippine Context",
@@ -453,7 +624,7 @@ Often: C → then I/A as follow-on damage.`,
 • Scripting languages can be powerful + dangerous
 
 **Policy note:** increased pressure for PH cyber policy development (E-Commerce Act era).`,
-        notes: "Localize: 'old' patterns still drive modern attacks."
+        notes: "Localize impact: show that 'old' malware patterns (social engineering + scripting) are still the backbone of modern attacks."
       },
       {
         title: "Virus vs Worm",
@@ -476,7 +647,7 @@ Often: C → then I/A as follow-on damage.`,
 **Defensive focus:**
 Virus → user training + file scanning
 Worm → patching + segmentation`,
-        notes: "Worm defense is mostly engineering discipline (patching, segmentation)."
+        notes: "Drive home: worm defense is largely *engineering discipline* (patching, segmentation). Virus defense includes people and endpoint controls."
       },
       {
         title: "Trojans & Backdoors",
@@ -491,7 +662,7 @@ Worm → patching + segmentation`,
 • Enables remote control later
 
 **Common bait:**
-• "Free" software, "cracks", fake updates`,
+• \"Free\" software, \"cracks\", fake updates`,
         rightTitle: "Week 2 (SecSDLC) Link",
         right: `Trojans exploit **process gaps**:
 • weak software sourcing
@@ -502,7 +673,7 @@ Worm → patching + segmentation`,
 • approved software lists
 • least privilege
 • secure update channels`,
-        notes: "Tie to SecSDLC: procurement/supply chain + least privilege."
+        notes: "Tie to SecSDLC: procurement/supply chain, secure builds, code signing, and least privilege reduce Trojan success."
       },
       {
         title: "Rootkits",
@@ -524,7 +695,7 @@ Incident response may require:
 • offline scanning
 • trusted boot
 • re-imaging systems`,
-        notes: "Trust chain: if measuring instrument is corrupted, reports are unreliable."
+        notes: "Keep it conceptual (no live IR). Emphasize that rootkits break the trust chain: 'the measuring instrument is corrupted.'"
       },
       {
         title: "Ransomware",
@@ -550,7 +721,7 @@ Incident response may require:
 • least privilege
 • network segmentation
 • incident response plan`,
-        notes: "Emphasize resilience: backups + restore drills."
+        notes: "Stress the operational reality: backups and segmentation matter. Encourage students to think like defenders: reduce blast radius and recovery time."
       },
       {
         title: "Advanced Evasion: Polymorphism",
@@ -567,10 +738,11 @@ Incident response may require:
         rightTitle: "What defenders do instead",
         right: `Shift from “what it looks like” to “what it does”:
 • behavioral detection
+• sandbox-like detonation *by vendors* (not in class)
 • anomaly monitoring
 
 **Concept:** mutate form, keep intent.`,
-        notes: "Polymorphism complicates signature matching; behavior complements it."
+        notes: "Keep it accessible: polymorphism ≠ invisibility; it complicates signature matching. Explain why behavior detection is the complementary strategy."
       },
       {
         title: "The Cyber Kill Chain",
@@ -590,7 +762,7 @@ Incident response may require:
 **Stop at C2:** firewall egress controls, DNS monitoring
 
 Earlier stop = cheaper defense.`,
-        notes: "Controls map to stages. Earlier stop = cheaper defense."
+        notes: "Have students identify where their home PC defenses sit and where organizational defenses sit. Reinforce: controls map to stages."
       },
       {
         title: "Adware, Spyware, & Logic Bombs",
@@ -613,13 +785,13 @@ Earlier stop = cheaper defense.`,
 **A clues:** encrypted files, services down
 
 Logic bomb triggers: date, user account removed, specific event.`,
-        notes: "Symptoms → CIA impact → likely malware class."
+        notes: "Use observable symptoms students can relate to. Teach them to think: symptoms → CIA impact → likely class of malware."
       },
       {
         title: "Lab Activity: Static Analysis (Paper-Based)",
         subtitle: "Read-only analysis — do NOT run",
         kicker: "SAFE PRACTICE",
-        left: `**Scenario:** You find a "maintenance" script in a USB drive.
+        left: `**Scenario:** You find a \"maintenance\" script in a USB drive.
 Your job: identify intent and risk by reading.
 
 **Rules:**
@@ -629,9 +801,9 @@ Your job: identify intent and risk by reading.
 • Propose one SecSDLC control to prevent it`,
         rightTitle: "Suspicious Batch Script",
         right: `@echo off
-attrib +h +s C:\\Users\\Ray\\Documents\\*.*
+attrib +h +s C:\Users\Ray\Documents\*.*
 shutdown /s /t 00`,
-        notes: "Frame as exam skill: read, reason, map to CIA + control."
+        notes: "Frame it as an exam-style skill: reading scripts is safe. Remind them: malware can be 'small' and still harmful."
       },
       {
         title: "Static Analysis Walkthrough",
@@ -640,7 +812,7 @@ shutdown /s /t 00`,
         left: `**Line 1: @echo off**
 • Hides command output → reduces user awareness
 
-**Line 2: attrib +h +s …\\Documents\\*.* **
+**Line 2: attrib +h +s …\Documents\*.* **
 • Sets Hidden + System attributes
 • Result: files appear ‘missing’ to most users
 
@@ -655,8 +827,9 @@ shutdown /s /t 00`,
 **What to do IRL:**
 • isolate device
 • copy script for review
-• restore attributes safely`,
-        notes: "Clarify: hiding != encryption, but it still disrupts availability."
+• remove persistence points
+• restore file attributes safely`,
+        notes: "Clarify: hiding files is not encryption, but it still causes availability loss for users. Emphasize response steps conceptually (no tooling)."
       },
       {
         title: "Detection Methods",
@@ -670,7 +843,7 @@ shutdown /s /t 00`,
 **Heuristic / Behavioral (modern)**
 • Flags suspicious actions
 • Better for unknown threats
-• Needs tuning to reduce false alarms`,
+• Needs good tuning to reduce false alarms`,
         rightTitle: "Behavior Examples",
         right: `Red flags:
 • Office app spawning PowerShell
@@ -679,7 +852,7 @@ shutdown /s /t 00`,
 • Program attempting outbound to rare domains
 
 Ask: “Does this action match the app’s job?”`,
-        notes: "Behavior patterns without teaching attacks; focus on mismatch."
+        notes: "Give concrete behavior patterns without teaching attack steps. Goal: help students recognize abnormal process behavior and intent mismatch."
       },
       {
         title: "Malware in the SecSDLC (Week 2 Connection)",
@@ -701,11 +874,11 @@ Ask: “Does this action match the app’s job?”`,
         rightTitle: "Where malware thrives",
         right: `Malware succeeds when the lifecycle is weak:
 • unpatched systems → worms
-• uncontrolled installs → trojans
+• uncontrolled software installs → trojans
 • missing backups → ransomware wins
 
 SecSDLC is your anti-malware pipeline.`,
-        notes: "Explicit Week 2 connection: lifecycle discipline reduces malware success."
+        notes: "Explicitly connect Week 2: each lifecycle phase has malware-relevant controls. Emphasize maintenance as the most neglected phase."
       },
       {
         title: "Defense in Depth",
@@ -715,7 +888,7 @@ SecSDLC is your anti-malware pipeline.`,
 • awareness + verification habits
 
 **Layer 2 — Endpoint**
-• antivirus/EDR, allowlisting
+• antivirus/EDR, app allowlisting
 
 **Layer 3 — Network**
 • firewall, segmentation, DNS controls
@@ -730,7 +903,7 @@ SecSDLC is your anti-malware pipeline.`,
 4) train users on links/attachments
 
 Result: fewer infections + faster recovery.`,
-        notes: "Actionable priorities for home + small org contexts."
+        notes: "Make it actionable. Students should leave with defensible priorities for home and small org contexts."
       },
       {
         title: "Summary",
@@ -749,7 +922,7 @@ Key facts:
 It’s about reducing probability + limiting impact + recovering fast.
 
 That’s real-world Information Assurance.`,
-        notes: "Tie 3-week arc together: CIA (goals) + SecSDLC (controls) + Malware (threat)."
+        notes: "End with a systems view: prevention + detection + response + recovery. Tie the whole 3-week arc together explicitly."
       },
       {
         title: "Next Week",
@@ -761,16 +934,15 @@ That’s real-world Information Assurance.`,
 
 Bring: examples of suspicious messages you’ve seen (remove personal info).`,
         rightTitle: "Bridge to Week 4",
-        right: `Many incidents start with a human decision.
+        right: `Many malware incidents start with a human decision.
 Social engineering is often the **vector**.
 Malware is the **payload**.
 
 You now have the language to separate the two.`,
-        notes: "Bridge: persuasion (vector) → malware (payload)."
+        notes: "Make the bridge explicit: vector (human persuasion) → payload (malware action). Encourage students to collect examples for discussion."
       }
     ];
 
-    // ===== Renderer =====
     const deck = document.getElementById('deck');
     const counter = document.getElementById('counter');
     const bar = document.getElementById('bar');
@@ -783,7 +955,9 @@ You now have the language to separate the two.`,
     let gotoBuf = "";
 
     function mdToHtml(md){
-      return (md || "")
+      // Minimal markdown-ish renderer: **bold**, line breaks, bullets already formatted as lines.
+      // Keeps things safe/simple for offline use.
+      return md
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -796,56 +970,60 @@ You now have the language to separate the two.`,
       el.className = 'slide';
       el.setAttribute('data-index', i);
 
+      const isTitle = (i === 0);
+
       const top = document.createElement('div');
       top.className = 'topline';
       top.innerHTML = `
-        <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="left">
           <span class="pip cyan"></span><span class="pip mag"></span><span class="pip lime"></span>
-          <span class="mono">${(s.kicker || "SLIDE")} :: ${String(i+1).padStart(2,'0')}</span>
+          <span>${(s.kicker || "SLIDE")} :: ${String(i+1).padStart(2,'0')}</span>
         </div>
-        <div class="mono">IT 221 • Week 3</div>
+        <div class="right">IT 221 • Week 3</div>
       `;
 
+      const head = document.createElement('div');
       const h = document.createElement('h1');
-      h.className = 'h1';
+      h.className = 'h1' + (isTitle ? ' glitch' : '');
+      if(isTitle){
+        h.setAttribute('data-text', s.title);
+      }
       h.innerText = s.title;
 
       const sub = document.createElement('div');
       sub.className = 'subtitle';
       sub.innerText = s.subtitle || '';
 
-      const row = document.createElement('div');
-      row.className = 'row g-3 mt-1';
+      head.appendChild(h);
+      if(s.subtitle) head.appendChild(sub);
 
-      const leftCol = document.createElement('div');
-      leftCol.className = (s.right !== undefined) ? 'col-12 col-lg-7' : 'col-12';
+      const content = document.createElement('div');
+      content.className = 'content' + ((s.right === undefined) ? ' onecol' : '');
+
       const leftPanel = document.createElement('div');
       leftPanel.className = 'panel';
-      leftPanel.innerHTML = `<div class="kicker">${(i===0) ? 'MODULE' : 'CONTENT'}</div><div class="panel-content">${mdToHtml(s.left)}</div>`;
-      leftCol.appendChild(leftPanel);
-      row.appendChild(leftCol);
+      leftPanel.innerHTML = `<div class="kicker">${isTitle ? 'MODULE' : 'CONTENT'}</div><div>${mdToHtml(s.left || '')}</div>`;
+
+      content.appendChild(leftPanel);
 
       if(s.right !== undefined){
-        const rightCol = document.createElement('div');
-        rightCol.className = 'col-12 col-lg-5';
         const rightPanel = document.createElement('div');
         rightPanel.className = 'panel';
 
+        // Codebox special case: if right looks like code (contains '\\n' + typical syntax) and title mentions script
         const isCode = (s.rightTitle || '').toLowerCase().includes('script') || (s.right || '').includes('@echo');
         rightPanel.innerHTML = `
           <div class="kicker">${(s.rightTitle || 'SIDEBAR').toUpperCase()}</div>
-          ${isCode ? `<div class="codebox">${(s.right || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
-                   : `<div class="panel-content">${mdToHtml(s.right)}</div>`}
+          ${isCode ? `<div class="codebox">${(s.right || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : `<div>${mdToHtml(s.right || '')}</div>`}
         `;
-        rightCol.appendChild(rightPanel);
-        row.appendChild(rightCol);
+        content.appendChild(rightPanel);
       }
 
       const meta = document.createElement('div');
       meta.className = 'meta';
       meta.innerHTML = `
-        <div class="mono">SLIDE_${String(i+1).padStart(2,'0')} • THREAT_LANDSCAPE</div>
-        <div class="mono d-flex gap-3 align-items-center">
+        <div>SLIDE_${String(i+1).padStart(2,'0')} • THREAT_LANDSCAPE</div>
+        <div style="display:flex; gap:10px; align-items:center;">
           <span style="color: rgba(51,246,255,.9)">CONF</span>
           <span style="color: rgba(255,43,214,.9)">INT</span>
           <span style="color: rgba(124,255,107,.9)">AVAIL</span>
@@ -853,45 +1031,55 @@ You now have the language to separate the two.`,
       `;
 
       el.appendChild(top);
-      el.appendChild(h);
-      if(s.subtitle) el.appendChild(sub);
-      el.appendChild(row);
+      el.appendChild(head);
+      el.appendChild(content);
       el.appendChild(meta);
+
       return el;
+    }
+
+    function render(){
+      deck.querySelectorAll('.slide').forEach(n => n.remove());
+      slides.forEach((s,i)=> deck.appendChild(createSlide(i,s)));
+      idx = 0; // safety: always start at first slide
+      update();
     }
 
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-    function render(){
-      deck.innerHTML = '';
-      slides.forEach((s,i)=> deck.appendChild(createSlide(i,s)));
-      idx = 0;
-      update();
-    }
-
     function update(){
       const all = [...deck.querySelectorAll('.slide')];
-      all.forEach(el => el.classList.remove('active'));
-      if(all[idx]) all[idx].classList.add('active');
+      all.forEach(el => {
+        const i = Number(el.getAttribute('data-index'));
+        el.classList.toggle('active', i === idx);
+      });
+
+      // Fallback: if no slide is active, activate first
+      if(!all.some(el => el.classList.contains('active')) && all.length){
+        all[0].classList.add('active');
+        idx = 0;
+      }
 
       counter.textContent = `${idx+1} / ${slides.length}`;
       bar.style.width = `${((idx+1)/slides.length)*100}%`;
 
       notesSlide.textContent = `Slide ${idx+1}`;
       notesText.textContent = slides[idx].notes || '(No notes for this slide)';
-
-      const active = deck.querySelector('.slide.active');
-      if(active) active.scrollTop = 0;
     }
 
     function next(){ idx = clamp(idx+1, 0, slides.length-1); update(); }
     function prev(){ idx = clamp(idx-1, 0, slides.length-1); update(); }
-    function toggleNotes(){ notes.classList.toggle('visible'); }
 
+    function toggleNotes(){
+      notes.classList.toggle('visible');
+    }
+
+    // Buttons
     document.getElementById('nextBtn').addEventListener('click', next);
     document.getElementById('prevBtn').addEventListener('click', prev);
     document.getElementById('notesBtn').addEventListener('click', toggleNotes);
 
+    // Keyboard
     window.addEventListener('keydown', (e) => {
       const k = e.key;
 
@@ -902,11 +1090,19 @@ You now have the language to separate the two.`,
             idx = clamp(n-1, 0, slides.length-1);
             update();
           }
-          gotoMode = false; gotoBuf = "";
+          gotoMode = false;
+          gotoBuf = "";
           return;
         }
-        if(k === 'Escape'){ gotoMode = false; gotoBuf=""; return; }
-        if(/\d/.test(k)){ gotoBuf += k; return; }
+        if(k === 'Escape'){
+          gotoMode = false;
+          gotoBuf = "";
+          return;
+        }
+        if(/\d/.test(k)){
+          gotoBuf += k;
+          return;
+        }
         return;
       }
 
@@ -914,14 +1110,24 @@ You now have the language to separate the two.`,
       if(k === 'ArrowLeft' || k === 'PageUp'){ e.preventDefault(); prev(); }
       if(k.toLowerCase() === 's'){ toggleNotes(); }
 
-      if(/^[1-9]$/.test(k)){ idx = clamp(parseInt(k,10)-1, 0, slides.length-1); update(); }
-      if(k === '0'){ idx = clamp(9, 0, slides.length-1); update(); }
-      if(k.toLowerCase() === 'g'){ gotoMode = true; gotoBuf = ""; }
+      // quick numeric jumps
+      if(/^[1-9]$/.test(k)){
+        idx = clamp(parseInt(k,10)-1, 0, slides.length-1);
+        update();
+      }
+      if(k === '0'){
+        idx = clamp(9, 0, slides.length-1); // slide 10
+        update();
+      }
+
+      if(k.toLowerCase() === 'g'){
+        gotoMode = true;
+        gotoBuf = "";
+      }
     });
 
+    // Initialize
     render();
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
