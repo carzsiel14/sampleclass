@@ -506,172 +506,427 @@
         title: "The Malware Menace: Code, Vectors, and Payloads",
         subtitle: "Week 3 | Information Assurance and Security 1",
         kicker: "TITLE",
-        left: `**Visual:** A digital biological cell dividing, but the nucleus is a glitching red skull.\n\n**Framing:** Malware is code written by humans to violate security guarantees.`,
+        left: `**Big Idea:** Malware is *software with intent*—code written to violate security goals.
+
+**Tonight’s question:** When you see a suspicious file/link, can you reason:
+1) *How did it get in?* (vector)
+2) *What does it do?* (payload)
+3) *Which CIA pillar breaks?* (Week 1)
+4) *Which SecSDLC control could stop it?* (Week 2)`,
         rightTitle: "Lecture Thread",
-        right: `• Week 1: CIA Triad (what must be protected)\n• Week 2: SecSDLC (how to build securely)\n• Week 3: Malware (how systems are attacked)`,
-        notes: "Last week we discussed building secure systems. This week we discuss how attackers break them. Malware is not magic—it is software with intent: to violate Confidentiality, Integrity, or Availability."
+        right: `**Continuity Map**
+• Week 1 — CIA Triad: what must be protected
+• Week 2 — SecSDLC: how to build & maintain securely
+• Week 3 — Malware: how attackers break systems
+
+**Today’s output:** a mental model you can apply to ANY malware family.`,
+        notes: "Set expectations: malware is not magic; it’s code + delivery + objectives. Emphasize continuity: CIA (goals) + SecSDLC (controls) + malware (threat mechanics)."
       },
       {
         title: "Learning Objectives",
-        subtitle: "What you should be able to do after today",
+        subtitle: "By the end of this session, you can…",
         kicker: "OBJECTIVES",
-        left: `• Classify malware by **propagation** (Virus vs Worm)\n• Classify malware by **payload** (Ransomware, Spyware, etc.)\n• Map malware types to **CIA Triad violations** (Week 1)\n• Explain **polymorphism** and why it defeats detection\n• Perform **static analysis** on a suspicious script (no execution)`,
-        rightTitle: "Ground Rules",
-        right: `• No virtual machines required\n• No running malware samples\n• Analysis mindset > tools\n• “Read before you click”`,
-        notes: "We focus on concept mastery and safe analysis. You can become competent in malware reasoning without executing anything."
+        left: `**Classification**
+• Distinguish **propagation**: Virus vs Worm
+• Distinguish **payload**: Ransomware, Spyware, Wiper, Botnet, etc.
+
+**Security mapping**
+• Map malware types to **Confidentiality / Integrity / Availability** (Week 1)
+
+**Detection concepts**
+• Explain **polymorphism** and why signatures fail
+
+**Safe analysis skill**
+• Perform **static analysis** on a theoretical script (read-only, no execution)`,
+        rightTitle: "Success Criteria",
+        right: `If I show you a scenario (email + file + symptoms), you can answer:
+1) likely malware category
+2) likely CIA impact
+3) likely stage in the kill chain
+4) best prevention point in SecSDLC`,
+        notes: "Make it explicit: assessment is reasoning, not tooling. Students should learn structured thinking: classify → map to CIA → place in kill chain → propose control (SecSDLC)."
       },
       {
         title: "Recall: The CIA Triad (Week 1 Connection)",
         subtitle: "Malware is a tool for breaking a pillar",
         kicker: "WEEK 1 LINK",
-        left: `**Confidentiality**\n• Spyware / keyloggers steal secrets\n\n**Integrity**\n• Viruses corrupt or modify files\n\n**Availability**\n• Ransomware & botnets deny access`,
-        rightTitle: "Key Insight",
-        right: `Malware is a **means**, not a goal.\n\nAttackers choose malware to break a specific pillar—or multiple pillars at once.`,
-        notes: "Remember the triad from Week 1? Malware is simply the tool hackers use to break one of these three pillars. Every example we discuss fits somewhere here."
+        left: `**Confidentiality (C):** secrets exposed
+• Spyware, keyloggers, info stealers
+• Browser credential theft, session hijacking
+
+**Integrity (I):** data becomes untrustworthy
+• File infectors, macro viruses, tampering
+• Website defacement, silent data edits
+
+**Availability (A):** services/data become unreachable
+• Ransomware, wipers, botnet-driven DDoS`,
+        rightTitle: "Mapping Examples",
+        right: `**C breach:** passwords exfiltrated → accounts taken
+**I breach:** grades/database records altered
+**A breach:** files encrypted → operations stop
+
+**Professor cue:** “Which pillar is hit FIRST?”
+Often: C → then I/A as follow-on damage.`,
+        notes: "Reinforce: CIA is not abstract—use relatable examples (grades, payroll, school systems). Ask: primary vs secondary impact."
       },
       {
         title: "Malware Anatomy: Vector vs Payload",
-        subtitle: "How it gets in vs what it does",
+        subtitle: "Entry mechanism vs post-entry behavior",
         kicker: "CORE MODEL",
-        left: `**Vector (Entry):**\n• Email attachment\n• USB flash drive\n• Malicious link\n• Exploited vulnerability\n\n**Payload (Action):**\n• Encrypt files\n• Steal passwords\n• Delete data\n• Install backdoor`,
-        rightTitle: "Analogy",
-        right: `Vector = **Delivery Truck**\nPayload = **Bomb inside**\n\nSeparate these in your mind: the *door* is not the *damage*.`,
-        notes: "Students often confuse vector and payload. Clicking is the vector. The harmful behavior is the payload. Defenses target both."
+        left: `**Vector = how it gets in**
+• Email attachment (Office macro, PDF exploit)
+• Malicious link (credential phishing → dropper)
+• USB (autorun, bait files)
+• Drive-by download (compromised website)
+• Exploit of vulnerability (unpatched service)
+
+**Payload = what it does**
+• Encrypt, steal, delete, spy, open backdoor, recruit into botnet`,
+        rightTitle: "Threat Reasoning",
+        right: `**Delivery Truck vs Bomb**
+• Blocking vectors reduces initial compromise probability
+• Limiting payload impact reduces blast radius
+
+**Controls:**
+• Vector controls: email filtering, user training, patching
+• Payload controls: least privilege, backups, monitoring`,
+        notes: "Give students the two-axis thinking. Many defenses focus only on entry; good security also limits what malware can do after entry."
       },
       {
         title: "History Lesson: Philippine Context",
-        subtitle: "The ILOVEYOU (LoveBug) outbreak — 2000",
+        subtitle: "ILOVEYOU (LoveBug) — 2000",
         kicker: "PH CASE STUDY",
-        left: `**ILOVEYOU Virus (LoveBug)**\n• Created in Manila (2000)\n• Spread via email attachment: \"LOVE-LETTER-FOR-YOU.TXT.vbs\"\n• Type: VBScript worm\n• Overwrote files → **Integrity violation**\n• Massive global impact (millions of systems)`,
-        rightTitle: "Legacy",
-        right: `Raised cybercrime awareness in the Philippines and contributed to policy momentum (e.g., **RA 8792** E-Commerce Act era).\n\n**Lesson:** one click can scale globally.`,
-        notes: "This is our local anchor: malware history is not only 'abroad'. The Philippines has a direct historical link to global malware events."
+        left: `**What happened?**
+• Emailed as a love letter, actually a VBScript worm
+• Users opened it → it executed and mass-mailed itself
+
+**Mechanism (simplified):**
+• Social engineering subject line
+• Script overwrote/modified files → Integrity damage
+• Spread via address book → rapid propagation`,
+        rightTitle: "Why it matters today",
+        right: `**Lessons that still apply:**
+• Humans click emotionally compelling bait
+• Email remains a top vector
+• Scripting languages can be powerful + dangerous
+
+**Policy note:** increased pressure for PH cyber policy development (E-Commerce Act era).`,
+        notes: "Localize impact: show that 'old' malware patterns (social engineering + scripting) are still the backbone of modern attacks."
       },
       {
         title: "Virus vs Worm",
         subtitle: "Propagation is the key difference",
         kicker: "PROPAGATION",
-        left: `**Virus (Parasitic)**\n• Needs a host file (.exe, .doc)\n• Needs user to run it\n• Spreads slower but can persist\n\n**Worm (Standalone)**\n• Self-replicating\n• Exploits network weaknesses\n• Spreads fast—often explosively`,
-        rightTitle: "Mental Image",
-        right: `Virus = file that waits for a double-click\nWorm = lightning traveling through a network cable`,
-        notes: "Viruses need user execution. Worms propagate automatically. This difference matters for defense: patching and network segmentation are crucial against worms."
+        left: `**Virus (Parasitic)**
+• Attaches to a host file (exe/doc)
+• Needs user action (run/open)
+• Often modifies files → Integrity damage
+
+**Worm (Standalone)**
+• Self-replicates without user help
+• Uses network paths or vulnerabilities
+• Can spread extremely fast → Availability risk`,
+        rightTitle: "Comparison Table",
+        right: `**Host needed?** Virus ✅ | Worm ❌
+**User click needed?** Virus often ✅ | Worm often ❌
+**Primary spread:** files/media | networks/services
+
+**Defensive focus:**
+Virus → user training + file scanning
+Worm → patching + segmentation`,
+        notes: "Drive home: worm defense is largely *engineering discipline* (patching, segmentation). Virus defense includes people and endpoint controls."
       },
       {
         title: "Trojans & Backdoors",
-        subtitle: "Malware that wins by deception",
+        subtitle: "Deception-driven compromise",
         kicker: "SOCIAL ENGINEERING",
-        left: `**Trojan**\n• Disguised as legitimate software\n• Non-replicating\n• Example: \"FreeCrackedGame.exe\"\n\n**Backdoor**\n• Hidden access left behind\n• Allows attacker to return later`,
-        rightTitle: "Week 2 Link",
-        right: `This is not just a code problem—it's a **process & human threat** problem (Week 2).\n\nBad decisions + weak controls = successful Trojan.`,
-        notes: "Trojans defeat people more than firewalls. Link this to Week 2: threat modeling must include human behavior and software supply choices."
+        left: `**Trojan**
+• Looks legitimate (installer, crack, PDF viewer)
+• Executes hidden actions (dropper, credential theft)
+
+**Backdoor**
+• Persistent secret access
+• Enables remote control later
+
+**Common bait:**
+• \"Free\" software, \"cracks\", fake updates`,
+        rightTitle: "Week 2 (SecSDLC) Link",
+        right: `Trojans exploit **process gaps**:
+• weak software sourcing
+• lack of code signing / integrity checks
+• users granted admin rights
+
+**SecSDLC control examples:**
+• approved software lists
+• least privilege
+• secure update channels`,
+        notes: "Tie to SecSDLC: procurement/supply chain, secure builds, code signing, and least privilege reduce Trojan success."
       },
       {
         title: "Rootkits",
-        subtitle: "The invisible cloak",
+        subtitle: "Stealth at the OS level",
         kicker: "STEALTH",
-        left: `**Rootkit behavior**\n• Digs deep into OS (often kernel level)\n• Hides files/processes\n• Can disable security tooling\n\n**Concept:** It modifies the OS so the OS lies to you.`,
-        rightTitle: "Why it’s scary",
-        right: `If you ask: “Are there viruses?”\nThe OS answers: “No.”\n\nBut the OS is compromised—its answers can’t be trusted.`,
-        notes: "Rootkits undermine your ability to measure reality. Security tools depend on the OS, so when the OS is modified, visibility collapses."
+        left: `**What rootkits do**
+• Hide malware processes/files
+• Intercept system calls
+• Disable or blind security tools
+
+**Where they live**
+• User-mode (less powerful)
+• Kernel-mode (more powerful, harder to detect)`,
+        rightTitle: "Trust Problem",
+        right: `If the OS is compromised, your tools may report false safety.
+
+**Practical consequence:**
+Incident response may require:
+• offline scanning
+• trusted boot
+• re-imaging systems`,
+        notes: "Keep it conceptual (no live IR). Emphasize that rootkits break the trust chain: 'the measuring instrument is corrupted.'"
       },
       {
         title: "Ransomware",
-        subtitle: "The business of malware",
+        subtitle: "The modern cash cow",
         kicker: "PAYLOAD",
-        left: `**Why it dominates:**\n• High profit\n• Repeatable playbook\n• Anonymous-ish payments\n\n**Process:**\nInfect → Contact C2 → Generate keys → Encrypt → Demand payment`,
-        rightTitle: "CIA Impact",
-        right: `Primary target: **Availability**\n\nOften also hits **Confidentiality** (data exfiltration) + **Integrity** (tampering).`,
-        notes: "Ransomware weaponizes encryption—a defensive tool. Emphasize: backups and incident response planning are core defenses, not optional add-ons."
+        left: `**Business model**
+• Monetizes downtime and panic
+• Often targets organizations (schools, LGUs, SMEs)
+
+**Typical chain**
+1) Initial access (phish/exploit)
+2) Privilege escalation
+3) Lateral movement
+4) Encryption + ransom note
+5) Sometimes data theft (“double extortion”)`,
+        rightTitle: "CIA Impact & Recovery",
+        right: `**Primary hit:** Availability (A)
+**Secondary hits:** Confidentiality (exfiltration), Integrity (tampering)
+
+**Defense essentials:**
+• offline backups
+• patching
+• least privilege
+• network segmentation
+• incident response plan`,
+        notes: "Stress the operational reality: backups and segmentation matter. Encourage students to think like defenders: reduce blast radius and recovery time."
       },
       {
         title: "Advanced Evasion: Polymorphism",
-        subtitle: "Why signature-based detection struggles",
+        subtitle: "Why signatures alone fail",
         kicker: "EVASION",
-        left: `**Signature-based AV**\n• Looks for known fingerprints\n\n**Polymorphism**\n• Malware mutates its code each replication\n• Same behavior, different binary\n• Fingerprint changes → detection harder`,
-        rightTitle: "Analogy",
-        right: `A criminal who changes their face and fingerprints after every robbery.\n\nResult: signatures alone become insufficient.`,
-        notes: "Polymorphism is an evasion technique. Pair with the later detection slide: behavior-based methods help counter code mutation."
+        left: `**Signature detection**
+• Antivirus matches known byte patterns
+• Works well for known, stable malware
+
+**Polymorphism**
+• Malware changes its code appearance
+• Same function/behavior, different bytes
+• Each copy looks ‘new’ to signature scanners`,
+        rightTitle: "What defenders do instead",
+        right: `Shift from “what it looks like” to “what it does”:
+• behavioral detection
+• sandbox-like detonation *by vendors* (not in class)
+• anomaly monitoring
+
+**Concept:** mutate form, keep intent.`,
+        notes: "Keep it accessible: polymorphism ≠ invisibility; it complicates signature matching. Explain why behavior detection is the complementary strategy."
       },
       {
         title: "The Cyber Kill Chain",
-        subtitle: "Where malware fits in a full attack",
+        subtitle: "A full attack story (with malware inside)",
         kicker: "ATTACK MODEL",
-        left: `1. Reconnaissance (Week 2: risk/threat discovery)\n2. Weaponization\n3. Delivery\n4. Exploitation\n5. Installation\n6. Command & Control (C2)\n7. Actions on Objectives`,
-        rightTitle: "Defense Idea",
-        right: `Break the chain early = less damage.\n\nStopping Delivery or Exploitation is cheaper than responding after Objectives.`,
-        notes: "Use this as a narrative spine. Students should learn to ask: which stage failed? Which control could have stopped it earlier?"
+        left: `1) **Reconnaissance** — target research (Week 2: risk context)
+2) **Weaponization** — malware packed into a deliverable
+3) **Delivery** — email/USB/link
+4) **Exploitation** — code runs (macro, vulnerability, user run)
+5) **Installation** — persistence/backdoor
+6) **C2** — ‘phones home’
+7) **Actions** — steal/encrypt/destroy`,
+        rightTitle: "Breaking the chain",
+        right: `**Stop at Delivery:** email filtering + user training
+**Stop at Exploitation:** patching, macro restrictions
+**Stop at Installation:** endpoint protection, least privilege
+**Stop at C2:** firewall egress controls, DNS monitoring
+
+Earlier stop = cheaper defense.`,
+        notes: "Have students identify where their home PC defenses sit and where organizational defenses sit. Reinforce: controls map to stages."
       },
       {
         title: "Adware, Spyware, & Logic Bombs",
-        subtitle: "Other common threats",
+        subtitle: "Common ‘everyday’ threats",
         kicker: "THREAT CATALOG",
-        left: `**Spyware / Keyloggers**\n• Silent observers\n• Steal credentials and secrets\n\n**Logic Bomb**\n• Trigger-based\n• Example: if date == Friday the 13th → delete files`,
-        rightTitle: "CIA Mapping",
-        right: `Spyware → **Confidentiality**\nLogic bomb → **Integrity/Availability**\n\nAsk: which pillar is the primary target?`,
-        notes: "Emphasize triggers and insider risk with logic bombs. Connect back to CIA triad mapping as a repeated skill."
+        left: `**Adware**
+• Aggressive ads, redirects
+• Often bundled with installers
+
+**Spyware / Keyloggers**
+• Records keystrokes/screens
+• Steals cookies/tokens
+
+**Logic bomb**
+• Dormant code waits for trigger
+• Often insider risk (disgruntled employee)`,
+        rightTitle: "CIA & Real-World Clues",
+        right: `**C clues:** unknown logins, password resets, MFA prompts
+**I clues:** files modified, configs changed
+**A clues:** encrypted files, services down
+
+Logic bomb triggers: date, user account removed, specific event.`,
+        notes: "Use observable symptoms students can relate to. Teach them to think: symptoms → CIA impact → likely class of malware."
       },
       {
         title: "Lab Activity: Static Analysis (Paper-Based)",
-        subtitle: "We analyze safely by reading—not running",
+        subtitle: "Read-only analysis — do NOT run",
         kicker: "SAFE PRACTICE",
-        left: `**Do NOT run. Read it.**`,
+        left: `**Scenario:** You find a \"maintenance\" script in a USB drive.
+Your job: identify intent and risk by reading.
+
+**Rules:**
+• Do not execute
+• Identify suspicious commands
+• Map impact to CIA Triad
+• Propose one SecSDLC control to prevent it`,
         rightTitle: "Suspicious Batch Script",
-        right: `@echo off\nattrib +h +s C:\\Users\\Ray\\Documents\\*.*\nshutdown /s /t 00`,
-        notes: "Guide analysis: '@echo off' hides command output; 'attrib +h +s' hides files; shutdown forces immediate restart/off. Lesson: static reading is safe and powerful."
+        right: `@echo off
+attrib +h +s C:\Users\Ray\Documents\*.*
+shutdown /s /t 00`,
+        notes: "Frame it as an exam-style skill: reading scripts is safe. Remind them: malware can be 'small' and still harmful."
       },
       {
-        title: "Static Analysis Discussion",
-        subtitle: "Interpreting each line",
+        title: "Static Analysis Walkthrough",
+        subtitle: "Line-by-line reasoning",
         kicker: "DECOMPOSITION",
-        left: `**Line 1:** @echo off\n→ hides commands while running\n\n**Line 2:** attrib +h +s ...\\Documents\\*.*\n→ hides documents (Hidden + System)\n\n**Line 3:** shutdown /s /t 00\n→ immediate shutdown`,
-        rightTitle: "Takeaway",
-        right: `This is how analysts work safely:\n**Understand intent from code structure** before any execution.\n\n\nIf a file does something you don't understand—assume hostile.`,
-        notes: "Reinforce safe behavior: analyze text, metadata, and logic first. This mirrors real-world SOC triage."
+        left: `**Line 1: @echo off**
+• Hides command output → reduces user awareness
+
+**Line 2: attrib +h +s …\Documents\*.* **
+• Sets Hidden + System attributes
+• Result: files appear ‘missing’ to most users
+
+**Line 3: shutdown /s /t 00**
+• Forces shutdown immediately
+• Prevents user from responding`,
+        rightTitle: "Risk Assessment",
+        right: `**CIA impact:**
+• Availability: user can’t access documents easily
+• Integrity: files not changed, but accessibility/manipulation risk exists
+
+**What to do IRL:**
+• isolate device
+• copy script for review
+• remove persistence points
+• restore file attributes safely`,
+        notes: "Clarify: hiding files is not encryption, but it still causes availability loss for users. Emphasize response steps conceptually (no tooling)."
       },
       {
         title: "Detection Methods",
         subtitle: "How defenders identify malware",
         kicker: "DEFENSE",
-        left: `**Signature-Based**\n• Matches known fingerprints\n• Fast\n• Weak against new / polymorphic threats\n\n**Heuristic / Behavioral**\n• Flags suspicious actions\n• More robust vs mutation`,
-        rightTitle: "Example Question",
-        right: `“Why is Calculator.exe trying to access the internet?”\n\nBehavioral detection looks for *intent* via actions.`,
-        notes: "Tie back to polymorphism: signatures are brittle. Behavior tells you what's happening even if code changes."
+        left: `**Signature-Based (classic)**
+• Matches known fingerprints
+• Fast + low false positives
+• Weak vs new/polymorphic threats
+
+**Heuristic / Behavioral (modern)**
+• Flags suspicious actions
+• Better for unknown threats
+• Needs good tuning to reduce false alarms`,
+        rightTitle: "Behavior Examples",
+        right: `Red flags:
+• Office app spawning PowerShell
+• Unknown program editing startup entries
+• Massive file renaming/encryption
+• Program attempting outbound to rare domains
+
+Ask: “Does this action match the app’s job?”`,
+        notes: "Give concrete behavior patterns without teaching attack steps. Goal: help students recognize abnormal process behavior and intent mismatch."
       },
       {
         title: "Malware in the SecSDLC (Week 2 Connection)",
-        subtitle: "Where do we stop malware in the lifecycle?",
+        subtitle: "Controls across the lifecycle",
         kicker: "WEEK 2 LINK",
-        left: `**Design Phase**\n• Strong permission structures\n• Threat modeling: anticipate vectors\n\n**Implementation**\n• Secure configs, least privilege\n• Endpoint protection\n\n**Maintenance**\n• Patch management\n• Monitoring & logging`,
-        rightTitle: "Key Insight",
-        right: `Worms love **unpatched systems**.\n\nSecSDLC isn't paperwork—it's how you reduce exploitable surfaces over time.`,
-        notes: "Explicitly connect: SecSDLC controls are anti-malware controls. Maintenance is critical: unpatched software turns small flaws into worm highways."
+        left: `**Requirements / Design**
+• threat modeling: identify vectors
+• security requirements: least privilege, logging
+
+**Implementation / Testing**
+• secure config baselines
+• dependency hygiene
+• code signing, integrity checks
+
+**Deployment / Maintenance**
+• patching & vulnerability mgmt
+• backups + restore drills
+• monitoring + incident playbooks`,
+        rightTitle: "Where malware thrives",
+        right: `Malware succeeds when the lifecycle is weak:
+• unpatched systems → worms
+• uncontrolled software installs → trojans
+• missing backups → ransomware wins
+
+SecSDLC is your anti-malware pipeline.`,
+        notes: "Explicitly connect Week 2: each lifecycle phase has malware-relevant controls. Emphasize maintenance as the most neglected phase."
       },
       {
         title: "Defense in Depth",
-        subtitle: "Layered controls beat single controls",
+        subtitle: "Layered controls reduce risk and impact",
         kicker: "STRATEGY",
-        left: `**Layer 1:** User training (don’t click)\n**Layer 2:** Endpoint protection\n**Layer 3:** Network defense (firewalls, segmentation)\n**Layer 4:** Backups & recovery (ransomware resilience)`,
-        rightTitle: "Reality Check",
-        right: `Assume one layer fails.\nDesign so failure is survivable.\n\nThis is the mindset of modern security engineering.`,
-        notes: "Defense-in-depth is a practical translation of the CIA triad into architecture. Emphasize resilience, not perfection."
+        left: `**Layer 1 — People**
+• awareness + verification habits
+
+**Layer 2 — Endpoint**
+• antivirus/EDR, app allowlisting
+
+**Layer 3 — Network**
+• firewall, segmentation, DNS controls
+
+**Layer 4 — Resilience**
+• backups, restore drills, incident response`,
+        rightTitle: "Practical Checklist",
+        right: `If you can only do 4 things:
+1) update/patch
+2) least privilege
+3) backup offline
+4) train users on links/attachments
+
+Result: fewer infections + faster recovery.`,
+        notes: "Make it actionable. Students should leave with defensible priorities for home and small org contexts."
       },
       {
         title: "Summary",
-        subtitle: "What you should remember",
+        subtitle: "The take-home model",
         kicker: "RECAP",
-        left: `• Malware targets the **CIA Triad**\n• Viruses attach; worms travel; trojans deceive\n• Polymorphism defeats signature-only detection\n• Kill chain thinking helps you stop attacks early\n• SecSDLC reduces malware success over time`,
-        rightTitle: "One Sentence",
-        right: `Security is the art of breaking attacker pathways—\n**before** they reach objectives.`,
-        notes: "Wrap with continuity: CIA tells you what matters, SecSDLC tells you how to build, Malware tells you how it breaks, and where defenses should sit."
+        left: `**1) Classify** malware (propagation + payload)
+**2) Map** to CIA Triad (Week 1)
+**3) Place** in kill chain (where did defense fail?)
+**4) Control** via SecSDLC (Week 2)
+
+Key facts:
+• Viruses attach; worms self-spread; trojans deceive
+• Polymorphism defeats signature-only detection`,
+        rightTitle: "Final Thought",
+        right: `Security is not about stopping *all* attacks.
+It’s about reducing probability + limiting impact + recovering fast.
+
+That’s real-world Information Assurance.`,
+        notes: "End with a systems view: prevention + detection + response + recovery. Tie the whole 3-week arc together explicitly."
       },
       {
         title: "Next Week",
         subtitle: "Hacking the Human",
         kicker: "TEASER",
-        left: `Next week we stop looking at code and start looking at psychology.\n\n**Topic:** Social Engineering & Phishing`,
-        rightTitle: "Why it matters",
-        right: `Many attacks succeed without advanced malware.\nThey succeed because humans are persuaded.\n\nBring examples of suspicious messages you’ve seen (remove personal info).`,
-        notes: "Preview: social engineering is often the vector. Malware is the payload. Next week focuses on the human entry point."
+        left: `Next week we shift from code to psychology.
+
+**Topic:** Social Engineering & Phishing
+
+Bring: examples of suspicious messages you’ve seen (remove personal info).`,
+        rightTitle: "Bridge to Week 4",
+        right: `Many malware incidents start with a human decision.
+Social engineering is often the **vector**.
+Malware is the **payload**.
+
+You now have the language to separate the two.`,
+        notes: "Make the bridge explicit: vector (human persuasion) → payload (malware action). Encourage students to collect examples for discussion."
       }
     ];
 
