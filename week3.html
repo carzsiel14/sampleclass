@@ -66,9 +66,10 @@
     }
 
     .app{
-      height:100%;
-      display:grid;
-      grid-template-rows: auto 1fr auto;
+      min-height:100vh;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
     }
 
     header{
@@ -129,24 +130,21 @@
 
     main{
       padding: 0 12px 14px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      height:100%;
+      display:flex;
+      flex: 1 1 auto;
       min-height:0;
     }
 
     .stage{
       position:relative;
-      height:100%;
+      flex: 1 1 auto;
       min-height:0;
-      display:grid;
-      grid-template-columns: 1fr;
+      display:flex;
     }
 
     .deck{
       position:relative;
-      height:100%;
+      flex: 1 1 auto;
       min-height:0;
       background: linear-gradient(180deg, rgba(11,16,32,.70), rgba(10,15,26,.72));
       border:1px solid rgba(232,236,255,.14);
@@ -167,7 +165,7 @@
     .slide{
       position:absolute; inset:0;
       padding: 22px 18px;
-      display:flex;
+      display:block; /* safety: ensure slides render on mobile */
       flex-direction:column;
       justify-content:space-between;
       gap: 16px;
@@ -372,6 +370,7 @@
       font-family: var(--mono);
       color: var(--muted);
       font-size: 12px;
+      flex: 0 0 auto;
     }
 
     .hint{
@@ -1037,6 +1036,7 @@ You now have the language to separate the two.`,
     function render(){
       deck.querySelectorAll('.slide').forEach(n => n.remove());
       slides.forEach((s,i)=> deck.appendChild(createSlide(i,s)));
+      idx = 0; // safety: always start at first slide
       update();
     }
 
@@ -1048,6 +1048,12 @@ You now have the language to separate the two.`,
         const i = Number(el.getAttribute('data-index'));
         el.classList.toggle('active', i === idx);
       });
+
+      // Fallback: if no slide is active, activate first
+      if(!all.some(el => el.classList.contains('active')) && all.length){
+        all[0].classList.add('active');
+        idx = 0;
+      }
 
       counter.textContent = `${idx+1} / ${slides.length}`;
       bar.style.width = `${((idx+1)/slides.length)*100}%`;
