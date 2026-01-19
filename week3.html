@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IAS 101 — Week 3: The Malware Menace</title>
+  <style>
+    :root{
+      --bg:#070A12;
+      --panel:#0B1020;
+      --panel2:#0A0F1A;
+      --text:#E8ECFF;
+      --muted:#A9B1D6;
+      --grid:rgba(122,162,247,.12);
+      --cyan:#33F6FF;
+      --mag:#FF2BD6;
+      --lime:#7CFF6B;
+      --amber:#FFB86B;
+      --red:#FF3B5C;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 80% 10%, rgba(255,43,214,.10), transparent 60%),
+                  radial-gradient(900px 650px at 15% 25%, rgba(51,246,255,.12), transparent 55%),
+                  radial-gradient(800px 600px at 50% 90%, rgba(124,255,107,.08), transparent 55%),
+                  linear-gradient(180deg, #050713, var(--bg));
+      color:var(--text);
+      font-family:var(--sans);
+      overflow:hidden;
+    }
+
+    /* Subtle “terminal grid” */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events:none;
+      opacity:.55;
+      mix-blend-mode: screen;
+    }
+
+    /* Scanlines */
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.02) 0px,
+        rgba(255,255,255,.02) 1px,
+        transparent 2px,
+        transparent 5px
+      );
+      pointer-events:none;
+      opacity:.45;
+    }
+
+    .app{
+      height:100%;
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header{
+      padding:14px 18px;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-family:var(--mono);
+    }
+
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(51,246,255,.10);
+      border:1px solid rgba(51,246,255,.35);
+      color:var(--cyan);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .brand .title{
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .controls{
+      display:flex; align-items:center; gap:10px;
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(232,236,255,.16);
+      background: rgba(11,16,32,.7);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      transition: transform .06s ease, border-color .2s ease, box-shadow .2s ease;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+    }
+    .btn:hover{ border-color: rgba(51,246,255,.55); box-shadow: 0 0 0 3px rgba(51,246,255,.12); }
+    .btn:active{ transform: translateY(1px); }
+
+    main{
+      padding: 0 18px 18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      height:100%;
+      min-height:0;
+    }
+
+    .stage{
+      position:relative;
+      height:100%;
+      min-height:0;
+      display:grid;
+      grid-template-columns: 1fr;
+    }
+
+    .deck{
+      position:relative;
+      height:100%;
+      min-height:0;
+      background: linear-gradient(180deg, rgba(11,16,32,.70), rgba(10,15,26,.72));
+      border:1px solid rgba(232,236,255,.14);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .deck::before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(900px 500px at 40% 15%, rgba(51,246,255,.10), transparent 60%),
+                  radial-gradient(700px 480px at 80% 85%, rgba(255,43,214,.10), transparent 55%);
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    .slide{
+      position:absolute; inset:0;
+      padding: 44px 54px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 22px;
+      opacity:0;
+      transform: translateY(8px) scale(.995);
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .slide.active{
+      opacity:1;
+      transform: translateY(0) scale(1);
+    }
+
+    .topline{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      font-family:var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing:.04em;
+    }
+
+    .topline .left{
+      display:flex; align-items:center; gap:10px;
+    }
+
+    .pip{
+      width:10px; height:10px; border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.03);
+      background: rgba(232,236,255,.18);
+    }
+    .pip.cyan{ background: rgba(51,246,255,.85); }
+    .pip.mag{ background: rgba(255,43,214,.85); }
+    .pip.lime{ background: rgba(124,255,107,.85); }
+
+    .h1{
+      font-size: 44px;
+      line-height:1.05;
+      letter-spacing: -0.02em;
+      margin:0;
+    }
+    .h2{
+      font-size: 26px;
+      line-height:1.15;
+      margin:0;
+      color: var(--text);
+    }
+
+    .subtitle{
+      color: var(--muted);
+      font-size: 16px;
+      margin-top: 10px;
+      max-width: 78ch;
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      min-height:0;
+    }
+
+    .content.onecol{ grid-template-columns: 1fr; }
+
+    .panel{
+      background: rgba(7,10,18,.38);
+      border: 1px solid rgba(232,236,255,.12);
+      border-radius: 16px;
+      padding: 18px 18px;
+    }
+
+    .kicker{
+      font-family:var(--mono);
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing:.12em;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    ul{
+      margin: 10px 0 0 0;
+      padding-left: 18px;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    li{ margin: 8px 0; }
+
+    .callout{
+      border-left: 3px solid rgba(51,246,255,.8);
+      padding: 12px 14px;
+      background: rgba(51,246,255,.08);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 15px;
+      line-height:1.5;
+    }
+
+    .callout.red{
+      border-left-color: rgba(255,59,92,.85);
+      background: rgba(255,59,92,.08);
+    }
+
+    .callout.mag{
+      border-left-color: rgba(255,43,214,.85);
+      background: rgba(255,43,214,.08);
+    }
+
+    .codebox{
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.5;
+      color: #EAFDFF;
+      background: rgba(5,7,19,.65);
+      border: 1px solid rgba(51,246,255,.22);
+      border-radius: 16px;
+      padding: 16px 16px;
+      white-space: pre;
+      overflow:auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
+    .meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+      margin-top:auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(232,236,255,.10);
+    }
+
+    .progress{
+      width: 240px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(232,236,255,.12);
+      overflow:hidden;
+      border:1px solid rgba(232,236,255,.10);
+    }
+
+    .bar{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(51,246,255,.9), rgba(255,43,214,.85));
+      box-shadow: 0 0 16px rgba(51,246,255,.25);
+    }
+
+    .notes{
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: min(560px, 40vw);
+      max-height: 42vh;
+      overflow:auto;
+      background: rgba(5,7,19,.75);
+      border: 1px solid rgba(255,43,214,.25);
+      border-radius: 16px;
+      padding: 14px 14px;
+      box-shadow: var(--shadow);
+      display:none;
+    }
+
+    .notes.visible{ display:block; }
+
+    .notes .hdr{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-family: var(--mono);
+      color: var(--mag);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .notes p{
+      margin:0;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+
+    footer{
+      padding: 10px 18px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .hint{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      opacity:.92;
+    }
+
+    kbd{
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      background: rgba(232,236,255,.08);
+      border: 1px solid rgba(232,236,255,.14);
+      color: var(--text);
+    }
+
+    /* Glitch header effect for the title slide */
+    .glitch{
+      position:relative;
+      display:inline-block;
+      text-shadow: 0 0 22px rgba(51,246,255,.18);
+    }
+    .glitch::before,
+    .glitch::after{
+      content: attr(data-text);
+      position:absolute;
+      left:0; top:0;
+      width:100%;
+      overflow:hidden;
+      clip-path: inset(0 0 0 0);
+      opacity:.75;
+    }
+    .glitch::before{
+      transform: translate(2px,-2px);
+      color: var(--cyan);
+      animation: glitch 2.2s infinite linear alternate-reverse;
+    }
+    .glitch::after{
+      transform: translate(-2px,2px);
+      color: var(--mag);
+      animation: glitch 1.8s infinite linear alternate;
+    }
+
+    @keyframes glitch{
+      0%{ clip-path: inset(0 0 92% 0); }
+      10%{ clip-path: inset(12% 0 55% 0); }
+      20%{ clip-path: inset(65% 0 20% 0); }
+      30%{ clip-path: inset(22% 0 58% 0); }
+      40%{ clip-path: inset(76% 0 8% 0); }
+      50%{ clip-path: inset(35% 0 44% 0); }
+      60%{ clip-path: inset(8% 0 76% 0); }
+      70%{ clip-path: inset(58% 0 26% 0); }
+      80%{ clip-path: inset(18% 0 63% 0); }
+      90%{ clip-path: inset(84% 0 7% 0); }
+      100%{ clip-path: inset(42% 0 39% 0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .slide{ padding: 32px 28px; }
+      .content{ grid-template-columns: 1fr; }
+      .notes{ width: calc(100% - 36px); max-height: 38vh; }
+      .progress{ width: 170px; }
+      .h1{ font-size: 34px; }
+    }
+
+    /* Print-friendly: one slide per page */
+    @media print{
+      body{ overflow:visible; }
+      header, footer, .notes{ display:none !important; }
+      .app{ display:block; }
+      main{ padding:0; }
+      .deck{ border:none; box-shadow:none; }
+      .slide{
+        position:relative;
+        opacity:1 !important;
+        transform:none !important;
+        page-break-after: always;
+        height: 100vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="badge">IAS 101</div>
+        <div class="title">Week 3 — Malware & Computer Viruses (Threat Landscape)</div>
+      </div>
+      <div class="controls">
+        <button class="btn" id="prevBtn" title="Previous (←)">← Prev</button>
+        <button class="btn" id="nextBtn" title="Next (→)">Next →</button>
+        <button class="btn" id="notesBtn" title="Toggle speaker notes (S)">Notes</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="stage">
+        <div class="deck" id="deck">
+          <!-- slides injected here -->
+          <div class="notes" id="notes">
+            <div class="hdr">
+              <span>Speaker Notes</span>
+              <span id="notesSlide">Slide 1</span>
+            </div>
+            <p id="notesText"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="hint">
+        <span>Navigate:</span> <kbd>←</kbd> <kbd>→</kbd> <kbd>Space</kbd>
+        <span style="margin-left:10px;">Notes:</span> <kbd>S</kbd>
+        <span style="margin-left:10px;">Jump:</span> <kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd>=10, <kbd>G</kbd> then number then <kbd>Enter</kbd>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div id="counter">1 / 18</div>
+        <div class="progress"><div class="bar" id="bar"></div></div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /**
+     * PPT-like Web Deck (no external libraries)
+     * - Arrow keys / Space: navigate
+     * - S: toggle speaker notes
+     * - Number keys: quick jump (1-9); 0 jumps to 10
+     * - G + digits + Enter: go to slide #
+     */
+
+    const slides = [
+      {
+        title: "The Malware Menace: Code, Vectors, and Payloads",
+        subtitle: "Week 3 | Information Assurance and Security 1",
+        kicker: "TITLE",
+        left: `**Visual:** A digital biological cell dividing, but the nucleus is a glitching red skull.\n\n**Framing:** Malware is code written by humans to violate security guarantees.`,
+        rightTitle: "Lecture Thread",
+        right: `• Week 1: CIA Triad (what must be protected)\n• Week 2: SecSDLC (how to build securely)\n• Week 3: Malware (how systems are attacked)`,
+        notes: "Last week we discussed building secure systems. This week we discuss how attackers break them. Malware is not magic—it is software with intent: to violate Confidentiality, Integrity, or Availability."
+      },
+      {
+        title: "Learning Objectives",
+        subtitle: "What you should be able to do after today",
+        kicker: "OBJECTIVES",
+        left: `• Classify malware by **propagation** (Virus vs Worm)\n• Classify malware by **payload** (Ransomware, Spyware, etc.)\n• Map malware types to **CIA Triad violations** (Week 1)\n• Explain **polymorphism** and why it defeats detection\n• Perform **static analysis** on a suspicious script (no execution)`,
+        rightTitle: "Ground Rules",
+        right: `• No virtual machines required\n• No running malware samples\n• Analysis mindset > tools\n• “Read before you click”`,
+        notes: "We focus on concept mastery and safe analysis. You can become competent in malware reasoning without executing anything."
+      },
+      {
+        title: "Recall: The CIA Triad (Week 1 Connection)",
+        subtitle: "Malware is a tool for breaking a pillar",
+        kicker: "WEEK 1 LINK",
+        left: `**Confidentiality**\n• Spyware / keyloggers steal secrets\n\n**Integrity**\n• Viruses corrupt or modify files\n\n**Availability**\n• Ransomware & botnets deny access`,
+        rightTitle: "Key Insight",
+        right: `Malware is a **means**, not a goal.\n\nAttackers choose malware to break a specific pillar—or multiple pillars at once.`,
+        notes: "Remember the triad from Week 1? Malware is simply the tool hackers use to break one of these three pillars. Every example we discuss fits somewhere here."
+      },
+      {
+        title: "Malware Anatomy: Vector vs Payload",
+        subtitle: "How it gets in vs what it does",
+        kicker: "CORE MODEL",
+        left: `**Vector (Entry):**\n• Email attachment\n• USB flash drive\n• Malicious link\n• Exploited vulnerability\n\n**Payload (Action):**\n• Encrypt files\n• Steal passwords\n• Delete data\n• Install backdoor`,
+        rightTitle: "Analogy",
+        right: `Vector = **Delivery Truck**\nPayload = **Bomb inside**\n\nSeparate these in your mind: the *door* is not the *damage*.`,
+        notes: "Students often confuse vector and payload. Clicking is the vector. The harmful behavior is the payload. Defenses target both."
+      },
+      {
+        title: "History Lesson: Philippine Context",
+        subtitle: "The ILOVEYOU (LoveBug) outbreak — 2000",
+        kicker: "PH CASE STUDY",
+        left: `**ILOVEYOU Virus (LoveBug)**\n• Created in Manila (2000)\n• Spread via email attachment: \"LOVE-LETTER-FOR-YOU.TXT.vbs\"\n• Type: VBScript worm\n• Overwrote files → **Integrity violation**\n• Massive global impact (millions of systems)`,
+        rightTitle: "Legacy",
+        right: `Raised cybercrime awareness in the Philippines and contributed to policy momentum (e.g., **RA 8792** E-Commerce Act era).\n\n**Lesson:** one click can scale globally.`,
+        notes: "This is our local anchor: malware history is not only 'abroad'. The Philippines has a direct historical link to global malware events."
+      },
+      {
+        title: "Virus vs Worm",
+        subtitle: "Propagation is the key difference",
+        kicker: "PROPAGATION",
+        left: `**Virus (Parasitic)**\n• Needs a host file (.exe, .doc)\n• Needs user to run it\n• Spreads slower but can persist\n\n**Worm (Standalone)**\n• Self-replicating\n• Exploits network weaknesses\n• Spreads fast—often explosively`,
+        rightTitle: "Mental Image",
+        right: `Virus = file that waits for a double-click\nWorm = lightning traveling through a network cable`,
+        notes: "Viruses need user execution. Worms propagate automatically. This difference matters for defense: patching and network segmentation are crucial against worms."
+      },
+      {
+        title: "Trojans & Backdoors",
+        subtitle: "Malware that wins by deception",
+        kicker: "SOCIAL ENGINEERING",
+        left: `**Trojan**\n• Disguised as legitimate software\n• Non-replicating\n• Example: \"FreeCrackedGame.exe\"\n\n**Backdoor**\n• Hidden access left behind\n• Allows attacker to return later`,
+        rightTitle: "Week 2 Link",
+        right: `This is not just a code problem—it's a **process & human threat** problem (Week 2).\n\nBad decisions + weak controls = successful Trojan.`,
+        notes: "Trojans defeat people more than firewalls. Link this to Week 2: threat modeling must include human behavior and software supply choices."
+      },
+      {
+        title: "Rootkits",
+        subtitle: "The invisible cloak",
+        kicker: "STEALTH",
+        left: `**Rootkit behavior**\n• Digs deep into OS (often kernel level)\n• Hides files/processes\n• Can disable security tooling\n\n**Concept:** It modifies the OS so the OS lies to you.`,
+        rightTitle: "Why it’s scary",
+        right: `If you ask: “Are there viruses?”\nThe OS answers: “No.”\n\nBut the OS is compromised—its answers can’t be trusted.`,
+        notes: "Rootkits undermine your ability to measure reality. Security tools depend on the OS, so when the OS is modified, visibility collapses."
+      },
+      {
+        title: "Ransomware",
+        subtitle: "The business of malware",
+        kicker: "PAYLOAD",
+        left: `**Why it dominates:**\n• High profit\n• Repeatable playbook\n• Anonymous-ish payments\n\n**Process:**\nInfect → Contact C2 → Generate keys → Encrypt → Demand payment`,
+        rightTitle: "CIA Impact",
+        right: `Primary target: **Availability**\n\nOften also hits **Confidentiality** (data exfiltration) + **Integrity** (tampering).`,
+        notes: "Ransomware weaponizes encryption—a defensive tool. Emphasize: backups and incident response planning are core defenses, not optional add-ons."
+      },
+      {
+        title: "Advanced Evasion: Polymorphism",
+        subtitle: "Why signature-based detection struggles",
+        kicker: "EVASION",
+        left: `**Signature-based AV**\n• Looks for known fingerprints\n\n**Polymorphism**\n• Malware mutates its code each replication\n• Same behavior, different binary\n• Fingerprint changes → detection harder`,
+        rightTitle: "Analogy",
+        right: `A criminal who changes their face and fingerprints after every robbery.\n\nResult: signatures alone become insufficient.`,
+        notes: "Polymorphism is an evasion technique. Pair with the later detection slide: behavior-based methods help counter code mutation."
+      },
+      {
+        title: "The Cyber Kill Chain",
+        subtitle: "Where malware fits in a full attack",
+        kicker: "ATTACK MODEL",
+        left: `1. Reconnaissance (Week 2: risk/threat discovery)\n2. Weaponization\n3. Delivery\n4. Exploitation\n5. Installation\n6. Command & Control (C2)\n7. Actions on Objectives`,
+        rightTitle: "Defense Idea",
+        right: `Break the chain early = less damage.\n\nStopping Delivery or Exploitation is cheaper than responding after Objectives.`,
+        notes: "Use this as a narrative spine. Students should learn to ask: which stage failed? Which control could have stopped it earlier?"
+      },
+      {
+        title: "Adware, Spyware, & Logic Bombs",
+        subtitle: "Other common threats",
+        kicker: "THREAT CATALOG",
+        left: `**Spyware / Keyloggers**\n• Silent observers\n• Steal credentials and secrets\n\n**Logic Bomb**\n• Trigger-based\n• Example: if date == Friday the 13th → delete files`,
+        rightTitle: "CIA Mapping",
+        right: `Spyware → **Confidentiality**\nLogic bomb → **Integrity/Availability**\n\nAsk: which pillar is the primary target?`,
+        notes: "Emphasize triggers and insider risk with logic bombs. Connect back to CIA triad mapping as a repeated skill."
+      },
+      {
+        title: "Lab Activity: Static Analysis (Paper-Based)",
+        subtitle: "We analyze safely by reading—not running",
+        kicker: "SAFE PRACTICE",
+        left: `**Do NOT run. Read it.**`,
+        rightTitle: "Suspicious Batch Script",
+        right: `@echo off\nattrib +h +s C:\\Users\\Ray\\Documents\\*.*\nshutdown /s /t 00`,
+        notes: "Guide analysis: '@echo off' hides command output; 'attrib +h +s' hides files; shutdown forces immediate restart/off. Lesson: static reading is safe and powerful."
+      },
+      {
+        title: "Static Analysis Discussion",
+        subtitle: "Interpreting each line",
+        kicker: "DECOMPOSITION",
+        left: `**Line 1:** @echo off\n→ hides commands while running\n\n**Line 2:** attrib +h +s ...\\Documents\\*.*\n→ hides documents (Hidden + System)\n\n**Line 3:** shutdown /s /t 00\n→ immediate shutdown`,
+        rightTitle: "Takeaway",
+        right: `This is how analysts work safely:\n**Understand intent from code structure** before any execution.\n\n\nIf a file does something you don't understand—assume hostile.`,
+        notes: "Reinforce safe behavior: analyze text, metadata, and logic first. This mirrors real-world SOC triage."
+      },
+      {
+        title: "Detection Methods",
+        subtitle: "How defenders identify malware",
+        kicker: "DEFENSE",
+        left: `**Signature-Based**\n• Matches known fingerprints\n• Fast\n• Weak against new / polymorphic threats\n\n**Heuristic / Behavioral**\n• Flags suspicious actions\n• More robust vs mutation`,
+        rightTitle: "Example Question",
+        right: `“Why is Calculator.exe trying to access the internet?”\n\nBehavioral detection looks for *intent* via actions.`,
+        notes: "Tie back to polymorphism: signatures are brittle. Behavior tells you what's happening even if code changes."
+      },
+      {
+        title: "Malware in the SecSDLC (Week 2 Connection)",
+        subtitle: "Where do we stop malware in the lifecycle?",
+        kicker: "WEEK 2 LINK",
+        left: `**Design Phase**\n• Strong permission structures\n• Threat modeling: anticipate vectors\n\n**Implementation**\n• Secure configs, least privilege\n• Endpoint protection\n\n**Maintenance**\n• Patch management\n• Monitoring & logging`,
+        rightTitle: "Key Insight",
+        right: `Worms love **unpatched systems**.\n\nSecSDLC isn't paperwork—it's how you reduce exploitable surfaces over time.`,
+        notes: "Explicitly connect: SecSDLC controls are anti-malware controls. Maintenance is critical: unpatched software turns small flaws into worm highways."
+      },
+      {
+        title: "Defense in Depth",
+        subtitle: "Layered controls beat single controls",
+        kicker: "STRATEGY",
+        left: `**Layer 1:** User training (don’t click)\n**Layer 2:** Endpoint protection\n**Layer 3:** Network defense (firewalls, segmentation)\n**Layer 4:** Backups & recovery (ransomware resilience)`,
+        rightTitle: "Reality Check",
+        right: `Assume one layer fails.\nDesign so failure is survivable.\n\nThis is the mindset of modern security engineering.`,
+        notes: "Defense-in-depth is a practical translation of the CIA triad into architecture. Emphasize resilience, not perfection."
+      },
+      {
+        title: "Summary",
+        subtitle: "What you should remember",
+        kicker: "RECAP",
+        left: `• Malware targets the **CIA Triad**\n• Viruses attach; worms travel; trojans deceive\n• Polymorphism defeats signature-only detection\n• Kill chain thinking helps you stop attacks early\n• SecSDLC reduces malware success over time`,
+        rightTitle: "One Sentence",
+        right: `Security is the art of breaking attacker pathways—\n**before** they reach objectives.`,
+        notes: "Wrap with continuity: CIA tells you what matters, SecSDLC tells you how to build, Malware tells you how it breaks, and where defenses should sit."
+      },
+      {
+        title: "Next Week",
+        subtitle: "Hacking the Human",
+        kicker: "TEASER",
+        left: `Next week we stop looking at code and start looking at psychology.\n\n**Topic:** Social Engineering & Phishing`,
+        rightTitle: "Why it matters",
+        right: `Many attacks succeed without advanced malware.\nThey succeed because humans are persuaded.\n\nBring examples of suspicious messages you’ve seen (remove personal info).`,
+        notes: "Preview: social engineering is often the vector. Malware is the payload. Next week focuses on the human entry point."
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('bar');
+    const notes = document.getElementById('notes');
+    const notesText = document.getElementById('notesText');
+    const notesSlide = document.getElementById('notesSlide');
+
+    let idx = 0;
+    let gotoMode = false;
+    let gotoBuf = "";
+
+    function mdToHtml(md){
+      // Minimal markdown-ish renderer: **bold**, line breaks, bullets already formatted as lines.
+      // Keeps things safe/simple for offline use.
+      return md
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\n/g, "<br>");
+    }
+
+    function createSlide(i, s){
+      const el = document.createElement('section');
+      el.className = 'slide';
+      el.setAttribute('data-index', i);
+
+      const isTitle = (i === 0);
+
+      const top = document.createElement('div');
+      top.className = 'topline';
+      top.innerHTML = `
+        <div class="left">
+          <span class="pip cyan"></span><span class="pip mag"></span><span class="pip lime"></span>
+          <span>${(s.kicker || "SLIDE")} :: ${String(i+1).padStart(2,'0')}</span>
+        </div>
+        <div class="right">IAS 101 • Week 3</div>
+      `;
+
+      const head = document.createElement('div');
+      const h = document.createElement('h1');
+      h.className = 'h1' + (isTitle ? ' glitch' : '');
+      if(isTitle){
+        h.setAttribute('data-text', s.title);
+      }
+      h.innerText = s.title;
+
+      const sub = document.createElement('div');
+      sub.className = 'subtitle';
+      sub.innerText = s.subtitle || '';
+
+      head.appendChild(h);
+      if(s.subtitle) head.appendChild(sub);
+
+      const content = document.createElement('div');
+      content.className = 'content' + ((s.right === undefined) ? ' onecol' : '');
+
+      const leftPanel = document.createElement('div');
+      leftPanel.className = 'panel';
+      leftPanel.innerHTML = `<div class="kicker">${isTitle ? 'MODULE' : 'CONTENT'}</div><div>${mdToHtml(s.left || '')}</div>`;
+
+      content.appendChild(leftPanel);
+
+      if(s.right !== undefined){
+        const rightPanel = document.createElement('div');
+        rightPanel.className = 'panel';
+
+        // Codebox special case: if right looks like code (contains '\\n' + typical syntax) and title mentions script
+        const isCode = (s.rightTitle || '').toLowerCase().includes('script') || (s.right || '').includes('@echo');
+        rightPanel.innerHTML = `
+          <div class="kicker">${(s.rightTitle || 'SIDEBAR').toUpperCase()}</div>
+          ${isCode ? `<div class="codebox">${(s.right || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : `<div>${mdToHtml(s.right || '')}</div>`}
+        `;
+        content.appendChild(rightPanel);
+      }
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = `
+        <div>SLIDE_${String(i+1).padStart(2,'0')} • THREAT_LANDSCAPE</div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span style="color: rgba(51,246,255,.9)">CONF</span>
+          <span style="color: rgba(255,43,214,.9)">INT</span>
+          <span style="color: rgba(124,255,107,.9)">AVAIL</span>
+        </div>
+      `;
+
+      el.appendChild(top);
+      el.appendChild(head);
+      el.appendChild(content);
+      el.appendChild(meta);
+
+      return el;
+    }
+
+    function render(){
+      deck.querySelectorAll('.slide').forEach(n => n.remove());
+      slides.forEach((s,i)=> deck.appendChild(createSlide(i,s)));
+      update();
+    }
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function update(){
+      const all = [...deck.querySelectorAll('.slide')];
+      all.forEach(el => {
+        const i = Number(el.getAttribute('data-index'));
+        el.classList.toggle('active', i === idx);
+      });
+
+      counter.textContent = `${idx+1} / ${slides.length}`;
+      bar.style.width = `${((idx+1)/slides.length)*100}%`;
+
+      notesSlide.textContent = `Slide ${idx+1}`;
+      notesText.textContent = slides[idx].notes || '(No notes for this slide)';
+    }
+
+    function next(){ idx = clamp(idx+1, 0, slides.length-1); update(); }
+    function prev(){ idx = clamp(idx-1, 0, slides.length-1); update(); }
+
+    function toggleNotes(){
+      notes.classList.toggle('visible');
+    }
+
+    // Buttons
+    document.getElementById('nextBtn').addEventListener('click', next);
+    document.getElementById('prevBtn').addEventListener('click', prev);
+    document.getElementById('notesBtn').addEventListener('click', toggleNotes);
+
+    // Keyboard
+    window.addEventListener('keydown', (e) => {
+      const k = e.key;
+
+      if(gotoMode){
+        if(k === 'Enter'){
+          const n = parseInt(gotoBuf, 10);
+          if(!Number.isNaN(n)){
+            idx = clamp(n-1, 0, slides.length-1);
+            update();
+          }
+          gotoMode = false;
+          gotoBuf = "";
+          return;
+        }
+        if(k === 'Escape'){
+          gotoMode = false;
+          gotoBuf = "";
+          return;
+        }
+        if(/\d/.test(k)){
+          gotoBuf += k;
+          return;
+        }
+        return;
+      }
+
+      if(k === 'ArrowRight' || k === ' ' || k === 'PageDown'){ e.preventDefault(); next(); }
+      if(k === 'ArrowLeft' || k === 'PageUp'){ e.preventDefault(); prev(); }
+      if(k.toLowerCase() === 's'){ toggleNotes(); }
+
+      // quick numeric jumps
+      if(/^[1-9]$/.test(k)){
+        idx = clamp(parseInt(k,10)-1, 0, slides.length-1);
+        update();
+      }
+      if(k === '0'){
+        idx = clamp(9, 0, slides.length-1); // slide 10
+        update();
+      }
+
+      if(k.toLowerCase() === 'g'){
+        gotoMode = true;
+        gotoBuf = "";
+      }
+    });
+
+    // Initialize
+    render();
+  </script>
+</body>
+</html>
