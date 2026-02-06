@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Threats (Human) - Web PPT</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap");
+
+      :root {
+        --ink: #12121a;
+        --muted: #4c4c5a;
+        --paper: #f7f2ea;
+        --accent: #ff6b3d;
+        --accent-2: #1bb3a9;
+        --accent-3: #f2c14e;
+        --card: #fff9f0;
+        --shadow: 0 22px 60px rgba(18, 18, 26, 0.16);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Noto Sans", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 20% 20%, #ffd9c7 0%, transparent 55%),
+          radial-gradient(circle at 80% 10%, #d8f3f1 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, #ffe9b0 0%, transparent 55%),
+          var(--paper);
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .deck {
+        height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      header {
+        padding: 18px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+      }
+
+      .brand {
+        font-family: "Fraunces", "Georgia", serif;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .progress {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .progress span {
+        width: clamp(18px, 3.2vw, 46px);
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(18, 18, 26, 0.12);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .progress span::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+      }
+
+      .progress span.active::after {
+        transform: scaleX(1);
+      }
+
+      main {
+        position: relative;
+        padding: 10px 32px 32px;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transform: translateX(40px) scale(0.985);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        padding: 10px 0 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+        pointer-events: none;
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .slide.active {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        pointer-events: auto;
+      }
+
+      .slide-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(18, 18, 26, 0.08);
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 12px;
+        font-family: "Fraunces", "Georgia", serif;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 4vw, 4rem);
+        line-height: 1.05;
+      }
+
+      h2 {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+      }
+
+      h3 {
+        font-size: 1.3rem;
+      }
+
+      p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      ul,
+      ol {
+        padding-left: 18px;
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      li + li {
+        margin-top: 6px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 24px;
+        align-items: center;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(255, 107, 61, 0.14);
+        font-weight: 600;
+        color: #7a2a0d;
+      }
+
+      .metric {
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .pill {
+        display: inline-flex;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(27, 179, 169, 0.16);
+        color: #0f5b55;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .note {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 32px 26px;
+      }
+
+      .nav button {
+        border: none;
+        background: var(--ink);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 10px 22px rgba(18, 18, 26, 0.2);
+      }
+
+      .nav button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .nav button:not(:disabled):hover {
+        transform: translateY(-2px);
+      }
+
+      .slide-meta {
+        display: grid;
+        gap: 4px;
+        text-align: center;
+      }
+
+      .slide-count {
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .highlight {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 14px;
+      }
+
+      .timeline .row {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+
+      .dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--accent-2);
+        margin-top: 4px;
+        box-shadow: 0 0 0 4px rgba(27, 179, 169, 0.18);
+      }
+
+      .quiz {
+        display: grid;
+        gap: 14px;
+      }
+
+      .quiz-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid rgba(18, 18, 26, 0.1);
+      }
+
+      .quiz-meta {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .quiz-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+
+      .quiz-actions button {
+        border: 1px solid rgba(18, 18, 26, 0.2);
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .quiz-actions button.correct {
+        background: rgba(27, 179, 169, 0.18);
+        border-color: var(--accent-2);
+      }
+
+      .quiz-actions button.wrong {
+        background: rgba(255, 107, 61, 0.18);
+        border-color: var(--accent);
+      }
+
+      .feedback {
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .score {
+        font-weight: 700;
+        color: var(--accent-2);
+      }
+
+      .stagger > * {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: rise 0.6s ease forwards;
+      }
+
+      .stagger > *:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      .stagger > *:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      .stagger > *:nth-child(4) {
+        animation-delay: 0.3s;
+      }
+
+      .stagger > *:nth-child(5) {
+        animation-delay: 0.4s;
+      }
+
+      .slide::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .slide::-webkit-scrollbar-thumb {
+        background: rgba(18, 18, 26, 0.18);
+        border-radius: 999px;
+      }
+
+      @keyframes rise {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 900px) {
+        header {
+          padding: 16px 20px;
+        }
+
+        main {
+          padding: 10px 20px 24px;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .nav {
+          padding: 12px 20px 20px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .progress {
+          display: none;
+        }
+
+        .slide-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          padding: 18px;
+        }
+
+        .slide {
+          padding-right: 0;
+        }
+
+        .nav {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-areas:
+            "count count"
+            "prev next";
+          gap: 12px;
+          padding: 10px 16px 16px;
+        }
+
+        #prev {
+          grid-area: prev;
+        }
+
+        #next {
+          grid-area: next;
+        }
+
+        .slide-meta {
+          grid-area: count;
+        }
+
+        .nav button {
+          width: 100%;
+          min-height: 44px;
+        }
+
+        .quiz-actions {
+          flex-direction: column;
+        }
+
+        .quiz-actions button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck">
+      <header>
+        <div class="brand">Cyber Awareness</div>
+        <div class="progress" id="progress"></div>
+      </header>
+      <main>
+        <section class="slide active" data-title="Title">
+          <div class="hero">
+            <div class="card stagger">
+              <span class="tag">Threats (Human)</span>
+              <h1>Humans are the easiest door.</h1>
+              <p>
+                Social engineering and insider threats leverage trust, routine,
+                and access. This deck breaks down the tactics, signals, and
+                response steps that keep people safe.
+              </p>
+              <div class="slide-grid">
+                <div>
+                  <div class="metric">85%</div>
+                  <p>Breaches include a human element in the attack chain.</p>
+                </div>
+                <div>
+                  <div class="metric">3 mins</div>
+                  <p>Average time to click a malicious link in simulation.</p>
+                </div>
+                <div>
+                  <div class="metric">1 click</div>
+                  <p>Is often enough to share credentials or install malware.</p>
+                </div>
+              </div>
+            </div>
+            <div class="card stagger">
+              <h3>Key Concepts</h3>
+              <ul>
+                <li>Social engineering: phishing, vishing, smishing</li>
+                <li>Insider threats: careless, compromised, or malicious</li>
+                <li>Defense mindset: verify, slow down, and report</li>
+              </ul>
+              <p class="pill">Lab: "Spot the Phish"</p>
+              <p class="note">Use arrows or swipe to navigate.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Agenda">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Today's Flow</h2>
+              <ul>
+                <li>Define social engineering and its channels</li>
+                <li>Map the attacker playbook and psychology</li>
+                <li>Spot phishing red flags fast</li>
+                <li>Understand insider threat types and signals</li>
+                <li>Practice with the Spot the Phish lab</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Learning Goals</h3>
+              <p>
+                By the end you can spot suspicious messaging, validate requests
+                using trusted channels, and escalate potential insider risk
+                early.
+              </p>
+              <div class="timeline">
+                <div class="row">
+                  <span class="dot"></span>
+                  <div>Detect persuasion tactics and urgency cues.</div>
+                </div>
+                <div class="row">
+                  <span class="dot"></span>
+                  <div>Identify spoofed senders and fake links quickly.</div>
+                </div>
+                <div class="row">
+                  <span class="dot"></span>
+                  <div>Respond with a safe and repeatable workflow.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Social Engineering">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Social Engineering</h2>
+              <p>
+                Manipulation of people to gain access, money, or sensitive data.
+                The goal is to trigger emotion and bypass judgment.
+              </p>
+              <ul>
+                <li>Authority, urgency, fear, curiosity, or sympathy</li>
+                <li>Pretexting: a believable story or role</li>
+                <li>Impersonation: vendor, coworker, or IT support</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Common Objectives</h3>
+              <ul>
+                <li>Credential theft or MFA fatigue approval</li>
+                <li>Wire transfer or gift card fraud</li>
+                <li>Malware delivery and persistence</li>
+              </ul>
+              <p class="pill">Attackers want a fast "yes".</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Playbook">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Attack Lifecycle</h2>
+              <ol>
+                <li>Recon: collect names, roles, vendors, habits.</li>
+                <li>Pretext: craft a believable story.</li>
+                <li>Delivery: email, phone, text, or chat.</li>
+                <li>Exploit: click, login, payment, or data.</li>
+                <li>Exit: cover tracks and pivot.</li>
+              </ol>
+            </div>
+            <div class="card stagger">
+              <h3>Psychology Triggers</h3>
+              <ul>
+                <li>Urgency: "within 30 minutes"</li>
+                <li>Authority: "CFO request"</li>
+                <li>Fear: "account suspended"</li>
+                <li>Curiosity: "see the document"</li>
+                <li>Reciprocity: "you owe me a favor"</li>
+                <li>Sympathy: "urgent personal issue"</li>
+              </ul>
+              <p class="pill">Defense: pause and verify.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Channels">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Phishing (Email)</h2>
+              <p>Looks official, often includes links or attachments.</p>
+              <ul>
+                <li>Display name mismatch or spoofed domain</li>
+                <li>Login page that imitates a real service</li>
+                <li>Attachment types: .zip, .html, .iso</li>
+              </ul>
+              <p class="pill">Safe move: use a known bookmark.</p>
+            </div>
+            <div class="card stagger">
+              <h2>Vishing (Voice)</h2>
+              <p>Callers use spoofed numbers and pressure.</p>
+              <ul>
+                <li>Urgent account or payroll changes</li>
+                <li>Asks for MFA codes or passwords</li>
+                <li>Claims to be IT or a vendor</li>
+              </ul>
+              <p class="pill">Safe move: hang up, call back.</p>
+            </div>
+            <div class="card stagger">
+              <h2>Smishing (SMS)</h2>
+              <p>Short texts with shortened links.</p>
+              <ul>
+                <li>Delivery failed or account alert</li>
+                <li>Short URL or random domain</li>
+                <li>Typos or unexpected timing</li>
+              </ul>
+              <p class="pill">Safe move: open the app directly.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Red Flags">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Phishing Red Flags</h2>
+              <ul>
+                <li>Unexpected urgency or secrecy</li>
+                <li>Sender domain slightly off or display mismatch</li>
+                <li>Generic greeting or missing context</li>
+                <li>Unusual payment, gift card, or login request</li>
+                <li>Links that hide real destinations</li>
+                <li>Unexpected attachments or file types</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Safe Response</h3>
+              <p>
+                Pause and verify using a trusted channel, not by replying to the
+                message itself. Report suspicious items immediately.
+              </p>
+              <ul>
+                <li>Hover links or inspect URLs</li>
+                <li>Use a known contact directory</li>
+                <li>Report to the security or help desk team</li>
+                <li>If you clicked, disconnect and report fast</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Insider Threats">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Insider Threats</h2>
+              <p>
+                Risk from someone with legitimate access. Not always malicious;
+                mistakes and compromised accounts count.
+              </p>
+              <ul>
+                <li>Careless: mis-sent files, weak passwords</li>
+                <li>Compromised: stolen credentials, MFA fatigue</li>
+                <li>Malicious: data theft, sabotage, fraud</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Motivations and Risk Factors</h3>
+              <ul>
+                <li>Financial pressure or personal stress</li>
+                <li>Grievances or policy conflicts</li>
+                <li>Excess access without oversight</li>
+                <li>Privilege creep over time</li>
+              </ul>
+              <p class="pill">Goal: detect early, respond calmly.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Insider Controls">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Behavioral Signals</h2>
+              <ul>
+                <li>Unusual access times or volumes</li>
+                <li>Repeated policy bypass attempts</li>
+                <li>Downloads outside job role</li>
+                <li>Sudden resignation with data spikes</li>
+                <li>Large transfers to personal storage</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Risk Reduction Controls</h3>
+              <ul>
+                <li>Least privilege and access reviews</li>
+                <li>Separation of duties for payments</li>
+                <li>Offboarding checklist and access removal</li>
+                <li>Logging, DLP, and anomaly alerts</li>
+                <li>Culture that encourages reporting</li>
+              </ul>
+              <p class="pill">Security is a team sport.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Defenses">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Human-Centered Defenses</h2>
+              <p>Build habits that slow down attackers and protect data.</p>
+              <ul>
+                <li>Awareness training and simulations</li>
+                <li>Least privilege and strong approvals</li>
+                <li>MFA and phishing-resistant methods</li>
+                <li>Clear reporting pathways</li>
+                <li>Security champions in each team</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Verify Script</h3>
+              <p class="highlight">"I need to verify this request."</p>
+              <ul>
+                <li>Confirm the sender via known contact</li>
+                <li>Use internal ticketing for approvals</li>
+                <li>Document what you saw and when</li>
+              </ul>
+              <p class="pill">Use STOP: Stop, Think, Observe, Proceed.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Response">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Phish Response Playbook</h2>
+              <ol>
+                <li>Stop: do not click or reply.</li>
+                <li>Capture: screenshot or save the email.</li>
+                <li>Verify: call the requester via known channel.</li>
+                <li>Report: forward to security or help desk.</li>
+                <li>Recover: reset passwords if you clicked.</li>
+              </ol>
+            </div>
+            <div class="card stagger">
+              <h3>Do Not</h3>
+              <ul>
+                <li>Do not use links or numbers in the message.</li>
+                <li>Do not forward to coworkers for opinions.</li>
+                <li>Do not share MFA codes or passwords.</li>
+                <li>Do not delay reporting; minutes matter.</li>
+              </ul>
+              <p class="pill">Fast reporting reduces impact.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Lab">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Lab: Spot the Phish</h2>
+              <p>
+                Review each message and decide: legit or phish. Tap a choice to
+                reveal the key clues.
+              </p>
+              <ul>
+                <li>Check sender address and display name.</li>
+                <li>Inspect links, attachments, and timing.</li>
+                <li>Assess the request: money, login, data?</li>
+                <li>Look for urgency, secrecy, or threats.</li>
+              </ul>
+              <p class="pill">Goal: 6/7 correct</p>
+              <p class="score" id="score">Score: 0 / 7</p>
+            </div>
+            <div class="card quiz" id="quiz"></div>
+          </div>
+        </section>
+
+        <section class="slide" data-title="Wrap">
+          <div class="slide-grid">
+            <div class="card stagger">
+              <h2>Wrap-Up</h2>
+              <ul>
+                <li>Attackers target people first, systems second.</li>
+                <li>Pause, verify, and report quickly.</li>
+                <li>Insider risk is everyone's responsibility.</li>
+                <li>One habit beats a hundred warnings.</li>
+              </ul>
+            </div>
+            <div class="card stagger">
+              <h3>Quick Check</h3>
+              <p>What one habit will you start using today?</p>
+              <ul>
+                <li>Verify payment requests out of band.</li>
+                <li>Use bookmarks for logins.</li>
+                <li>Report suspicious messages immediately.</li>
+              </ul>
+              <p class="pill">Choose one and practice this week.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="nav">
+        <button id="prev">Prev</button>
+        <div class="slide-meta">
+          <div class="slide-count" id="slideCount">1 / 12</div>
+          <div class="hint">Swipe or use arrows</div>
+        </div>
+        <button id="next">Next</button>
+      </footer>
+    </div>
+    <script>
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const progress = document.getElementById("progress");
+      const slideCount = document.getElementById("slideCount");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      let index = 0;
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchActive = false;
+      const swipeThreshold = 60;
+
+      const quizData = [
+        {
+          from: "IT Support <support@micr0soft-secure.com>",
+          subject: "Password expires today",
+          body: "We detected unusual activity. Reset your password within 1 hour to avoid lockout.",
+          answer: "phish",
+          why: "Domain spoof (micr0soft), urgency, credential request.",
+        },
+        {
+          from: "HR Team <hr@company.com>",
+          subject: "Benefits enrollment window",
+          body: "Reminder: enrollment closes Friday. Log in via the HR portal bookmark.",
+          answer: "legit",
+          why: "No link, known portal, normal timing.",
+        },
+        {
+          from: "FedEx Alerts <tracking@fedex-support.info>",
+          subject: "Delivery failed - confirm address",
+          body: "We could not deliver your package. Update address: fedex-track.click/4GZ",
+          answer: "phish",
+          why: "Unknown domain and short link.",
+        },
+        {
+          from: "CEO Office <ceo.office@company.com>",
+          subject: "Need gift cards fast",
+          body: "In a meeting. Buy 6 gift cards and send the codes now.",
+          answer: "phish",
+          why: "Unusual request, secrecy, gift cards.",
+        },
+        {
+          from: "Security Desk <security@company.com>",
+          subject: "MFA push attempts",
+          body: "We detected multiple MFA pushes. If this was not you, call the hotline.",
+          answer: "legit",
+          why: "No link, directs to verified call.",
+        },
+        {
+          from: "Accounts Payable <ap@company-payables.com>",
+          subject: "Overdue invoice - action required",
+          body: "Please review the attached invoice zip and wire today to avoid late fees.",
+          answer: "phish",
+          why: "Lookalike domain, zip attachment, urgent payment.",
+        },
+        {
+          from: "IT Change Notice <it@company.com>",
+          subject: "VPN maintenance window",
+          body: "Planned maintenance tonight at 10 PM. Reconnect using your saved VPN client. Report issues via the help desk portal.",
+          answer: "legit",
+          why: "Informational, no link, standard channel.",
+        },
+      ];
+
+      function buildProgress() {
+        progress.innerHTML = "";
+        slides.forEach((_, i) => {
+          const dot = document.createElement("span");
+          if (i === index) dot.classList.add("active");
+          progress.appendChild(dot);
+        });
+      }
+
+      function updateSlide(newIndex) {
+        slides[index].classList.remove("active");
+        index = newIndex;
+        slides[index].classList.add("active");
+        slides[index].scrollTop = 0;
+        slideCount.textContent = `${index + 1} / ${slides.length}`;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === slides.length - 1;
+        buildProgress();
+      }
+
+      function renderQuiz() {
+        const quizEl = document.getElementById("quiz");
+        quizEl.innerHTML = "";
+        quizData.forEach((item, i) => {
+          const card = document.createElement("div");
+          card.className = "quiz-card";
+          card.innerHTML = `
+            <div class="quiz-meta">
+              <span><strong>From:</strong> ${item.from}</span>
+              <span><strong>Subject:</strong> ${item.subject}</span>
+            </div>
+            <p>${item.body}</p>
+            <div class="quiz-actions">
+              <button data-answer="legit">Legit</button>
+              <button data-answer="phish">Phish</button>
+            </div>
+            <div class="feedback" id="feedback-${i}"></div>
+          `;
+          quizEl.appendChild(card);
+        });
+      }
+
+      function updateScore() {
+        const scoreEl = document.getElementById("score");
+        const correct = quizData.filter((item) => item.chosen === item.answer)
+          .length;
+        scoreEl.textContent = `Score: ${correct} / ${quizData.length}`;
+      }
+
+      document.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-answer]");
+        if (!button) return;
+        const card = button.closest(".quiz-card");
+        const cardIndex = Array.from(
+          document.querySelectorAll(".quiz-card")
+        ).indexOf(card);
+        const choice = button.dataset.answer;
+        quizData[cardIndex].chosen = choice;
+        const feedback = card.querySelector(`#feedback-${cardIndex}`);
+        const isCorrect = choice === quizData[cardIndex].answer;
+        feedback.textContent = `${isCorrect ? "Correct" : "Not quite"} - ${
+          quizData[cardIndex].why
+        }`;
+        card.querySelectorAll("button").forEach((btn) => {
+          btn.classList.remove("correct", "wrong");
+        });
+        button.classList.add(isCorrect ? "correct" : "wrong");
+        updateScore();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight" || event.key === "PageDown") {
+          if (index < slides.length - 1) updateSlide(index + 1);
+        }
+        if (event.key === "ArrowLeft" || event.key === "PageUp") {
+          if (index > 0) updateSlide(index - 1);
+        }
+      });
+
+      document.addEventListener(
+        "touchstart",
+        (event) => {
+          if (event.touches.length !== 1) return;
+          const touch = event.touches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchActive = true;
+        },
+        { passive: true }
+      );
+
+      document.addEventListener("touchend", (event) => {
+        if (!touchActive) return;
+        const touch = event.changedTouches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        touchActive = false;
+        if (Math.abs(deltaX) < swipeThreshold) return;
+        if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+        if (deltaX < 0 && index < slides.length - 1) {
+          updateSlide(index + 1);
+        }
+        if (deltaX > 0 && index > 0) {
+          updateSlide(index - 1);
+        }
+      });
+
+      document.addEventListener("touchcancel", () => {
+        touchActive = false;
+      });
+
+      prevBtn.addEventListener("click", () => {
+        if (index > 0) updateSlide(index - 1);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (index < slides.length - 1) updateSlide(index + 1);
+      });
+
+      renderQuiz();
+      buildProgress();
+      updateSlide(0);
+    </script>
+  </body>
+</html>
