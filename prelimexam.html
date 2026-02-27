@@ -146,6 +146,7 @@
         <div class="questionNo">
           Question <span id="qIndex">1</span> of <span id="qTotal">—</span>
           <span class="muted">• Original No. <span id="qOriginal">—</span></span>
+          <span class="muted">• Points: <span id="qPoints">—</span></span>
         </div>
         <p id="qText" class="qtext"></p>
 
@@ -207,7 +208,7 @@
   const PER_ITEM_SECONDS = 20;
 
   // -------------------------------
-  // Question Bank (from the docx)
+  // Question Bank (with points)
   // -------------------------------
   const matchingOptions = [
     { key:"A", label:"Administrative control" },
@@ -242,11 +243,11 @@
     { key:"G", label:"Weakness that can be exploited" },
   ];
 
-  // Answer key is encoded as the correct letter (A/B/C/...)
-  // Questions include original number for display.
+  // Test 1: Q1–Q20 => 1 point each
+  // Test 2: Q21–Q40 => 2 points each
   const questionBank = [
-    // 1-13 Multiple Choice
-    { original:1, type:"mc", text:"Which of the following are examples of information assets?",
+    // 1-13 Multiple Choice (1 pt)
+    { original:1, points:1, type:"mc", text:"Which of the following are examples of information assets?",
       options:[
         {key:"A", label:"Student data, records, finances, intellectual property"},
         {key:"B", label:"Campus buildings, classrooms, laboratory equipment, and furniture used for instruction"},
@@ -255,7 +256,7 @@
       ],
       answer:"A"
     },
-    { original:2, type:"mc", text:"Which of the following are consequences of security incidents?",
+    { original:2, points:1, type:"mc", text:"Which of the following are consequences of security incidents?",
       options:[
         {key:"A", label:"Encryption, access control, MFA, and change control used to reduce unauthorized actions"},
         {key:"B", label:"Backups, redundancy, fault tolerance, and restore drills used to support resilience planning"},
@@ -264,7 +265,7 @@
       ],
       answer:"C"
     },
-    { original:3, type:"mc", text:"The socio-technical reality means:",
+    { original:3, points:1, type:"mc", text:"The socio-technical reality means:",
       options:[
         {key:"A", label:"Security = technology + tools + infrastructure"},
         {key:"B", label:"Security = people + process + technology"},
@@ -273,7 +274,7 @@
       ],
       answer:"B"
     },
-    { original:4, type:"mc", text:"Continuity means:",
+    { original:4, points:1, type:"mc", text:"Continuity means:",
       options:[
         {key:"A", label:"Systems must prevent unauthorized access through encryption and access control measures"},
         {key:"B", label:"Systems must ensure accurate, unmodified information through hashing and change control"},
@@ -282,7 +283,7 @@
       ],
       answer:"C"
     },
-    { original:5, type:"mc", text:"Information Assurance (IA) ensures information remains:",
+    { original:5, points:1, type:"mc", text:"Information Assurance (IA) ensures information remains:",
       options:[
         {key:"A", label:"Protects information from unauthorized access or alteration (focus on protecting data)"},
         {key:"B", label:"Protects digital systems and networks from cyber attacks (focus on systems & networks)"},
@@ -291,7 +292,7 @@
       ],
       answer:"C"
     },
-    { original:6, type:"mc", text:"Information Security (InfoSec) protects information from:",
+    { original:6, points:1, type:"mc", text:"Information Security (InfoSec) protects information from:",
       options:[
         {key:"A", label:"Money loss, downtime, reputation damage, penalties that may result from security incidents"},
         {key:"B", label:"Likelihood × impact used to measure risk and guide security requirements during analysis"},
@@ -300,7 +301,7 @@
       ],
       answer:"D"
     },
-    { original:7, type:"mc", text:"Cybersecurity protects:",
+    { original:7, points:1, type:"mc", text:"Cybersecurity protects:",
       options:[
         {key:"A", label:"Digital systems and networks from cyber attacks (focus on systems & networks)"},
         {key:"B", label:"Information from unauthorized access or alteration (focus on protecting data)"},
@@ -309,7 +310,7 @@
       ],
       answer:"A"
     },
-    { original:8, type:"mc", text:"Confidentiality means:",
+    { original:8, points:1, type:"mc", text:"Confidentiality means:",
       options:[
         {key:"A", label:"Likelihood × impact"},
         {key:"B", label:"Accessible when needed (backups, redundancy, fault tolerance)"},
@@ -318,7 +319,7 @@
       ],
       answer:"D"
     },
-    { original:9, type:"mc", text:"Confidentiality controls include:",
+    { original:9, points:1, type:"mc", text:"Confidentiality controls include:",
       options:[
         {key:"A", label:"Hashing, checksums, change control"},
         {key:"B", label:"Encryption, access control, MFA"},
@@ -327,7 +328,7 @@
       ],
       answer:"B"
     },
-    { original:10, type:"mc", text:"Integrity means:",
+    { original:10, points:1, type:"mc", text:"Integrity means:",
       options:[
         {key:"A", label:"Accurate, unmodified information (hashing, checksums, change control)"},
         {key:"B", label:"Only authorized access (encryption, access control, MFA)"},
@@ -336,7 +337,7 @@
       ],
       answer:"A"
     },
-    { original:11, type:"mc", text:"Integrity controls include:",
+    { original:11, points:1, type:"mc", text:"Integrity controls include:",
       options:[
         {key:"A", label:"Encryption, access control, MFA"},
         {key:"B", label:"Backups, redundancy, fault tolerance"},
@@ -345,7 +346,7 @@
       ],
       answer:"C"
     },
-    { original:12, type:"mc", text:"Availability means:",
+    { original:12, points:1, type:"mc", text:"Availability means:",
       options:[
         {key:"A", label:"Accurate, unmodified information (hashing, checksums, change control)"},
         {key:"B", label:"Only authorized access (encryption, access control, MFA)"},
@@ -354,7 +355,7 @@
       ],
       answer:"C"
     },
-    { original:13, type:"mc", text:"Availability controls include:",
+    { original:13, points:1, type:"mc", text:"Availability controls include:",
       options:[
         {key:"A", label:"Hashing, checksums, change control"},
         {key:"B", label:"Backups, redundancy, fault tolerance"},
@@ -364,88 +365,74 @@
       answer:"B"
     },
 
-    // 14-20 using common options list
-    { original:14, type:"mc", text:"Authentication means:",
-      options: options14_20, answer:"D"
-    },
-    { original:15, type:"mc", text:"Authorization means:",
-      options: options14_20, answer:"A"
-    },
-    { original:16, type:"mc", text:"Non-repudiation means:",
-      options: options14_20, answer:"E"
-    },
-    { original:17, type:"mc", text:"Accountability means:",
-      options: options14_20, answer:"B"
-    },
-    { original:18, type:"mc", text:"Threat means:",
-      options: options14_20, answer:"F"
-    },
-    { original:19, type:"mc", text:"Vulnerability means:",
-      options: options14_20, answer:"G"
-    },
-    { original:20, type:"mc", text:"Risk means:",
-      options: options14_20, answer:"C"
-    },
+    // 14-20 (1 pt)
+    { original:14, points:1, type:"mc", text:"Authentication means:", options: options14_20, answer:"D" },
+    { original:15, points:1, type:"mc", text:"Authorization means:", options: options14_20, answer:"A" },
+    { original:16, points:1, type:"mc", text:"Non-repudiation means:", options: options14_20, answer:"E" },
+    { original:17, points:1, type:"mc", text:"Accountability means:", options: options14_20, answer:"B" },
+    { original:18, points:1, type:"mc", text:"Threat means:", options: options14_20, answer:"F" },
+    { original:19, points:1, type:"mc", text:"Vulnerability means:", options: options14_20, answer:"G" },
+    { original:20, points:1, type:"mc", text:"Risk means:", options: options14_20, answer:"C" },
 
-    // 21-40 matching, implemented as dropdown (A-T)
-    { original:21, type:"match", text:"Which type of security control includes policies, training, procedures, and risk management?",
+    // 21-40 matching (2 pts)  <-- TEST 2
+    { original:21, points:2, type:"match", text:"Which type of security control includes policies, training, procedures, and risk management?",
       options: matchingOptions, answer:"A"
     },
-    { original:22, type:"match", text:"Which type of control includes firewalls, MFA, encryption, antivirus, and IDS/IPS?",
+    { original:22, points:2, type:"match", text:"Which type of control includes firewalls, MFA, encryption, antivirus, and IDS/IPS?",
       options: matchingOptions, answer:"B"
     },
-    { original:23, type:"match", text:"Which type of control includes locks, CCTV, guards, and secure rooms?",
+    { original:23, points:2, type:"match", text:"Which type of control includes locks, CCTV, guards, and secure rooms?",
       options: matchingOptions, answer:"C"
     },
-    { original:24, type:"match", text:"What do we call the need to balance security with usability, cost, and performance to reduce risk to an acceptable level?",
+    { original:24, points:2, type:"match", text:"What do we call the need to balance security with usability, cost, and performance to reduce risk to an acceptable level?",
       options: matchingOptions, answer:"D"
     },
-    { original:25, type:"match", text:"What do we call habits like verifying URLs, locking screens, avoiding unknown USBs, and reporting suspicious activity early?",
+    { original:25, points:2, type:"match", text:"What do we call habits like verifying URLs, locking screens, avoiding unknown USBs, and reporting suspicious activity early?",
       options: matchingOptions, answer:"E"
     },
-    { original:26, type:"match", text:"In the lab, what do we call a checklist-based workstation review (accounts, updates, protections, backups) documented with evidence and recommendations?",
+    { original:26, points:2, type:"match", text:"In the lab, what do we call a checklist-based workstation review (accounts, updates, protections, backups) documented with evidence and recommendations?",
       options: matchingOptions, answer:"F"
     },
-    { original:27, type:"match", text:"In a VM sandbox, what do we call the snapshot that acts like a reset button?",
+    { original:27, points:2, type:"match", text:"In a VM sandbox, what do we call the snapshot that acts like a reset button?",
       options: matchingOptions, answer:"G"
     },
-    { original:28, type:"match", text:"What term refers to the overall environment of threats, defenses, technologies, and professionals that keeps evolving?",
+    { original:28, points:2, type:"match", text:"What term refers to the overall environment of threats, defenses, technologies, and professionals that keeps evolving?",
       options: matchingOptions, answer:"H"
     },
-    { original:29, type:"match", text:"Which security role monitors systems and analyzes security logs to respond to security events?",
+    { original:29, points:2, type:"match", text:"Which security role monitors systems and analyzes security logs to respond to security events?",
       options: matchingOptions, answer:"I"
     },
-    { original:30, type:"match", text:"Which security role designs and implements security solutions?",
+    { original:30, points:2, type:"match", text:"Which security role designs and implements security solutions?",
       options: matchingOptions, answer:"J"
     },
-    { original:31, type:"match", text:"Which security role handles breaches and cyber incidents (detection, response, and recovery)?",
+    { original:31, points:2, type:"match", text:"Which security role handles breaches and cyber incidents (detection, response, and recovery)?",
       options: matchingOptions, answer:"K"
     },
-    { original:32, type:"match", text:"Which executive role leads an organization’s security strategy?",
+    { original:32, points:2, type:"match", text:"Which executive role leads an organization’s security strategy?",
       options: matchingOptions, answer:"L"
     },
-    { original:33, type:"match", text:"What is the structured process that integrates security into system development from the beginning (not added later)?",
+    { original:33, points:2, type:"match", text:"What is the structured process that integrates security into system development from the beginning (not added later)?",
       options: matchingOptions, answer:"M"
     },
-    { original:34, type:"match", text:"In malware analysis, what is the term for “how it gets in” (email attachment, malicious link, USB, drive-by download, exploit)?",
+    { original:34, points:2, type:"match", text:"In malware analysis, what is the term for “how it gets in” (email attachment, malicious link, USB, drive-by download, exploit)?",
       options: matchingOptions, answer:"N"
     },
-    { original:35, type:"match", text:"In malware analysis, what is the term for “what it does” (encrypt, steal, delete, spy, open backdoor, recruit into a botnet)?",
+    { original:35, points:2, type:"match", text:"In malware analysis, what is the term for “what it does” (encrypt, steal, delete, spy, open backdoor, recruit into a botnet)?",
       options: matchingOptions, answer:"O"
     },
-    { original:36, type:"match", text:"What type of malware attaches to a host file and often needs user action (run/open) to spread?",
+    { original:36, points:2, type:"match", text:"What type of malware attaches to a host file and often needs user action (run/open) to spread?",
       options: matchingOptions, answer:"P"
     },
-    { original:37, type:"match", text:"What type of malware self-replicates without user help and can spread through networks or vulnerabilities?",
+    { original:37, points:2, type:"match", text:"What type of malware self-replicates without user help and can spread through networks or vulnerabilities?",
       options: matchingOptions, answer:"Q"
     },
-    { original:38, type:"match", text:"What type of malware looks legitimate (installer/crack/fake update) but performs hidden actions like credential theft?",
+    { original:38, points:2, type:"match", text:"What type of malware looks legitimate (installer/crack/fake update) but performs hidden actions like credential theft?",
       options: matchingOptions, answer:"R"
     },
-    { original:39, type:"match", text:"What malware type encrypts files and demands payment—often causing downtime and panic?",
+    { original:39, points:2, type:"match", text:"What malware type encrypts files and demands payment—often causing downtime and panic?",
       options: matchingOptions, answer:"S"
     },
-    { original:40, type:"match", text:"What evasion technique changes malware code appearance so signatures fail, but intent/behavior stays the same?",
+    { original:40, points:2, type:"match", text:"What evasion technique changes malware code appearance so signatures fail, but intent/behavior stays the same?",
       options: matchingOptions, answer:"T"
     },
   ];
@@ -471,6 +458,7 @@
   const qIndex = el("qIndex");
   const qTotal = el("qTotal");
   const qOriginal = el("qOriginal");
+  const qPoints = el("qPoints");
   const qText = el("qText");
   const qOptions = el("qOptions");
 
@@ -555,6 +543,7 @@
     const q = questions[currentIndex];
     qIndex.textContent = String(currentIndex + 1);
     qOriginal.textContent = String(q.original);
+    qPoints.textContent = String(q.points ?? 1);
     qText.textContent = q.text;
 
     qOptions.innerHTML = "";
@@ -645,20 +634,24 @@
     screenExam.style.display = "none";
     screenResults.style.display = "";
 
-    const total = questions.length;
+    let totalPoints = 0;
+    let earnedPoints = 0;
     let correct = 0, wrong = 0, unans = 0;
 
-    // Use questions array to keep current randomized order for review display
     resultsGrid.innerHTML = "";
 
     for(const q of questions){
       const your = (answers.get(q.original) || "").trim();
       const ok = q.answer;
+      const pts = q.points ?? 1;
+
+      totalPoints += pts;
+
       const isAnswered = your !== "";
       const isCorrect = isAnswered && your === ok;
 
       if(!isAnswered) unans++;
-      else if(isCorrect) correct++;
+      else if(isCorrect) { correct++; earnedPoints += pts; }
       else wrong++;
 
       const card = document.createElement("div");
@@ -668,7 +661,7 @@
       top.className = "resTop";
 
       const left = document.createElement("div");
-      left.innerHTML = `<div class="muted small">Original No. <b>${q.original}</b></div>
+      left.innerHTML = `<div class="muted small">Original No. <b>${q.original}</b> • Points: <b>${pts}</b></div>
                         <div style="font-weight:800; margin-top:2px">${escapeHtml(q.text)}</div>`;
 
       const right = document.createElement("div");
@@ -692,7 +685,6 @@
 
       card.appendChild(top);
 
-      // Show key labels for context
       const keyLine = document.createElement("div");
       keyLine.className = "muted small";
       keyLine.textContent = describeOption(q, ok, your);
@@ -701,8 +693,8 @@
       resultsGrid.appendChild(card);
     }
 
-    const scorePct = Math.round((correct / total) * 100);
-    scoreText.textContent = `${correct}/${total} (${scorePct}%)`;
+    const scorePct = Math.round((earnedPoints / totalPoints) * 100);
+    scoreText.textContent = `${earnedPoints}/${totalPoints} (${scorePct}%)`;
     correctCount.textContent = String(correct);
     wrongCount.textContent = String(wrong);
     unansweredCount.textContent = String(unans);
@@ -724,23 +716,14 @@
   }
 
   function describeOption(q, ok, your){
-    if(q.type === "match"){
-      const okLabel = optionLabel(q, ok);
-      const yourLabel = your ? optionLabel(q, your) : "";
-      if(!your) return `Unanswered. Correct is: ${okLabel}`;
-      if(your === ok) return `Correct: ${okLabel}`;
-      return `You chose: ${yourLabel} • Correct is: ${okLabel}`;
-    } else {
-      const okLabel = optionLabel(q, ok);
-      const yourLabel = your ? optionLabel(q, your) : "";
-      if(!your) return `Unanswered. Correct is: ${okLabel}`;
-      if(your === ok) return `Correct: ${okLabel}`;
-      return `You chose: ${yourLabel} • Correct is: ${okLabel}`;
-    }
+    const okLabel = optionLabel(q, ok);
+    const yourLabel = your ? optionLabel(q, your) : "";
+    if(!your) return `Unanswered. Correct is: ${okLabel}`;
+    if(your === ok) return `Correct: ${okLabel}`;
+    return `You chose: ${yourLabel} • Correct is: ${okLabel}`;
   }
 
   function initQuestions(){
-    // New randomized exam order each time
     questions = shuffle(questionBank);
     currentIndex = 0;
     answers = new Map();
@@ -748,12 +731,10 @@
   }
 
   function goNext(fromAuto=false){
-    // Advance index or finish
     if(currentIndex < questions.length - 1){
       currentIndex++;
       renderQuestion();
     } else {
-      // end
       showResults();
     }
   }
@@ -789,7 +770,6 @@
   });
 
   btnEndEarly.addEventListener("click", ()=>{
-    // End immediately and grade what exists
     showResults();
   });
 
