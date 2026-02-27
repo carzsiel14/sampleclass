@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IT 221 Prelim Exam - Answer Key</title>
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --text:#e9eefc;
+      --muted:#b7c2e6;
+      --accent:#7aa2ff;
+      --line:rgba(255,255,255,.10);
+      --good:#3ddc97;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(122,162,255,.20), transparent 60%),
+                  radial-gradient(900px 500px at 90% 20%, rgba(61,220,151,.12), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      padding:28px 14px 60px;
+    }
+    .wrap{max-width:980px;margin:0 auto}
+    header{
+      display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    h1{margin:0;font-size:clamp(22px,3vw,34px);letter-spacing:.2px}
+    .sub{margin:6px 0 0;color:var(--muted);line-height:1.4}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:var(--muted);font-size:13px;
+    }
+    .badge b{color:var(--text)}
+    .toolbar{
+      display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px;
+      align-items:center;justify-content:space-between;
+    }
+    .search{
+      flex:1;min-width:240px;
+      display:flex;align-items:center;gap:10px;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      border-radius:14px;padding:10px 12px;
+    }
+    .search input{
+      width:100%;border:0;outline:0;background:transparent;color:var(--text);
+      font-size:14px;
+    }
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;border-radius:14px;
+      font-size:14px;
+      transition:transform .05s ease, background .2s ease;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(255,255,255,.10)}
+    .btn:active{transform:translateY(1px)}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    .card{
+      background:rgba(17,26,46,.75);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow: 0 10px 28px rgba(0,0,0,.28);
+    }
+    details summary{
+      list-style:none;
+      cursor:pointer;
+      padding:14px 16px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      border-bottom:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), transparent);
+      user-select:none;
+    }
+    details summary::-webkit-details-marker{display:none}
+    .section-title{
+      display:flex;flex-direction:column;gap:2px;
+    }
+    .section-title b{font-size:16px}
+    .section-title span{color:var(--muted);font-size:13px}
+    .chev{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      font-size:16px;
+      transition:transform .2s ease;
+      flex:0 0 auto;
+    }
+    details[open] .chev{transform:rotate(180deg)}
+    .content{padding:14px 16px}
+    .note{
+      padding:12px 14px;border:1px dashed rgba(122,162,255,.45);
+      border-radius:14px;background:rgba(122,162,255,.08);
+      color:var(--muted);font-size:13px;line-height:1.45;margin-bottom:12px;
+    }
+    .answers{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:10px;
+    }
+    .item{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      border-radius:14px;
+      padding:10px 12px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      min-height:44px;
+    }
+    .item .q{color:var(--muted);font-size:13px}
+    .item .a{
+      font-weight:800;letter-spacing:.4px;
+      color:var(--good);
+      font-size:15px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(61,220,151,.12);
+      border:1px solid rgba(61,220,151,.25);
+    }
+    footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+    .hidden{display:none !important;}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>IT 221 Prelim Exam — Answer Key</h1>
+        <p class="sub">
+          Information Assurance and Security I • Answers for Test I (1–20) and Test II (21–40)
+        </p>
+      </div>
+      <div class="badge">Instructor: <b>John Carl Ray R. Lelis</b></div>
+    </header>
+
+    <div class="toolbar">
+      <div class="search">
+        <span aria-hidden="true">🔎</span>
+        <input id="search" type="search" placeholder="Search by question number (e.g., 12) or answer letter (e.g., B)..." />
+      </div>
+      <button class="btn" id="expandAll">Expand all</button>
+      <button class="btn" id="collapseAll">Collapse all</button>
+    </div>
+
+    <div class="grid">
+      <!-- TEST I -->
+      <details class="card" open>
+        <summary>
+          <div class="section-title">
+            <b>TEST I — Multiple Choice</b>
+            <span>Questions 1–20</span>
+          </div>
+          <div class="chev">⌄</div>
+        </summary>
+        <div class="content">
+          <div class="note">
+            Tip: Use the search bar to quickly find a question number (e.g., <b>8</b>) or an answer letter (e.g., <b>D</b>).
+          </div>
+          <div class="answers" id="test1"></div>
+        </div>
+      </details>
+
+      <!-- TEST II -->
+      <details class="card">
+        <summary>
+          <div class="section-title">
+            <b>TEST II — Matching Type</b>
+            <span>Questions 21–40</span>
+          </div>
+          <div class="chev">⌄</div>
+        </summary>
+        <div class="content">
+          <div class="note">
+            Matching Type answers are letters A–T corresponding to the terms box in the exam.
+          </div>
+          <div class="answers" id="test2"></div>
+        </div>
+      </details>
+    </div>
+
+    <footer>
+      © <span id="year"></span> • IT 221 Answer Key
+    </footer>
+  </div>
+
+  <script>
+    const test1Answers = {
+      1:"A",2:"C",3:"B",4:"C",5:"C",6:"D",7:"A",8:"D",9:"B",10:"A",
+      11:"C",12:"C",13:"B",14:"D",15:"A",16:"E",17:"B",18:"F",19:"G",20:"C"
+    };
+
+    const test2Answers = {
+      21:"A",22:"B",23:"C",24:"D",25:"E",26:"F",27:"G",28:"H",29:"I",30:"J",
+      31:"K",32:"L",33:"M",34:"N",35:"O",36:"P",37:"Q",38:"R",39:"S",40:"T"
+    };
+
+    function renderAnswers(containerId, answers){
+      const el = document.getElementById(containerId);
+      el.innerHTML = Object.keys(answers).map(q => `
+        <div class="item" data-q="${q}" data-a="${answers[q]}">
+          <div class="q">#${q}</div>
+          <div class="a">${answers[q]}</div>
+        </div>
+      `).join("");
+    }
+
+    renderAnswers("test1", test1Answers);
+    renderAnswers("test2", test2Answers);
+
+    // Search/filter
+    const search = document.getElementById("search");
+    search.addEventListener("input", () => {
+      const term = search.value.trim().toUpperCase();
+      const items = document.querySelectorAll(".item");
+
+      items.forEach(it => {
+        const q = it.dataset.q;
+        const a = it.dataset.a;
+        const match =
+          term === "" ||
+          q.includes(term) ||
+          a.includes(term) ||
+          (`#${q}`).includes(term);
+
+        it.classList.toggle("hidden", !match);
+      });
+    });
+
+    // Expand/collapse all
+    const details = () => Array.from(document.querySelectorAll("details.card"));
+    document.getElementById("expandAll").addEventListener("click", () => {
+      details().forEach(d => d.open = true);
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    document.getElementById("collapseAll").addEventListener("click", () => {
+      details().forEach(d => d.open = false);
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
