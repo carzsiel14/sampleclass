@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attacks & Exploits</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #00e5ff;
+    --bg-main: #0b1120;
+    --bg-card: rgba(255,255,255,0.05);
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0b1120, #020617);
+    color: #e2e8f0;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+}
+
+.slide-wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.slide {
+    position: absolute;
+    max-width: 950px;
+    width: 100%;
+    background: var(--bg-card);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.6s ease;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+}
+
+h1 {
+    font-size: 2.7rem;
+    font-weight: 700;
+}
+
+h2 {
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+ul li {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+}
+
+.progress-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+}
+
+.progress-bar-custom {
+    height: 4px;
+    width: 0%;
+    background: var(--primary);
+    transition: width 0.4s ease;
+}
+
+.counter {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.nav-controls {
+    position: fixed;
+    bottom: 25px;
+    width: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    body { overflow-y: auto; }
+    .slide { padding: 30px; }
+    h1 { font-size: 1.9rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-container">
+    <div class="progress-bar-custom" id="progressBar"></div>
+</div>
+
+<div class="counter" id="counter"></div>
+
+<div class="slide-wrapper">
+
+<!-- Slide 1 -->
+<div class="slide active text-center">
+    <h1>Attacks & Exploits</h1>
+    <p class="lead mt-3">Understanding Major Cybersecurity Threats & Real-World Exploits</p>
+</div>
+
+<!-- Slide 2 -->
+<div class="slide">
+    <h2>DoS (Denial of Service)</h2>
+    <ul>
+        <li>Attack from a single source</li>
+        <li>Overloads server resources (CPU, memory, bandwidth)</li>
+        <li>Makes services unavailable to legitimate users</li>
+        <li>Example: Flooding a website with excessive requests</li>
+    </ul>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide">
+    <h2>DDoS (Distributed DoS)</h2>
+    <ul>
+        <li>Attack from multiple compromised devices (botnet)</li>
+        <li>Harder to block due to many IP sources</li>
+        <li>Often uses infected IoT devices</li>
+        <li>Targets: Banks, gaming servers, e-commerce sites</li>
+    </ul>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide">
+    <h2>SQL Injection (Concept)</h2>
+    <ul>
+        <li>Injection attack targeting database-driven applications</li>
+        <li>Occurs when unsanitized input is embedded into SQL queries</li>
+        <li>Allows attackers to bypass login systems</li>
+        <li>May expose, modify, or delete database records</li>
+        <li>Prevention: Prepared statements & input validation</li>
+    </ul>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide">
+    <h2>XSS (Cross-Site Scripting) – Concept</h2>
+    <ul>
+        <li>Injection of malicious JavaScript into web pages</li>
+        <li>Executed in victim’s browser</li>
+        <li>Can steal session cookies or tokens</li>
+        <li>Types: Stored, Reflected, DOM-based</li>
+        <li>Prevention: Output encoding & Content Security Policy</li>
+    </ul>
+</div>
+
+<!-- Slide 6 -->
+<div class="slide">
+    <h2>IP Spoofing</h2>
+    <ul>
+        <li>Forging source IP address in network packets</li>
+        <li>Makes traffic appear from a trusted source</li>
+        <li>Used in DDoS amplification attacks</li>
+        <li>Difficult to trace attacker’s real location</li>
+    </ul>
+</div>
+
+<!-- Slide 7 -->
+<div class="slide">
+    <h2>Case Study: WannaCry (2017)</h2>
+    <ul>
+        <li>Global ransomware attack in May 2017</li>
+        <li>Exploited Windows SMB vulnerability (EternalBlue)</li>
+        <li>Spread automatically like a worm</li>
+        <li>Infected 200,000+ computers in 150+ countries</li>
+    </ul>
+</div>
+
+<!-- Slide 8 -->
+<div class="slide">
+    <h2>How WannaCry Worked</h2>
+    <ul>
+        <li>Scanned for vulnerable systems</li>
+        <li>Installed ransomware payload</li>
+        <li>Encrypted victim files</li>
+        <li>Demanded Bitcoin ransom payment</li>
+        <li>Caused billions in damages worldwide</li>
+    </ul>
+</div>
+
+<!-- Slide 9 -->
+<div class="slide">
+    <h2>Lessons Learned</h2>
+    <ul>
+        <li>Importance of regular patching & updates</li>
+        <li>Network segmentation limits malware spread</li>
+        <li>Maintain secure offline backups</li>
+        <li>Cybersecurity awareness training is critical</li>
+    </ul>
+</div>
+
+</div>
+
+<div class="nav-controls">
+    <button class="btn btn-outline-light me-2" onclick="prevSlide()">Previous</button>
+    <button class="btn btn-info" onclick="nextSlide()">Next</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const progressBar = document.getElementById('progressBar');
+const counter = document.getElementById('counter');
+let current = 0;
+
+function updateUI() {
+    slides.forEach(slide => slide.classList.remove('active'));
+    slides[current].classList.add('active');
+
+    let progress = ((current + 1) / slides.length) * 100;
+    progressBar.style.width = progress + "%";
+    counter.innerText = `Slide ${current + 1} of ${slides.length}`;
+}
+
+function nextSlide() {
+    if (current < slides.length - 1) current++;
+    updateUI();
+}
+
+function prevSlide() {
+    if (current > 0) current--;
+    updateUI();
+}
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "ArrowRight") nextSlide();
+    if(e.key === "ArrowLeft") prevSlide();
+});
+
+updateUI();
+</script>
+
+</body>
+</html>
