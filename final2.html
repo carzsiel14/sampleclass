@@ -3,196 +3,568 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Risk Control Web Slides</title>
+  <title>Risk Control - Enterprise Management</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
+    * {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0f172a;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1a2847 100%);
       color: #fff;
+      overflow-x: hidden;
     }
 
     .slide {
       min-height: 100vh;
-      padding: 60px 40px;
+      padding: 40px 20px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border-bottom: 2px solid #1e293b;
+      align-items: center;
+      border-bottom: 3px solid #1e293b;
+      position: relative;
+      overflow: hidden;
     }
 
-    h1 { font-size: 3.5rem; font-weight: bold; }
-    h2 { font-size: 2.5rem; margin-bottom: 20px; }
-    h3 { font-size: 1.5rem; }
+    .slide::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(56, 189, 248, 0.05);
+      border-radius: 50%;
+      top: -100px;
+      right: -100px;
+      pointer-events: none;
+    }
 
-    ul { font-size: 1.2rem; }
+    .slide-content {
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
 
-    .highlight { color: #38bdf8; font-weight: bold; }
+    h1 { 
+      font-size: clamp(2.5rem, 8vw, 3.5rem); 
+      font-weight: 800; 
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+
+    h2 { 
+      font-size: clamp(2rem, 6vw, 2.8rem); 
+      margin-bottom: 25px;
+      font-weight: 700;
+      color: #38bdf8;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, transparent);
+      border-radius: 2px;
+    }
+
+    h3 { 
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 20px;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: clamp(1rem, 3vw, 1.1rem);
+      line-height: 1.8;
+      color: #cbd5e1;
+    }
+
+    ul { 
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      list-style: none;
+      padding-left: 0;
+      line-height: 1.9;
+    }
+
+    li {
+      margin-bottom: 12px;
+      padding-left: 28px;
+      position: relative;
+      color: #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    li:hover {
+      color: #38bdf8;
+      transform: translateX(5px);
+    }
+
+    li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .highlight { 
+      color: #38bdf8; 
+      font-weight: 700;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .feature-card {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      padding: 25px;
+      margin: 15px 0;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.95);
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .feature-card h4 {
+      color: #38bdf8;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .badge-custom {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
 
     .nav-btns {
       position: fixed;
       bottom: 20px;
       right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1000;
     }
 
     .nav-btns a {
-      margin: 5px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      background: rgba(56, 189, 248, 0.9);
+      color: #0f172a;
+      border: 2px solid #38bdf8;
+      text-decoration: none;
+    }
+
+    .nav-btns a:hover {
+      background: #38bdf8;
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    .progress-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+      width: 0%;
+      z-index: 999;
+    }
+
+    .intro-subtitle {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: #94a3b8;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 30px 15px;
+        min-height: auto;
+        margin-top: 20px;
+      }
+
+      .nav-btns {
+        bottom: 10px;
+        right: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: calc(100% - 20px);
+        padding: 0 10px;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      .nav-btns a {
+        width: 40px;
+        height: 40px;
+        font-size: 0.8rem;
+      }
+
+      .feature-card {
+        padding: 18px;
+      }
+
+      h2::after {
+        width: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slide {
+        padding: 20px 10px;
+      }
+
+      .nav-btns a {
+        width: 38px;
+        height: 38px;
+        font-size: 0.75rem;
+      }
+
+      li {
+        padding-left: 22px;
+      }
+
+      .feature-card {
+        padding: 15px;
+        margin: 10px 0;
+      }
     }
   </style>
 </head>
 
 <body>
 
+<body>
+
 <!-- SLIDE 1 -->
 <section class="slide" id="s1">
-  <h1>Risk Control</h1>
-  <h3 class="mt-3">Managing and reducing potential threats to an organization</h3>
+  <div class="slide-content">
+    <h1>Risk Control</h1>
+    <p class="intro-subtitle">Strategic Framework for Managing & Mitigating Enterprise Threats</p>
+    
+    <ul class="mt-5">
+      <li>Risk control is a <span class="highlight">cornerstone of enterprise risk management</span> strategies</li>
+      <li>Focuses on systematically <span class="highlight">reducing impact</span> and <span class="highlight">likelihood</span> of identified risks</li>
+      <li>Applied across <span class="highlight">cybersecurity, finance, operations</span>, and strategic business domains</li>
+      <li>Enables organizations to make <span class="highlight">data-driven, informed decisions</span> under uncertainty</li>
+      <li>Protects organizational assets, reputation, and stakeholder value</li>
+    </ul>
 
-  <ul class="mt-4">
-    <li>Risk control is a key part of <span class="highlight">risk management</span></li>
-    <li>It focuses on <span class="highlight">reducing impact</span> and <span class="highlight">likelihood</span> of risks</li>
-    <li>Used in cybersecurity, business, finance, and operations</li>
-    <li>Helps organizations make <span class="highlight">smart decisions</span></li>
-  </ul>
+    <div class="mt-5">
+      <span class="badge-custom"><i class="fas fa-shield-alt"></i> Enterprise Protection</span>
+      <span class="badge-custom"><i class="fas fa-chart-line"></i> Strategic Planning</span>
+      <span class="badge-custom"><i class="fas fa-cogs"></i> Risk Mitigation</span>
+    </div>
+  </div>
 </section>
 
 <!-- SLIDE 2 -->
 <section class="slide" id="s2">
-  <h2>Risk Control Strategies</h2>
+  <div class="slide-content">
+    <h2>Risk Control Strategies</h2>
+    <p>Five primary approaches to manage organizational risk exposure:</p>
 
-  <ul>
-    <li><span class="highlight">Defend</span> – Protect systems using security controls</li>
-    <li><span class="highlight">Transfer</span> – Shift risk to another party (e.g., insurance)</li>
-    <li><span class="highlight">Mitigate</span> – Reduce risk impact or likelihood</li>
-    <li><span class="highlight">Accept</span> – Acknowledge risk without action</li>
-    <li><span class="highlight">Terminate</span> – Remove the source of risk completely</li>
-  </ul>
+    <div class="feature-card">
+      <h4><i class="fas fa-shield-alt"></i> Defend</h4>
+      <p>Actively protect systems using multi-layered security controls, firewalls, encryption, and defensive mechanisms</p>
+    </div>
 
-  <p class="mt-3">These strategies help organizations choose the best response depending on risk severity.</p>
+    <div class="feature-card">
+      <h4><i class="fas fa-exchange-alt"></i> Transfer</h4>
+      <p>Shift risk responsibility to external parties through insurance, outsourcing, and contractual agreements</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><i class="fas fa-tools"></i> Mitigate</h4>
+      <p>Reduce risk severity through backup systems, disaster recovery plans, and impact reduction measures</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><i class="fas fa-check-circle"></i> Accept</h4>
+      <p>Consciously tolerate manageable risks when mitigation costs exceed potential impact</p>
+    </div>
+
+    <div class="feature-card">
+      <h4><i class="fas fa-ban"></i> Terminate</h4>
+      <p>Eliminate risk entirely by discontinuing high-risk activities or removing vulnerable processes</p>
+    </div>
+
+    <p class="mt-4"><strong>Strategic Selection:</strong> Organizations typically combine multiple strategies based on risk severity, feasibility, and cost-benefit analysis.</p>
+  </div>
 </section>
 
 <!-- SLIDE 3 -->
 <section class="slide" id="s3">
-  <h2>Defend Strategy</h2>
-  <ul>
-    <li>Use firewalls, antivirus, encryption</li>
-    <li>Implement strong authentication systems</li>
-    <li>Monitor systems continuously</li>
-    <li>Train employees on cybersecurity awareness</li>
-    <li>Goal: <span class="highlight">prevent attacks before they happen</span></li>
-  </ul>
+  <div class="slide-content">
+    <h2>Defend Strategy</h2>
+    <p>Proactive protection through multiple layers of security controls and monitoring:</p>
+    
+    <ul class="mt-4">
+      <li>Deploy <span class="highlight">firewalls, intrusion detection systems, and antivirus solutions</span></li>
+      <li>Implement <span class="highlight">end-to-end encryption</span> for data in transit and at rest</li>
+      <li>Establish <span class="highlight">multi-factor authentication (MFA)</span> and strong identity management</li>
+      <li>Conduct <span class="highlight">24/7 continuous monitoring</span> and real-time threat detection</li>
+      <li>Provide comprehensive <span class="highlight">cybersecurity awareness training</span> for all personnel</li>
+      <li>Perform regular <span class="highlight">security audits and penetration testing</span></li>
+      <li>Maintain <span class="highlight">secure development practices</span> and code reviews</li>
+    </ul>
+
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-target"></i> Primary Objective</h4>
+      <p>Prevent attacks and unauthorized access before they can impact organizational systems and data</p>
+    </div>
+  </div>
 </section>
 
 <!-- SLIDE 4 -->
 <section class="slide" id="s4">
-  <h2>Transfer Strategy</h2>
-  <ul>
-    <li>Use <span class="highlight">cyber insurance</span></li>
-    <li>Outsource risky operations</li>
-    <li>Create contracts with liability clauses</li>
-    <li>Shared responsibility with vendors</li>
-    <li>Goal: <span class="highlight">shift financial burden</span></li>
-  </ul>
+  <div class="slide-content">
+    <h2>Transfer Strategy</h2>
+    <p>Shift financial and operational risk to third parties and specialized providers:</p>
+    
+    <ul class="mt-4">
+      <li>Procure <span class="highlight">comprehensive cyber insurance</span> coverage for data breaches and ransomware</li>
+      <li>Leverage <span class="highlight">managed security service providers (MSSPs)</span> for specialized security operations</li>
+      <li>Establish <span class="highlight">vendor contracts with clear liability clauses</span> and indemnification terms</li>
+      <li>Implement <span class="highlight">shared responsibility models</span> with cloud providers and partners</li>
+      <li>Use <span class="highlight">business continuity insurance</span> for operational disruption scenarios</li>
+      <li>Engage <span class="highlight">specialized consultants</span> for complex risk assessments</li>
+    </ul>
+
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-chart-bar"></i> Financial Impact</h4>
+      <p>Shifts risk burden to insurance carriers and specialized providers with greater capacity to absorb losses</p>
+    </div>
+
+    <p class="mt-3"><strong>Note:</strong> Transfer does not eliminate risk; it redistributes financial responsibility and accountability.</p>
+  </div>
 </section>
 
 <!-- SLIDE 5 -->
 <section class="slide" id="s5">
-  <h2>Mitigate Strategy</h2>
-  <ul>
-    <li>Reduce risk probability</li>
-    <li>Implement backup systems</li>
-    <li>Create disaster recovery plans</li>
-    <li>Limit access to sensitive data</li>
-    <li>Goal: <span class="highlight">minimize damage</span></li>
-  </ul>
+  <div class="slide-content">
+    <h2>Mitigate Strategy</h2>
+    <p>Systematically reduce the probability and impact of identified risks:</p>
+    
+    <ul class="mt-4">
+      <li><span class="highlight">Reduce probability</span> through preventive controls and risk avoidance measures</li>
+      <li>Implement <span class="highlight">redundant backup systems</span> and automated failover mechanisms</li>
+      <li>Develop <span class="highlight">comprehensive disaster recovery</span> and business continuity plans</li>
+      <li>Establish <span class="highlight">data access controls</span> and least-privilege access policies</li>
+      <li>Create <span class="highlight">incident response procedures</span> and playbooks</li>
+      <li>Deploy <span class="highlight">segmentation and isolation</span> of critical systems and data</li>
+      <li>Perform <span class="highlight">regular testing and simulation</span> of recovery procedures</li>
+    </ul>
+
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-hand-paper"></i> Risk Reduction</h4>
+      <p>Minimizes financial and operational damage when risks materialize by limiting scope and enabling rapid recovery</p>
+    </div>
+
+    <p class="mt-3"><strong>Best Practice:</strong> Mitigation is often the most cost-effective strategy for moderate risks.</p>
+  </div>
 </section>
 
 <!-- SLIDE 6 -->
 <section class="slide" id="s6">
-  <h2>Accept Strategy</h2>
-  <ul>
-    <li>Used when risk is low or unavoidable</li>
-    <li>No immediate action taken</li>
-    <li>Monitor the risk over time</li>
-    <li>Prepare contingency plans</li>
-    <li>Goal: <span class="highlight">tolerate manageable risks</span></li>
-  </ul>
+  <div class="slide-content">
+    <h2>Accept Strategy</h2>
+    <p>Consciously acknowledge and tolerate manageable risks when mitigation is not cost-effective:</p>
+    
+    <ul class="mt-4">
+      <li>Applied to <span class="highlight">low-probability or low-impact risks</span></li>
+      <li>Used when <span class="highlight">mitigation costs exceed potential impact</span></li>
+      <li>No immediate preventive action is taken</li>
+      <li><span class="highlight">Continuous monitoring</span> to detect risk escalation</li>
+      <li>Develop <span class="highlight">contingency plans</span> for reactive response if risk occurs</li>
+      <li>Document <span class="highlight">risk acceptance decisions</span> with stakeholder approval</li>
+      <li>Establish <span class="highlight">trigger points</span> for escalation and reassessment</li>
+    </ul>
+
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-balance-scale"></i> Strategic Trade-off</h4>
+      <p>Balances operational efficiency and cost control by accepting inherent business risks that are manageable</p>
+    </div>
+
+    <p class="mt-3"><strong>Requirement:</strong> Acceptance must be documented, approved by risk ownership, and regularly reviewed.</p>
+  </div>
 </section>
 
 <!-- SLIDE 7 -->
 <section class="slide" id="s7">
-  <h2>Terminate Strategy</h2>
-  <ul>
-    <li>Stop risky activity completely</li>
-    <li>Remove vulnerable systems</li>
-    <li>Avoid high-risk business processes</li>
-    <li>Used for severe threats</li>
-    <li>Goal: <span class="highlight">eliminate risk entirely</span></li>
-  </ul>
+  <div class="slide-content">
+    <h2>Terminate Strategy</h2>
+    <p>Complete elimination of risk by discontinuing the activity or removing the threat source:</p>
+    
+    <ul class="mt-4">
+      <li>Completely <span class="highlight">cease risky business activities</span> or processes</li>
+      <li>Decommission <span class="highlight">vulnerable or outdated systems</span></li>
+      <li>Exit <span class="highlight">high-risk market segments</span> or partnerships</li>
+      <li>Avoid <span class="highlight">severe threat landscapes</span> or regulatory burdens</li>
+      <li>Reserved for <span class="highlight">critical and unmanageable risks</span></li>
+      <li>Requires <span class="highlight">strategic business decision-making</span> and stakeholder alignment</li>
+      <li>May have <span class="highlight">significant business implications</span> and opportunity costs</li>
+    </ul>
+
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-times-circle"></i> Risk Elimination</h4>
+      <p>The most drastic approach—completely removes risk but may also eliminate business opportunities</p>
+    </div>
+
+    <p class="mt-3"><strong>Use Case:</strong> Employed when risks pose existential threats to organizational viability.</p>
+  </div>
 </section>
 
 <!-- SLIDE 8 -->
 <section class="slide" id="s8">
-  <h2>Cost-Benefit Analysis (CBA)</h2>
+  <div class="slide-content">
+    <h2>Cost-Benefit Analysis (CBA)</h2>
+    <p>Quantitative framework for evaluating control implementation decisions:</p>
 
-  <ul>
-    <li>Compares <span class="highlight">costs vs benefits</span></li>
-    <li>Helps in decision-making</li>
-    <li>Used before implementing controls</li>
-  </ul>
+    <div class="feature-card">
+      <h4><i class="fas fa-ruler-combined"></i> Core Principle</h4>
+      <p>Systematically compares total costs versus projected benefits to determine financial viability and ROI of risk controls</p>
+    </div>
 
-  <h3 class="mt-4">Costs</h3>
-  <ul>
-    <li>Technology expenses</li>
-    <li>Training and manpower</li>
-    <li>Maintenance</li>
-  </ul>
+    <h3 class="mt-5"><i class="fas fa-minus-circle"></i> Cost Categories</h3>
+    <ul>
+      <li><span class="highlight">Technology investments</span> - Hardware, software, and infrastructure</li>
+      <li><span class="highlight">Personnel expenses</span> - Training, staffing, and specialized consultants</li>
+      <li><span class="highlight">Operational costs</span> - Maintenance, updates, and ongoing support</li>
+      <li><span class="highlight">Overhead</span> - Management, integration, and administration efforts</li>
+      <li><span class="highlight">Opportunity costs</span> - Resources diverted from other initiatives</li>
+    </ul>
 
-  <h3>Benefits</h3>
-  <ul>
-    <li>Reduced losses</li>
-    <li>Better security</li>
-    <li>Improved reputation</li>
-  </ul>
+    <h3 class="mt-5"><i class="fas fa-plus-circle"></i> Benefit Factors</h3>
+    <ul>
+      <li><span class="highlight">Financial protection</span> - Avoided losses from realized threats</li>
+      <li><span class="highlight">Enhanced security</span> - Reduced breach likelihood and severity</li>
+      <li><span class="highlight">Regulatory compliance</span> - Avoidance of penalties and fines</li>
+      <li><span class="highlight">Reputation protection</span> - Maintained customer and stakeholder trust</li>
+      <li><span class="highlight">Business continuity</span> - Reduced downtime and service disruption</li>
+    </ul>
 
-  <p><span class="highlight">Decision:</span> Implement if benefits outweigh costs.</p>
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-check-double"></i> Decision Criteria</h4>
+      <p><strong>Implement</strong> if benefits outweigh costs. <strong>Net Positive Return:</strong> Benefits > Costs</p>
+    </div>
+  </div>
 </section>
 
 <!-- SLIDE 9 -->
 <section class="slide" id="s9">
-  <h2>Recitation: "To Insure or Not to Insure?"</h2>
+  <div class="slide-content">
+    <h2>Insurance: Strategic Debate</h2>
+    <p>"To Insure or Not to Insure?" - Balancing risk transfer with prevention investment:</p>
 
-  <h3 class="mt-3">Pro (Yes to Insurance)</h3>
-  <ul>
-    <li>Covers financial losses</li>
-    <li>Helps recovery after cyberattacks</li>
-    <li>Provides expert support</li>
-  </ul>
+    <div class="feature-card">
+      <h4><i class="fas fa-thumbs-up"></i> Arguments FOR Insurance</h4>
+      <ul style="margin-top: 12px; margin-bottom: 0;">
+        <li><span class="highlight">Financial protection</span> - Comprehensive coverage for catastrophic losses</li>
+        <li><span class="highlight">Expert support</span> - Access to specialized incident response teams</li>
+        <li><span class="highlight">Regulatory compliance</span> - Often required by industry standards or contracts</li>
+        <li><span class="highlight">Peace of mind</span> - Stakeholder confidence and reduced anxiety</li>
+        <li><span class="highlight">Rapid recovery</span> - Funds for immediate business restoration</li>
+      </ul>
+    </div>
 
-  <h3>Con (No to Insurance)</h3>
-  <ul>
-    <li>Can be expensive</li>
-    <li>Not all damages are covered</li>
-    <li>May reduce focus on prevention</li>
-  </ul>
+    <div class="feature-card">
+      <h4><i class="fas fa-thumbs-down"></i> Arguments AGAINST Insurance</h4>
+      <ul style="margin-top: 12px; margin-bottom: 0;">
+        <li><span class="highlight">High premium costs</span> - Significant ongoing financial commitment</li>
+        <li><span class="highlight">Coverage gaps</span> - Not all damages may be included or covered</li>
+        <li><span class="highlight">Policy complexity</span> - Exclusions and conditions may limit protection</li>
+        <li><span class="highlight">Prevention focus dilution</span> - May reduce investment in proactive security measures</li>
+        <li><span class="highlight">Claims challenges</span> - Lengthy processes and negotiation hurdles</li>
+      </ul>
+    </div>
 
-  <p class="mt-3"><span class="highlight">Guide Question:</span> Should companies invest in insurance or focus on prevention?</p>
+    <div class="feature-card mt-4">
+      <h4><i class="fas fa-lightbulb"></i> Balanced Perspective</h4>
+      <p><strong>Recommended Approach:</strong> Combine both strategies - maintain strong internal controls AND obtain appropriate insurance coverage. Insurance should supplement, not replace, robust risk management practices.</p>
+    </div>
+  </div>
 </section>
 
 <!-- NAV BUTTONS -->
 <div class="nav-btns">
-  <a href="#s1" class="btn btn-light">1</a>
-  <a href="#s2" class="btn btn-light">2</a>
-  <a href="#s3" class="btn btn-light">3</a>
-  <a href="#s4" class="btn btn-light">4</a>
-  <a href="#s5" class="btn btn-light">5</a>
-  <a href="#s6" class="btn btn-light">6</a>
-  <a href="#s7" class="btn btn-light">7</a>
-  <a href="#s8" class="btn btn-light">8</a>
-  <a href="#s9" class="btn btn-light">9</a>
+  <a href="#s1" class="btn-nav" title="Slide 1">1</a>
+  <a href="#s2" class="btn-nav" title="Slide 2">2</a>
+  <a href="#s3" class="btn-nav" title="Slide 3">3</a>
+  <a href="#s4" class="btn-nav" title="Slide 4">4</a>
+  <a href="#s5" class="btn-nav" title="Slide 5">5</a>
+  <a href="#s6" class="btn-nav" title="Slide 6">6</a>
+  <a href="#s7" class="btn-nav" title="Slide 7">7</a>
+  <a href="#s8" class="btn-nav" title="Slide 8">8</a>
+  <a href="#s9" class="btn-nav" title="Slide 9">9</a>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Smooth scroll progress indicator
+  window.addEventListener('scroll', () => {
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (window.scrollY / height) * 100;
+    const progressBar = document.querySelector('.progress-indicator');
+    if (progressBar) {
+      progressBar.style.width = scrolled + '%';
+    }
+  });
+
+  // Add progress indicator element if not exists
+  if (!document.querySelector('.progress-indicator')) {
+    const bar = document.createElement('div');
+    bar.className = 'progress-indicator';
+    document.body.insertBefore(bar, document.body.firstChild);
+  }
+</script>
 </body>
 </html>
