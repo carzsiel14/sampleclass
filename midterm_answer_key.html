@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Key - Midterm Examination</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #334155;
+            --accent: #2563eb;
+            --bg: #f8fafc;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .school-name {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .subject {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin: 5px 0;
+            font-weight: 600;
+        }
+
+        .exam-type {
+            font-size: 1rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        h2 {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 15px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            margin-top: 35px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .answer-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: baseline;
+        }
+
+        .num {
+            font-weight: 700;
+            color: var(--secondary);
+            width: 30px;
+            flex-shrink: 0;
+        }
+
+        .ans {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .modified-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modified-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+        }
+
+        .modified-list .num { width: 40px; }
+
+        .id-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        @media print {
+            body { padding: 0; background: white; }
+            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <p class="school-name">St. Mary’s College of Bansalan, Inc.</p>
+            <p class="subject">Information Assurance and Security I</p>
+            <p class="exam-type">OFFICIAL MIDTERM ANSWER KEY</p>
+        </header>
+
+        <section>
+            <h2>TEST I: MULTIPLE CHOICE</h2>
+            <div class="grid-container">
+                <div class="answer-item"><span class="num">1.</span><span class="ans">D</span></div>
+                <div class="answer-item"><span class="num">2.</span><span class="ans">C</span></div>
+                <div class="answer-item"><span class="num">3.</span><span class="ans">B</span></div>
+                <div class="answer-item"><span class="num">4.</span><span class="ans">B</span></div>
+                <div class="answer-item"><span class="num">5.</span><span class="ans">D</span></div>
+                <div class="answer-item"><span class="num">6.</span><span class="ans">D</span></div>
+                <div class="answer-item"><span class="num">7.</span><span class="ans">D</span></div>
+                <div class="answer-item"><span class="num">8.</span><span class="ans">B</span></div>
+                <div class="answer-item"><span class="num">9.</span><span class="ans">A</span></div>
+                <div class="answer-item"><span class="num">10.</span><span class="ans">C</span></div>
+                <div class="answer-item"><span class="num">11.</span><span class="ans">B</span></div>
+                <div class="answer-item"><span class="num">12.</span><span class="ans">A</span></div>
+                <div class="answer-item"><span class="num">13.</span><span class="ans">A</span></div>
+                <div class="answer-item"><span class="num">14.</span><span class="ans">C</span></div>
+                <div class="answer-item"><span class="num">15.</span><span class="ans">D</span></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>TEST II: MODIFIED TRUE OR FALSE</h2>
+            <ul class="modified-list">
+                <li><span class="num">16.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">17.</span><span class="ans">Smishing (or SMS)</span></li>
+                <li><span class="num">18.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">19.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">20.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">21.</span><span class="ans">Incomplete (or Impossible)</span></li>
+                <li><span class="num">22.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">23.</span><span class="ans">Reporting (or Stopping)</span></li>
+                <li><span class="num">24.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">25.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">26.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">27.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">28.</span><span class="ans">textContent (or Output Encoding)</span></li>
+                <li><span class="num">29.</span><span class="ans">TRUE</span></li>
+                <li><span class="num">30.</span><span class="ans">Hardware, Data, and Software</span></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>TEST III: IDENTIFICATION</h2>
+            <div class="id-grid">
+                <div class="answer-item"><span class="num">31.</span><span class="ans">Prioritize / Risk Assessment</span></div>
+                <div class="answer-item"><span class="num">32.</span><span class="ans">Pretexting</span></div>
+                <div class="answer-item"><span class="num">33.</span><span class="ans">Botnet</span></div>
+                <div class="answer-item"><span class="num">34.</span><span class="ans">Asset Inventory</span></div>
+                <div class="answer-item"><span class="num">35.</span><span class="ans">Vishing</span></div>
+                <div class="answer-item"><span class="num">36.</span><span class="ans">Rate Limiting</span></div>
+                <div class="answer-item"><span class="num">37.</span><span class="ans">Hardware</span></div>
+                <div class="answer-item"><span class="num">38.</span><span class="ans">Careless</span></div>
+                <div class="answer-item"><span class="num">39.</span><span class="ans">Content Security Policy (CSP)</span></div>
+                <div class="answer-item"><span class="num">40.</span><span class="ans">Vulnerability Assessment / Assess</span></div>
+                <div class="answer-item"><span class="num">41.</span><span class="ans">Smishing</span></div>
+                <div class="answer-item"><span class="num">42.</span><span class="ans">BCP 38</span></div>
+                <div class="answer-item"><span class="num">43.</span><span class="ans">Data / Software</span></div>
+                <div class="answer-item"><span class="num">44.</span><span class="ans">Separation of Duties</span></div>
+                <div class="answer-item"><span class="num">45.</span><span class="ans">Timeouts</span></div>
+            </div>
+        </section>
+
+        <div class="footer">
+            <p>Confidential: For Faculty Use Only</p>
+        </div>
+    </div>
+</body>
+</html>
