@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMCBI - InfoSec Policy Masterclass</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root { 
+            --cobalt: #0047ab; 
+            --slate: #2c3e50; 
+            --gold: #ffc107; 
+            --emerald: #198754; 
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            scroll-behavior: smooth; 
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Slide Layout */
+        .slide { 
+            min-height: 100vh; 
+            padding: 80px 20px; 
+            display: flex; 
+            align-items: center; 
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .hero { 
+            background: linear-gradient(145deg, var(--slate), var(--cobalt)); 
+            color: white; 
+        }
+
+        /* Progress Bar */
+        .progress-container { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            height: 6px; 
+            background: rgba(0,0,0,0.1); 
+            z-index: 1001; 
+        }
+        .progress-bar { 
+            height: 6px; 
+            background: var(--gold); 
+            width: 0%; 
+            transition: width 0.3s ease; 
+        }
+
+        /* Navigation */
+        .nav-buttons { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            z-index: 999; 
+            display: flex; 
+            gap: 10px; 
+        }
+
+        /* Tooltip/Abbreviation Styling */
+        abbr.abbr-callout { 
+            color: var(--cobalt); 
+            font-weight: 700; 
+            text-decoration: underline dotted var(--gold); 
+            cursor: help; 
+        }
+        .hero abbr.abbr-callout { color: var(--gold); }
+
+        /* UI Cards */
+        .policy-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            height: 100%;
+            transition: 0.3s;
+        }
+        .policy-card:hover { transform: translateY(-5px); }
+
+        /* AUP Document Simulation */
+        .aup-paper { 
+            background: white; 
+            color: #333; 
+            padding: 40px; 
+            border-radius: 4px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
+            text-align: left;
+            font-family: 'Times New Roman', serif;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        /* Quiz Styles */
+        .quiz-box { 
+            background: #fffbeb; 
+            border: 2px dashed #f59e0b; 
+            padding: 25px; 
+            border-radius: 15px; 
+        }
+        .feedback { font-weight: bold; min-height: 24px; }
+    </style>
+</head>
+<body onscroll="updateProgress()">
+
+<div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
+
+<div id="slides">
+
+    <section class="slide hero text-center">
+        <div class="container">
+            <h5 class="text-uppercase text-info fw-bold mb-3 tracking-widest">SMCBI: Information Assurance and Security 1</h5>
+            <h1 class="display-1 fw-bold mb-3">InfoSec Policy Framework</h1>
+            <p class="lead mb-5">Mastering the structural layers of defense: 
+                <abbr title="Enterprise Information Security Policy" class="abbr-callout">EISP</abbr>, 
+                <abbr title="Issue-Specific Security Policy" class="abbr-callout">ISSP</abbr>, and 
+                <abbr title="System-Specific Security Policy" class="abbr-callout">SysSP</abbr>.
+            </p>
+            <div class="mt-5"><i class="bi bi-chevron-double-down display-6 text-warning"></i></div>
+        </div>
+    </section>
+
+    <section class="slide bg-white text-center">
+        <div class="container">
+            <h2 class="display-5 fw-bold mb-5">The Hierarchy of Information Security Policy</h2>
+            <div class="row g-4 text-start">
+                <div class="col-md-4">
+                    <div class="policy-card border-top border-primary border-5">
+                        <h4 class="text-primary">EISP</h4>
+                        <p class="small text-muted"><strong>Strategic Level:</strong> High-level philosophy and governance signed by the <abbr title="Chief Executive Officer" class="abbr-callout">CEO</abbr>.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="policy-card border-top border-success border-5">
+                        <h4 class="text-success">ISSP</h4>
+                        <p class="small text-muted"><strong>Tactical Level:</strong> Detailed instructions for specific areas like <abbr title="Bring Your Own Device" class="abbr-callout">BYOD</abbr> or Remote Work.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="policy-card border-top border-danger border-5">
+                        <h4 class="text-danger">SysSP</h4>
+                        <p class="small text-muted"><strong>Technical Level:</strong> Configurations and <abbr title="Access Control Lists" class="abbr-callout">ACLs</abbr> applied to specific hardware.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="slide bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="display-4 fw-bold">EISP <small class="text-muted fs-4">Strategic</small></h2>
+                    <p class="lead">The "Constitution" of the organization’s security.</p>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-shield-check text-primary"></i> Establishes organizational philosophy.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-shield-check text-primary"></i> Assigns roles and responsibilities.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-shield-check text-primary"></i> Ensures legal and regulatory compliance.</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="quiz-box shadow-sm text-center">
+                        <h5 class="fw-bold">Knowledge Check</h5>
+                        <p>Who provides the strategic "top-down" mandate for the EISP?</p>
+                        <button class="btn btn-outline-dark w-100 mb-2" onclick="checkAnswer(this, true)">CEO & Board of Directors</button>
+                        <button class="btn btn-outline-dark w-100" onclick="checkAnswer(this, false)">The IT Intern</button>
+                        <p class="feedback mt-3"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-4 fw-bold">ISSP <small class="text-muted fs-4">Tactical</small></h2>
+                <p class="lead w-75 mx-auto">Rules for specific technologies or behaviors.</p>
+            </div>
+            <div class="row g-4 text-start">
+                <div class="col-md-6">
+                    <div class="p-4 border-start border-success border-4 bg-light rounded shadow-sm">
+                        <h5><abbr title="Bring Your Own Device" class="abbr-callout">BYOD</abbr> Policy</h5>
+                        <p class="small mb-0">Specifies security requirements for personal smartphones accessing the corporate network.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 border-start border-success border-4 bg-light rounded shadow-sm">
+                        <h5>Email & Internet Policy</h5>
+                        <p class="small mb-0">Prevents the leakage of <abbr title="Personally Identifiable Information" class="abbr-callout">PII</abbr> and blocks unsafe websites.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="display-4 fw-bold text-danger">SysSP <small class="text-muted fs-4">Technical</small></h2>
+                    <p class="lead">Where management decisions meet machine code.</p>
+                    <div class="card p-3 border-danger shadow-sm">
+                        <h6>Technical Specifications</h6>
+                        <p class="small mb-2">Example Firewall <abbr title="Access Control List" class="abbr-callout">ACL</abbr> rule:</p>
+                        <code class="bg-dark text-warning p-2 rounded d-block">deny ip any any port 21</code>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <i class="bi bi-gear-wide-connected display-1 text-danger opacity-25"></i>
+                    <p class="mt-4">Translates the "Why" of EISP into the "How" of hardware configuration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 text-start">
+                    <h2 class="display-4 fw-bold text-warning mb-4">📝 Homework Task</h2>
+                    <p class="lead">Draft an <strong>Acceptable Use Policy (AUP)</strong>.</p>
+                    <p>Subject: <strong>Information Assurance and Security 1</strong></p>
+                    
+                    <div class="bg-dark bg-opacity-25 p-4 rounded mb-4">
+                        <h6>Penalty Section Included!</h6>
+                        <p class="small mb-0">Remember: A policy is not enforceable without stated consequences. This ensures <strong>accountability</strong>.</p>
+                    </div>
+
+                    <button class="btn btn-warning btn-lg shadow-lg fw-bold mb-4" onclick="downloadTemplate()">
+                        <i class="bi bi-download"></i> Download AUP Template (.txt)
+                    </button>
+
+                    <div class="alert alert-info py-2 small shadow">
+                        <strong>Deliverable:</strong> 1-page PDF focused on the SMCBI Computer Lab.
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div id="aup-content" class="aup-paper shadow-lg">
+                        <div class="text-center border-bottom border-2 border-dark mb-3">
+                            <h5 class="mb-0 fw-bold">SMCBI COMPUTER LAB</h5>
+                            <p class="small mb-1 text-uppercase">Information Assurance and Security 1</p>
+                            <p class="fw-bold small mb-2 text-decoration-underline">ACCEPTABLE USE POLICY (AUP)</p>
+                        </div>
+                        
+                        <p><strong>1. PURPOSE:</strong> To provide a secure environment for students to achieve academic excellence while protecting lab resources.</p>
+                        
+                        <p><strong>2. AUTHORIZED USERS:</strong> Enrollment-based access for SMCBI students with valid <abbr title="Information Technology" class="text-primary fw-bold">IT</abbr> credentials.</p>
+                        
+                        <p><strong>3. PROHIBITED ACTS:</strong>
+                            <br>• Using <abbr title="Virtual Private Network" class="text-primary fw-bold">VPNs</abbr> to bypass campus filters.
+                            <br>• Installation of unauthorized software or tools used for "hacking."
+                            <br>• Accessing or storing <abbr title="Personally Identifiable Information" class="text-primary fw-bold">PII</abbr> of other users.
+                        </p>
+                        
+                        <div class="bg-light p-3 border-start border-danger border-4 my-3">
+                            <strong>4. PENALTIES & SANCTIONS:</strong>
+                            <br>Failure to comply will result in:
+                            <br>• <strong>1st Offense:</strong> Immediate suspension of lab account for 1 week.
+                            <br>• <strong>2nd Offense:</strong> Permanent ban from lab and referral to the Dean.
+                            <br>• <strong>Illegal Activities:</strong> Referral to local law enforcement.
+                        </div>
+                        
+                        <p><strong>5. PRIVACY:</strong> Users have <strong>no expectation of privacy</strong>. All network traffic is monitored for security purposes.</p>
+                        
+                        <div class="mt-4 pt-3 border-top border-1 border-secondary">
+                            <p class="small text-muted mb-0">Signature: _______________________ Date: ________</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<div class="nav-buttons">
+    <button class="btn btn-dark shadow-lg btn-lg" onclick="prevSlide()"><i class="bi bi-chevron-left"></i></button>
+    <button class="btn btn-warning shadow-lg btn-lg px-4 fw-bold" onclick="nextSlide()">Next <i class="bi bi-chevron-right"></i></button>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+
+    // Scroll Progress Tracker
+    function updateProgress() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("myBar").style.width = scrolled + "%";
+    }
+
+    // Navigation Logic
+    function showSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+        currentSlide = index;
+        slides[index].scrollIntoView({ behavior: "smooth" });
+    }
+
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; showSlide(currentSlide); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); } }
+
+    // Quiz Feedback
+    function checkAnswer(button, isCorrect) {
+        const feedback = button.parentElement.querySelector(".feedback");
+        if (isCorrect) {
+            feedback.innerHTML = "✅ <strong>Correct!</strong> CEO provides the top mandate.";
+            feedback.className = "feedback mt-3 text-success";
+        } else {
+            feedback.innerHTML = "❌ <strong>Incorrect.</strong> Strategy comes from the top down.";
+            feedback.className = "feedback mt-3 text-danger";
+        }
+    }
+
+    // DOWNLOAD FUNCTION
+    function downloadTemplate() {
+        const templateText = `SMCBI COMPUTER LAB\nInformation Assurance and Security 1\nACCEPTABLE USE POLICY (AUP)\n\n` +
+        `1. PURPOSE: To provide a secure environment for academic excellence.\n\n` +
+        `2. AUTHORIZED USERS: Enrolled SMCBI students with valid IT credentials.\n\n` +
+        `3. PROHIBITED ACTS:\n` +
+        `   - Bypassing filters using VPNs.\n` +
+        `   - Installing unauthorized/malicious software.\n` +
+        `   - Accessing PII of other users.\n\n` +
+        `4. PENALTIES & SANCTIONS:\n` +
+        `   - 1st Offense: 1-week account suspension.\n` +
+        `   - 2nd Offense: Permanent lab ban.\n` +
+        `   - Illegal Acts: Referral to law enforcement.\n\n` +
+        `5. PRIVACY: Users have NO expectation of privacy. Traffic is monitored.\n\n` +
+        `--------------------------------------------------\n` +
+        `Student Signature: __________________ Date: ______`;
+
+        const blob = new Blob([templateText], { type: 'text/plain' });
+        const anchor = document.createElement('a');
+        anchor.download = 'SMCBI_AUP_Template.txt';
+        anchor.href = window.URL.createObjectURL(blob);
+        anchor.target = '_blank';
+        anchor.style.display = 'none'; 
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
